@@ -1,0 +1,1 @@
+installs = "winget install -e --id Microsoft.PowerShell"

@@ -1,9 +1,8 @@
+installs = 'winget install -e --id Neovim.Neovim'
+
 [links]
 'after' = '~\AppData\Local\nvim\after'
 'lua' = '~\AppData\Local\nvim\lua'
 'plugin' = '~\AppData\Local\nvim\plugin'
 'lazy-lock.json' = '~\AppData\Local\nvim\lazy-lock.json'
 'init.lua' = '~\AppData\Local\nvim\init.lua'
-
-[installs]
-cmd = 'winget install -e --id Neovim.Neovim'
