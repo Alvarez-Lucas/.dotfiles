@@ -98,11 +98,6 @@ return {
 			-- Vim Mappings
 			vim.keymap.set("n", "l", api.node.open.edit, opts("Edit Or Open"))
 			vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("Close Directory"))
-
-			-- Telescope files / grep in selected folder
-			local treeutils = require("../../plugin/treeutils")
-			vim.keymap.set("n", "<c-f>", treeutils.launch_find_files, opts("Launch Find Files"))
-			vim.keymap.set("n", "<c-g>", treeutils.launch_live_grep, opts("Launch Live Grep"))
 		end
 
 		require("nvim-tree").setup({
