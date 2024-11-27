@@ -109,3 +109,7 @@ carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
 
 # Zoxide - Directory Jumper
 zoxide init nushell | save -f ~/.zoxide.nu
+
+# Starship - Prompt
+mkdir ~/.cache/starship
+starship init nu | save -f ~/.cache/starship/init.nu

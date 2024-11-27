@@ -914,3 +914,5 @@ source ~/.cache/carapace/init.nu
 # Zoxide - Directory Jumpter
 source ~/.zoxide.nu
 
+# Starship - Prompt
+use ~/.cache/starship/init.nu
