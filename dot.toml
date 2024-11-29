@@ -1,1 +1,35 @@
-installs = ""
+installs = '''
+# Winget Packages
+winget install -e --id Git.Git
+winget install -e --id Opera.Opera
+winget install -e --id glzr-io.glazewm
+winget install -e --id TeamSpeakSystems.TeamSpeakClient
+winget install -e --id Valve.Steam
+winget install -e --id Telegram.TelegramDesktop
+winget install -e --id SublimeHQ.SublimeText.4
+winget install -e --id Microsoft.WindowsTerminal
+winget install -e --id Microsoft.PowerShell
+winget install -e --id Nushell.Nushell
+winget install -e --id Starship.Starship
+winget install -e --id Neovim.Neovim
+winget install -e --id LLVM.LLVM
+winget install -e --id OpenJS.NodeJS
+winget install -e --id sxyazi.yazi
+winget install -e --id 7zip.7zip
+winget install -e --id jqlang.jq
+winget install -e --id sharkdp.fd
+winget install -e --id BurntSushi.ripgrep.MSVC
+winget install -e --id junegunn.fzf
+winget install -e --id ajeetdsouza.zoxide
+winget install -e --id ImageMagick.ImageMagick
+# Scoop Packages
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expressionn
+scoop bucket add extras
+scoop install extras/monitorprofileswitcher
+# Chocolatey Packages
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+choco install geforce-game-ready-driver
+choco install jetbrainsmono
+choco install nerd-fonts-jetbrainsmono
+'''

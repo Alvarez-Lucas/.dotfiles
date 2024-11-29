@@ -1,5 +1,3 @@
-installs = 'winget install -e --id Neovim.Neovim'
-
 [links]
 'after' = '~\AppData\Local\nvim\after'
 'lua' = '~\AppData\Local\nvim\lua'

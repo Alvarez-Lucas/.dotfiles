@@ -1,1 +1,0 @@
-installs = "winget install -e --id Valve.Steam"
