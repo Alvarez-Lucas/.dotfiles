@@ -23,7 +23,7 @@ window_effects:
       enabled: true
       color: '#8dbcff'
     hide_title_bar:
-      enabled: true
+      enabled: false
     corner_style:
       enabled: true
       style: 'square' # Options: 'square', 'rounded', 'small_rounded'
@@ -32,7 +32,7 @@ window_effects:
       enabled: true
       color: '#a1a1a1'
     hide_title_bar:
-      enabled: true
+      enabled: false
     corner_style:
       enabled: true
       style: 'square'
@@ -48,10 +48,12 @@ window_behavior:
       shown_on_top: false
 
 workspaces:
+  - name: 'social'
+    display_name: 'Social'
   - name: 'browser'
     display_name: 'Browser'
   - name: 'terminal'
-    display_name: 'Terminal'
+    display_name: 'Windows Terminal'
   - name: 'explorer'
     display_name: 'Explorer'
   - name: '1'
@@ -65,6 +67,12 @@ workspaces:
   - name: '9'
 
 window_rules:
+  # social
+  - commands: ['move --workspace social', 'focus --workspace social']
+    match:
+      - window_process: { equals: 'Discord' }
+      - window_process: { equals: 'ts3client_win64' }
+
   # browser
   - commands: ['move --workspace browser', 'focus --workspace browser']
     match:
@@ -101,6 +109,13 @@ binding_modes:
 
 keybindings:
   # Workspaces
+
+  # social
+  - commands: ['focus --workspace social']
+    bindings: ['alt+s']
+  - commands: ['move --workspace social', 'focus --workspace social']
+    bindings: ['alt+shift+s']
+
   # browser
   - commands: ['focus --workspace browser']
     bindings: ['alt+b']
@@ -187,13 +202,13 @@ keybindings:
 
   # Move workspace
   - commands: ['move-workspace --direction left']
-    bindings: ['alt+shift+a']
+    bindings: ['alt+shift+left']
   - commands: ['move-workspace --direction right']
-    bindings: ['alt+shift+f']
+    bindings: ['alt+shift+right']
   - commands: ['move-workspace --direction up']
-    bindings: ['alt+shift+d']
+    bindings: ['alt+shift+up']
   - commands: ['move-workspace --direction down']
-    bindings: ['alt+shift+s']
+    bindings: ['alt+shift+down']
 
   # Resize
   - commands: ['resize --width -2%']
