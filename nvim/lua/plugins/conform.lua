@@ -1,7 +1,9 @@
 return {
 	"stevearc/conform.nvim",
-	event = {
-		"BufWritePre",
+	event = { "BufWritePre" },
+	dependencies = {
+		"williamboman/mason.nvim",
+		{ "zapling/mason-conform.nvim", opts = {} },
 	},
 	opts = {
 		format_on_save = {
@@ -14,7 +16,7 @@ return {
 			-- Conform will run multiple formatters sequentially
 			python = { "isort", "black" },
 			-- You can customize some of the format options for the filetype (:help conform.format)
-			rust = { "rustfmt", lsp_format = "fallback" },
+			-- rust = { lsp_format = "never" },
 			-- Conform will run the first available formatter
 			javascript = { "prettierd", "prettier", stop_after_first = true },
 			toml = { "taplo" },
