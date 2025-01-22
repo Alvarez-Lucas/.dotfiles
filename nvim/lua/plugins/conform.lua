@@ -3,6 +3,10 @@ return {
   event = {
     "BufWritePre",
   },
+  dependencies = {
+    "williamboman/mason.nvim",
+	{ "zapling/mason-conform.nvim", opts = {} },
+  },
   opts = {
     format_after_save = {
       -- These options will be passed to conform.format()
