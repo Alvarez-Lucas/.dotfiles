@@ -72,6 +72,7 @@ return {
 			--     },
 			--   },
 			-- },
+      powershell_es = {},
 			taplo = {},
 			lua_ls = {
 				settings = {
