@@ -113,3 +113,5 @@ zoxide init nushell | save -f ~/.zoxide.nu
 # Starship - Prompt
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
+
+$env.YAZI_FILE_ONE = "C:/Program Files/Git/usr/bin/file.exe"
