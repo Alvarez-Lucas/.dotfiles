@@ -2,6 +2,7 @@
 -- See `:help telescope.builtin`
 
 return {
+	enabled = false,
 	tag = "0.1.8", -- or branch = '0.1.x',
 	"nvim-telescope/telescope.nvim",
 	event = "VeryLazy",
