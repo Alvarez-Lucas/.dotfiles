@@ -40,9 +40,10 @@ return {
 			["g\\"] = "actions.toggle_trash",
 		},
 		-- Set to false to disable all of the above keymaps
-		use_default_keymaps = false,
+		use_default_keymaps = true,
 	},
 	-- Optional dependencies
 	dependencies = { { "echasnovski/mini.icons", opts = {} } },
 	-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
+	--
 }

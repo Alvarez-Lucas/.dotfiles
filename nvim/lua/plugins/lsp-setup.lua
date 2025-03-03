@@ -1,13 +1,18 @@
 return {
 	"junnplus/lsp-setup.nvim",
-	event = { "BufReadPost", "BufNewFile" },
+	event = { "BufReadPost", "BufNewFile", "VeryLazy" },
 	cmd = { "LspInfo", "LspInstall", "LspUninstall" },
 	dependencies = {
 		{
 			"j-hui/fidget.nvim",
 			opts = {},
 		},
-		"neovim/nvim-lspconfig",
+		{
+			"neovim/nvim-lspconfig",
+			config = function()
+				require("lspconfig").nushell.setup({})
+			end,
+		},
 		"williamboman/mason.nvim", -- optional
 		"williamboman/mason-lspconfig.nvim", -- optional
 	},
@@ -15,11 +20,11 @@ return {
 	opts = {
 		-- Default mappings
 		default_mappings = false,
-		gD = "lua vim.lsp.buf.declaration()",
+		-- gD = "lua vim.lsp.buf.declaration()",
 		gd = "lua vim.lsp.buf.definition()",
 		gt = "lua vim.lsp.buf.type_definition()",
-		gi = "lua vim.lsp.buf.implementation()",
-		gr = "lua vim.lsp.buf.references()",
+		-- gi = "lua vim.lsp.buf.implementation()",
+		-- gr = "lua vim.lsp.buf.references()",
 		K = "lua vim.lsp.buf.hover()",
 		-- ['<C-k>'] = 'lua vim.lsp.buf.signature_help()', -- TODO: We are using for window navigation, need new bind
 		["<space>rn"] = "lua vim.lsp.buf.rename()",
@@ -72,8 +77,9 @@ return {
 			--     },
 			--   },
 			-- },
-      powershell_es = {},
+			powershell_es = {},
 			taplo = {},
+			omnisharp = {},
 			lua_ls = {
 				settings = {
 					Lua = {

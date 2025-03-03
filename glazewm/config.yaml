@@ -52,6 +52,8 @@ workspaces:
     display_name: 'Social'
   - name: 'browser'
     display_name: 'Browser'
+  - name: 'notes'
+    display_name: 'Notes'
   - name: 'terminal'
     display_name: 'Windows Terminal'
   - name: 'explorer'
@@ -100,6 +102,7 @@ window_rules:
         window_title: { regex: '.*? - Peek' }
       - window_process: { equals: 'Lively' }
         window_class: { regex: 'HwndWrapper' }
+      - window_process: {equals: 'Ueli'}
 
 binding_modes:
   - name: 'pause'
@@ -133,6 +136,12 @@ keybindings:
     bindings: ['alt+e']
   - commands: ['move --workspace explorer', 'focus --workspace explorer']
     bindings: ['alt+shift+e']
+
+  # notes
+  - commands: ['focus --workspace notes']
+    bindings: ['alt+n']
+  - commands: ['move --workspace notes', 'focus --workspace notes']
+    bindings: ['alt+shift+n']
 
   - commands: ['focus --workspace 1']
     bindings: ['alt+1']

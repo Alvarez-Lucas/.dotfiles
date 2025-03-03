@@ -24,6 +24,7 @@ return {
 			javascript = { "prettierd", "prettier", stop_after_first = true },
 			-- toml = { "taplo" },
 			json = { "prettier" },
+			csharp = { "csharpier" },
 		},
 	},
 }

@@ -1,4 +1,5 @@
 return {
+	-- dependencies = "nvim-tree/nvim-web-devicons",
 	enabled = false,
 	"ms-jpq/chadtree",
 	branch = "chad",
@@ -20,6 +21,8 @@ return {
 		},
 		options = {
 			close_on_open = true,
+			follow = true,
+			-- icon_glyph_set = devicons,
 		},
 	},
 	config = function(_, opts)
