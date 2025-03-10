@@ -1,4 +1,5 @@
 return {
+	enabled = false,
 	"NTBBloodbath/doom-one.nvim",
 	setup = function()
 		-- Add color to cursor

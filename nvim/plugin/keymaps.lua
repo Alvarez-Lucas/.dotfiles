@@ -9,7 +9,23 @@ vim.keymap.set("n", "<c-d>", "<c-d>zz", defaultOpts)
 vim.keymap.set("n", "<c-u>", "<c-u>zz", defaultOpts)
 
 -- Delete a buffer
-vim.keymap.set("", "<leader>d", "<cmd>bdelete<cr>", defaultOpts)
+-- vim.keymap.set("", "<leader>d", "<cmd>bdelete<cr>", defaultOpts)
+
+-- Yank into system clipboard
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y') -- yank motion
+vim.keymap.set({ "n", "v" }, "<leader>Y", '"+Y') -- yank line
+
+-- Delete into system clipboard
+vim.keymap.set({ "n", "v" }, "<leader>d", '"+d') -- delete motion
+vim.keymap.set({ "n", "v" }, "<leader>D", '"+D') -- delete line
+
+-- Paste from system clipboard
+vim.keymap.set("n", "<leader>p", '"+p') -- paste after cursor
+vim.keymap.set("n", "<leader>P", '"+P') -- paste before cursor
+vim.keymap.set("v", "<leader>p", '"+p')
+
+-- Copy from register into clipboard
+vim.keymap.set("n", "<Leader>xp", ":call setreg('+', getreg('@'))<CR>", defaultOpts)
 
 -- Save File
 vim.keymap.set("n", "<C-s>", "<cms>w<cr>", defaultOpts)

@@ -1,0 +1,5 @@
+{
+  "links": {
+    "config.toml": ". ~/AppData/Roaming/neovide/config.toml"
+  }
+}

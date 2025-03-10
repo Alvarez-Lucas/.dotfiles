@@ -2,7 +2,6 @@ return {
 	enabled = false,
 	"miikanissi/modus-themes.nvim",
 	priority = 1000,
-	config = true,
 	opts = {
 		-- Theme comes in two styles `modus_operandi` and `modus_vivendi`
 		-- `auto` will automatically set style based on background set with vim.o.background

@@ -1,0 +1,12 @@
+[plugin]
+deps = []
+
+[[flavor.deps]]
+use = "tkapias/nightfly"
+rev = "599b8ad"
+hash = "2c32a36c552fea0035a4e30e72698ea8"
+
+[[flavor.deps]]
+use = "yazi-rs/flavors:catppuccin-mocha"
+rev = "b929df6"
+hash = "800799d6ab64ece50a4e516641b96fa0"

@@ -1,4 +1,4 @@
-vim.opt.background = "light"
+-- vim.opt.background = "light"
 vim.opt.inccommand = "split" -- Preview for substitute
 vim.opt.laststatus = 3 -- Global status line
 vim.opt.number = true -- Line numbers
