@@ -2,6 +2,7 @@ return -- lazy.nvim
 {
 	"folke/snacks.nvim",
 	---@type snacks.Config
+	lazy = false,
 	opts = {
 		picker = {
 			layout = { preset = "ivy", layout = { height = 0.7 } },
@@ -23,7 +24,8 @@ return -- lazy.nvim
 								["<c-e>"] = {
 									function(picker)
 										picker:close()
-										Snacks.picker.explorer()
+										-- Snacks.picker.explorer()
+										vim.cmd("CHADopen")
 									end,
 									mode = { "n", "i" },
 								},
@@ -31,21 +33,26 @@ return -- lazy.nvim
 						},
 					},
 				},
-				explorer = {
-					replace_netrw = true,
-					auto_close = true,
-					matcher = {
-						fuzzy = true,
-					},
-					win = {
-						list = {
-							keys = { ["f"] = "picker_files" },
-						},
-					},
-				},
+				-- explorer = {
+				--   -- replace_netrw = true,
+				--   auto_close = true,
+				--   matcher = {
+				--     fuzzy = true,
+				--   },
+				--   win = {
+				--     list = {
+				--       -- keys = { ["f"] = "picker_files" },
+				--       keys = {
+				--         ["f"] = function()
+				--           vim.cmd("CHADopen")
+				--         end,
+				--       },
+				--     },
+				--   },
+				-- },
 			},
 		},
-		explorer = {},
+		-- explorer = {},
 		quickfile = {},
 		scratch = {},
 	},
@@ -124,13 +131,13 @@ return -- lazy.nvim
 		-- 	end,
 		-- 	desc = "Notification History",
 		-- },
-		{
-			"<leader>e",
-			function()
-				Snacks.picker.explorer({})
-			end,
-			desc = "File Explorer",
-		},
+		-- {
+		-- 	"<leader>e",
+		-- 	function()
+		-- 		Snacks.picker.explorer({})
+		-- 	end,
+		-- 	desc = "File Explorer",
+		-- },
 		-- -- find
 		{
 			"<leader>b",
@@ -170,13 +177,24 @@ return -- lazy.nvim
 			function()
 				Snacks.picker.projects({
 					dev = { "~/repos", "~/.dotfiles" },
-					patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "package.json", "Makefile", "dot.toml" },
+					patterns = {
+						".git",
+						"_darcs",
+						".hg",
+						".bzr",
+						".svn",
+						"package.json",
+						"Makefile",
+						"dot.toml",
+						"dot.yaml",
+					},
 					-- confirm = {"picker_explorer" },
 					confirm = function(picker, item)
 						if item then
 							vim.cmd.tcd(Snacks.picker.util.dir(item))
 							picker:close()
-							Snacks.picker.files()
+							-- Snacks.picker.files()
+							vim.cmd("CHADopen")
 						else
 							picker:close()
 						end
