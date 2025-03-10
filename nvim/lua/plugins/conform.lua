@@ -15,7 +15,7 @@ return {
 		},
 		formatters_by_ft = {
 			ps1 = { lsp_format = "prefer" },
-			lua = { "stylua" },
+			lua = { "stylua", stop_after_first = true },
 			-- Conform will run multiple formatters sequentially
 			python = { "isort", "black" },
 			-- You can customize some of the format options for the filetype (:help conform.format)

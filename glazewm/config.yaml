@@ -52,6 +52,8 @@ workspaces:
     display_name: 'Social'
   - name: 'browser'
     display_name: 'Browser'
+  - name: 'code'
+    display_name: 'Code'
   - name: 'notes'
     display_name: 'Notes'
   - name: 'terminal'
@@ -124,6 +126,12 @@ keybindings:
     bindings: ['alt+b']
   - commands: ['move --workspace browser', 'focus --workspace browser']
     bindings: ['alt+shift+b']
+
+  # browser
+  - commands: ['focus --workspace code']
+    bindings: ['alt+c']
+  - commands: ['move --workspace code', 'focus --workspace code']
+    bindings: ['alt+shift+c']
 
   # terminal
   - commands: ['focus --workspace terminal']

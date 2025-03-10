@@ -1,22 +1,51 @@
 return -- lazy.nvim
 {
 	"folke/snacks.nvim",
+	lazy = false,
+	---@module "snacks"
 	---@type snacks.Config
 	opts = {
+		-- quickfile = { enabled = true },
+		input = { enabled = true },
+		scratch = { enabled = true },
+		indent = {
+			priority = 1,
+			enabled = true,
+			animate = { enabled = false },
+			chunk = {
+				enabled = true,
+				char = {
+					corner_top = "┌",
+					corner_bottom = "└",
+					-- corner_top = "╭",
+					-- corner_bottom = "╰",
+					horizontal = "─",
+					vertical = "│",
+					arrow = ">",
+				},
+			},
+		},
 		picker = {
-			layout = { preset = "ivy", layout = { height = 0.7 } },
+			-- layout = { preset = "top" },
+			layout = { preset = "vertical" },
+			-- layout = { preset = "select" },
+			-- layout = { preset = "ivy", layout = { position = "bottom" } },
+			-- layout = { preset = "ivy" },
+			-- layout = { preset = "ivy_split" },
+			-- layout = { preset = "default" },
+			-- layout = { preset = "vscode" },
+			-- layout = { preset = "dropdown" },
+			-- layout = { preset = "bottom" },
+			-- layout = { preset = "telescope"},
 			win = {
 				input = {
 					keys = {
-						-- ["<Esc>"] = { "close", mode = { "n", "i" } },
+						["<Esc>"] = { "close", mode = { "n", "i" } },
 					},
 				},
 			},
 			sources = {
-				-- buffers = { layout = { preset = "ivy", layout = { height = 0.8 } } },
-				-- projects = { layout = { preset = "ivy", layout = { height = 0.8 } } },
 				files = {
-					-- layout = { preset = "ivy", layout = { height = 0.8 } },
 					win = {
 						input = {
 							keys = {
@@ -32,7 +61,7 @@ return -- lazy.nvim
 					},
 				},
 				explorer = {
-					replace_netrw = true,
+					replace_netrw = false,
 					auto_close = true,
 					matcher = {
 						fuzzy = true,
@@ -45,9 +74,7 @@ return -- lazy.nvim
 				},
 			},
 		},
-		explorer = {},
-		quickfile = {},
-		scratch = {},
+		explorer = { enabled = true },
 	},
 	keys = {
 		{
@@ -65,14 +92,14 @@ return -- lazy.nvim
 			desc = "Select Scratch Buffer",
 		},
 		{
-			"<leader>gg",
+			"<leader>g",
 			function()
 				Snacks.picker.grep()
 			end,
 			desc = "Grep",
 		},
 		{
-			"<leader>gg",
+			"<leader>g",
 			function()
 				Snacks.picker.grep_word()
 			end,
@@ -170,7 +197,18 @@ return -- lazy.nvim
 			function()
 				Snacks.picker.projects({
 					dev = { "~/repos", "~/.dotfiles" },
-					patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "package.json", "Makefile", "dot.toml" },
+					patterns = {
+						".git",
+						"_darcs",
+						".hg",
+						".bzr",
+						".svn",
+						"package.json",
+						"Makefile",
+						"dot.toml",
+						"dot.json",
+						"dot.toml",
+					},
 					-- confirm = {"picker_explorer" },
 					confirm = function(picker, item)
 						if item then
@@ -195,127 +233,54 @@ return -- lazy.nvim
 		},
 		-- -- git
 		{
-			"<leader>gb",
+			"<leader>vb",
 			function()
 				Snacks.picker.git_branches()
 			end,
 			desc = "Git Branches",
 		},
 		{
-			"<leader>gl",
+			"<leader>vl",
 			function()
 				Snacks.picker.git_log()
 			end,
 			desc = "Git Log",
 		},
 		{
-			"<leader>gL",
+			"<leader>vL",
 			function()
 				Snacks.picker.git_log_line()
 			end,
 			desc = "Git Log Line",
 		},
 		{
-			"<leader>gs",
+			"<leader>vs",
 			function()
 				Snacks.picker.git_status()
 			end,
 			desc = "Git Status",
 		},
 		{
-			"<leader>gS",
+			"<leader>vS",
 			function()
 				Snacks.picker.git_stash()
 			end,
 			desc = "Git Stash",
 		},
 		{
-			"<leader>gd",
+			"<leader>vd",
 			function()
 				Snacks.picker.git_diff()
 			end,
 			desc = "Git Diff (Hunks)",
 		},
 		{
-			"<leader>gf",
+			"<leader>vf",
 			function()
 				Snacks.picker.git_log_file()
 			end,
 			desc = "Git Log File",
 		},
-		-- Grep
-		-- {
-		-- 	"<leader>sb",
-		-- 	function()
-		-- 		Snacks.picker.lines()
-		-- 	end,
-		-- 	desc = "Buffer Lines",
-		-- },
-		-- {
-		-- 	"<leader>sB",
-		-- 	function()
-		-- 		Snacks.picker.grep_buffers()
-		-- 	end,
-		-- 	desc = "Grep Open Buffers",
-		-- },
-		-- {
-		-- 	"<leader>sg",
-		-- 	function()
-		-- 		Snacks.picker.grep()
-		-- 	end,
-		-- 	desc = "Grep",
-		-- },
-		-- {
-		-- 	"<leader>sw",
-		-- 	function()
-		-- 		Snacks.picker.grep_word()
-		-- 	end,
-		-- 	desc = "Visual selection or word",
-		-- 	mode = { "n", "x" },
-		-- },
-		-- search
-		-- {
-		-- 	'<leader>s"',
-		-- 	function()
-		-- 		Snacks.picker.registers()
-		-- 	end,
-		-- 	desc = "Registers",
-		-- },
-		-- {
-		-- 	"<leader>s/",
-		-- 	function()
-		-- 		Snacks.picker.search_history()
-		-- 	end,
-		-- 	desc = "Search History",
-		-- },
-		-- {
-		-- 	"<leader>sa",
-		-- 	function()
-		-- 		Snacks.picker.autocmds()
-		-- 	end,
-		-- 	desc = "Autocmds",
-		-- },
-		-- {
-		-- 	"<leader>sb",
-		-- 	function()
-		-- 		Snacks.picker.lines()
-		-- 	end,
-		-- 	desc = "Buffer Lines",
-		-- },
-		-- {
-		-- 	"<leader>sc",
-		-- 	function()
-		-- 		Snacks.picker.command_history()
-		-- 	end,
-		-- 	desc = "Command History",
-		-- },
-		-- 	{
-		-- 		"<leader>sC",
-		-- 		function()
-		-- 			Snacks.picker.commands()
-		-- 		end,
-		-- 		desc = "Commands",
-		-- 	},
 		{
 			"<leader>Q",
 			function()
@@ -444,57 +409,20 @@ return -- lazy.nvim
 			nowait = true,
 			desc = "References",
 		},
-		-- 	{
-		-- 		"gI",
-		-- 		function()
-		-- 			Snacks.picker.lsp_implementations()
-		-- 		end,
-		-- 		desc = "Goto Implementation",
-		-- 	},
-		-- 	{
-		-- 		"gy",
-		-- 		function()
-		-- 			Snacks.picker.lsp_type_definitions()
-		-- 		end,
-		-- 		desc = "Goto T[y]pe Definition",
-		-- 	},
-		-- 	{
-		-- 		"<leader>ss",
-		-- 		function()
-		-- 			Snacks.picker.lsp_symbols()
-		-- 		end,
-		-- 		desc = "LSP Symbols",
-		-- 	},
-		-- 	{
-		-- 		"<leader>sS",
-		-- 		function()
-		-- 			Snacks.picker.lsp_workspace_symbols()
-		-- 		end,
-		-- 		desc = "LSP Workspace Symbols",
-		-- 	},
-		--   },
-		-- }
-		-- 		end,
-		-- 		desc = "LSP Symbols",
-		-- 	},
-		-- 	{
-		-- 		"<leader>sS",
-		-- 		function()
-		-- 			Snacks.picker.lsp_workspace_symbols()
-		-- 		end,
-		-- 		desc = "LSP Workspace Symbols",
-		-- 	},
-		-- 		function()
-		-- 			Snacks.picker.lsp_workspace_symbols()
-		-- 		end,
-		-- 		desc = "LSP Workspace Symbols",
-		-- 	},
-		-- 		function()
-		-- 			Snacks.picker.lsp_workspace_symbols()
-		-- 		end,
-		-- 		desc = "LSP Workspace Symbols",
-		-- 	},
-		-- 		desc = "LSP Workspace Symbols",
-		-- 	},
+		-- "<leader>sb", Snacks.picker.lines() desc = "Buffer Lines",
+		-- "<leader>sB", Snacks.picker.grep_buffers() desc = "Grep Open Buffers",
+		-- "<leader>sg", Snacks.picker.grep() desc = "Grep",
+		-- "<leader>sw", Snacks.picker.grep_word() desc = "Visual selection or word",
+		-- '<leader>s"', Snacks.picker.registers() desc = "Registers",
+		-- "<leader>s/", Snacks.picker.search_history() desc = "Search History",
+		-- "<leader>sa", Snacks.picker.autocmds() desc = "Autocmds",
+		-- "<leader>sc", Snacks.picker.command_history() desc = "Command History",
+		-- "<leader>sC", Snacks.picker.commands() desc = "Commands",
+		-- "gI",         Snacks.picker.lsp_implementations() desc = "Goto Implementation",
+		-- "gy",         Snacks.picker.lsp_type_definitions() desc = "Goto T[y]pe Definition",
+		-- "<leader>ss", Snacks.picker.lsp_symbols() desc = "LSP Symbols",
+		-- "<leader>sS", Snacks.picker.lsp_workspace_symbols() desc = "LSP Workspace Symbols",
+		-- "<leader>sS", Snacks.picker.lsp_workspace_symbols() desc = "LSP Workspace Symbols", Snacks.picker.lsp_workspace_symbols() desc = "LSP Workspace Symbols",
+		-- 			Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols",
 	},
 }
