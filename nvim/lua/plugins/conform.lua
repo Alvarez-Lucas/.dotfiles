@@ -10,7 +10,7 @@ return {
 	opts = {
 		format_on_save = {
 			-- These options will be passed to conform.format()
-			timeout_ms = 500,
+			timeout_ms = 3000,
 			lsp_format = "fallback",
 		},
 		formatters_by_ft = {
@@ -24,7 +24,7 @@ return {
 			javascript = { "prettierd", "prettier", stop_after_first = true },
 			-- toml = { "taplo" },
 			json = { "prettier" },
-			csharp = { "csharpier" },
+			cs = { "csharpier" },
 		},
 	},
 }
