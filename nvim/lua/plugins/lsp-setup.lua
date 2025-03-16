@@ -113,6 +113,7 @@ return {
 			powershell_es = {},
 			taplo = {},
 			omnisharp = {},
+			ruff = {},
 			lua_ls = {
 				-- settings = {
 				-- Lua = {
