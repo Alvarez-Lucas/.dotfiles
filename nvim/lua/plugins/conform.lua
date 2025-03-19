@@ -23,7 +23,7 @@ return {
 			-- Conform will run the first available formatter
 			javascript = { "prettierd", "prettier", stop_after_first = true },
 			-- toml = { "taplo" },
-			json = { "prettier" },
+			json = { "fixjson", "prettier" },
 			cs = { "csharpier" },
 		},
 	},

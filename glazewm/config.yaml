@@ -222,7 +222,8 @@ window_rules:
       - window_process: { equals: "brave" }
 
   # Windows Terminal
-  - commands: ["move --workspace w", "focus --workspace w"]
+  # - commands: ["move --workspace w", "focus --workspace w"]
+  - commands: [ "set-floating --x-pos 0 --y-pos 0 --width 1920 --height 1440"]
   # - commands: [ "set-floating", "size --width 1280 --height 768"]
   # - commands: ["set-fullscreen"]
     match:
@@ -334,7 +335,7 @@ keybindings:
 
   # Kill GlazeWM process safely.
   - commands: ["wm-exit"]
-    bindings: ["alt+shift+e"]
+    bindings: ["alt+shift+x"]
 
   # Re-evaluate configuration file.
   - commands: ["wm-reload-config"]

@@ -25,7 +25,7 @@ vim.keymap.set("n", "<leader>P", '"+P') -- paste before cursor
 vim.keymap.set("v", "<leader>p", '"+p')
 
 -- Copy from register into clipboard
-vim.keymap.set("n", "<Leader>xp", ":call setreg('+', getreg('@'))<CR>", defaultOpts)
+vim.keymap.set("n", "<Leader>xy", "<cmd>call setreg('+', getreg('@'))<CR>", defaultOpts)
 
 -- Save File
 vim.keymap.set("n", "<C-s>", "<cms>w<cr>", defaultOpts)
@@ -47,8 +47,8 @@ vim.keymap.set("n", "<bs>", "<C-^>", defaultOpts)
 vim.keymap.set("v", "Y", "y$", defaultOpts)
 
 -- Keep Selection After Indent TODO: Convert to lua
-vim.cmd(":vnoremap < <gv")
-vim.cmd(":vnoremap > >gv")
+vim.cmd(":vnoremap < <gv", defaultOpts)
+vim.cmd(":vnoremap > >gv", defaultOpts)
 
 -- Move Text
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv")
@@ -65,16 +65,16 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", defaultOpts)
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", defaultOpts)
 
 -- Create veritcal and horizontal split
-vim.keymap.set("n", "<leader>oL", "<cmd>set splitright<cr>:vsplit<cr>", defaultOpts)
-vim.keymap.set("n", "<leader>oJ", "<cmd>set splitbelow<cr>:split<cr>", defaultOpts)
-vim.keymap.set("n", "<leader>oK", "<cmd>set nosplitright<cr>:split<cr><C-w><c-k>", defaultOpts)
-vim.keymap.set("n", "<leader>oH", "<cmd>set nosplitbelow<cr>:vsplit<cr><C-w><c-h>", defaultOpts)
+vim.keymap.set("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts)
+vim.keymap.set("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>", defaultOpts)
+vim.keymap.set("n", "<leader>oK", "<cmd>set nosplitright<cr><cmd>split<cr><C-w><c-k>", defaultOpts)
+vim.keymap.set("n", "<leader>oH", "<cmd>set nosplitbelow<cr><cmd>vsplit<cr><C-w><c-h>", defaultOpts)
 
 -- Resize split
-vim.keymap.set("n", "<C-Up>", ":resize -5<CR>", defaultOpts)
-vim.keymap.set("n", "<C-Down>", ":resize +5<CR>", defaultOpts)
-vim.keymap.set("n", "<C-Left>", ":vertical resize -5<CR>", defaultOpts)
-vim.keymap.set("n", "<C-Right>", ":vertical resize +5<CR>", defaultOpts)
+vim.keymap.set("n", "<C-Up>", "<cmd>resize -5<CR>", defaultOpts)
+vim.keymap.set("n", "<C-Down>", "<cmd>resize +5<CR>", defaultOpts)
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -5<CR>", defaultOpts)
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
 
 -- Navigate terminal
 vim.keymap.set("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts)

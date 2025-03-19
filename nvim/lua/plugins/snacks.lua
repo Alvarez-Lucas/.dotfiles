@@ -205,7 +205,7 @@ return -- lazy.nvim
 						".svn",
 						"package.json",
 						"Makefile",
-						"dot.toml",
+						"dot.yaml",
 						"dot.json",
 						"dot.toml",
 					},
