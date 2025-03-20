@@ -1,4 +1,5 @@
+---
 links:
   komorebi.json: ~/komorebi.json
-  komorebi.bar.json : ~/komorebi.bar.json
+  komorebi.bar.json: ~/komorebi.bar.json
   whkdrc: ~/.config/whkdrc

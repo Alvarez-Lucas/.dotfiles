@@ -122,6 +122,7 @@ return {
 			-- end)
 		end,
 		servers = {
+			yamlls = {},
 			jsonls = {},
 			powershell_es = {},
 			taplo = {},

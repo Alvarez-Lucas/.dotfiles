@@ -25,6 +25,7 @@ return {
 			-- toml = { "taplo" },
 			json = { "fixjson", "prettier" },
 			cs = { "csharpier" },
+			yaml = { "yamlfix" }, -- "yamlfmt"
 		},
 	},
 }
