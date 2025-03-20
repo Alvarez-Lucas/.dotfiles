@@ -13,11 +13,18 @@ return {
 		},
 		lazy = true, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
 		version = "*", -- Pin Neorg to the latest stable release
+		-- cmd = { "Neorg" },
 		keys = {
 			"<leader>nn",
 			"<leader>ni",
 			{ "<leader>ni", "<cmd>Neorg index<cr>" },
-			-- { "<leader>nn", "<Plug>(neorg.dirman.new-note)<cr>" },
+			{ "<leader>njt", "<cmd>Neorg journal today<cr>" },
+			{ "<leader>njm", "<cmd>Neorg journal tomorrow<cr>" },
+			{ "<leader>njy", "<cmd>Neorg journal yesterday<cr>" },
+			{ "<leader>njc", "<cmd>Neorg journal custom<cr>" },
+			{ "<leader>njo", "<cmd>Neorg journal toc open<cr>" },
+			{ "<leader>nju", "<cmd>Neorg journal toc update<cr>" },
+			{ "<leader>nw", "<cmd>Neorg workspace<cr>" },
 		},
 		config = function()
 			require("neorg").setup({
@@ -34,7 +41,9 @@ return {
 					},
 					["core.integrations.treesitter"] = {},
 					["core.promo"] = {},
-					["core.esupports.metagen"] = {},
+					["core.esupports.metagen"] = {
+						config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix
+					},
 					["core.autocommands"] = {
 						vimleavepre = true,
 					},
@@ -48,6 +57,12 @@ return {
 					["core.dirman.utils"] = {},
 					["core.summary"] = {},
 					["core.itero"] = {},
+					["core.journal"] = {
+						config = {
+							strategy = "flat",
+							workspace = "notes",
+						},
+					},
 				},
 			})
 			vim.wo.foldlevel = 99
