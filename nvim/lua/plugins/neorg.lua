@@ -22,8 +22,8 @@ return {
 			{ "<leader>njm", "<cmd>Neorg journal tomorrow<cr>" },
 			{ "<leader>njy", "<cmd>Neorg journal yesterday<cr>" },
 			{ "<leader>njc", "<cmd>Neorg journal custom<cr>" },
-			{ "<leader>njo", "<cmd>Neorg journal toc open<cr>" },
-			{ "<leader>nju", "<cmd>Neorg journal toc update<cr>" },
+			-- { "<leader>njo", "<cmd>Neorg journal toc open<cr>" }, -- TODO: after installing TOC
+			-- { "<leader>nju", "<cmd>Neorg journal toc update<cr>" }, -- TODO: after installing TOC
 			{ "<leader>nw", "<cmd>Neorg workspace<cr>" },
 		},
 		config = function()
@@ -41,12 +41,12 @@ return {
 					},
 					["core.integrations.treesitter"] = {},
 					["core.promo"] = {},
-					["core.esupports.metagen"] = {
-						config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix
-					},
-					["core.autocommands"] = {
-						vimleavepre = true,
-					},
+					["core.esupports.metagen"] = { config = { update_date = false, type = "empty" } }, -- do not update date until https://github.com/nvim-neorg/neorg/issues/1579 fixed
+					-- https://github.com/nvim-neorg/neorg/issues/1579
+					-- ["core.esupports.metagen"] = {
+					-- 	config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix
+					-- },
+					["core.autocommands"] = {},
 					["core.esupports.indent"] = {},
 					-- ["core.completion"] = { config = { engine = "nvim-cmp" } },
 					--https://github.com/benlubas/neorg-interim-ls

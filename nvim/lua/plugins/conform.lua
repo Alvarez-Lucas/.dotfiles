@@ -26,6 +26,7 @@ return {
 			json = { "fixjson", "prettier" },
 			cs = { "csharpier" },
 			yaml = { "yamlfix" }, -- "yamlfmt"
+			-- norg = { command = "C:/Users/lalvarez/source/repos/norg-fmt/target/release/norg-fmt.exe" },
 		},
 	},
 }

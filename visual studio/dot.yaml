@@ -1,4 +1,4 @@
 ---
-windows[whoami.username="lalvarez"]:
+windows[whoami.username="LAlvarez"]:
   links:
     .vimrc: ~\.vimrc

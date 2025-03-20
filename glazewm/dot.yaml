@@ -2,6 +2,6 @@
 windows[whoami.username="lucas"]:
   links:
     home.config.yaml: ~/.glzr/glazewm/config.yaml
-windows[whoami.username="lalvarez"]:
+windows[whoami.username="LAlvarez"]:
   links:
     work.config.yaml: ~/.glzr/glazewm/config.yaml
