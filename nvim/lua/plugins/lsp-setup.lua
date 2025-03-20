@@ -15,6 +15,13 @@ return {
 		},
 		"williamboman/mason.nvim", -- optional
 		"williamboman/mason-lspconfig.nvim", -- optional
+		{ "sontungexpt/better-diagnostic-virtual-text", lazy = true },
+		-- {
+		-- 	url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		-- 	config = function()
+		-- 		require("lsp_lines").setup()
+		-- 	end,
+		-- },
 	},
 	-- config = function()
 	-- vim.o.updatetime = 250
@@ -38,19 +45,24 @@ return {
 						[vim.diagnostic.severity.HINT] = "󰌶 ",
 					},
 				},
-				virtual_text = {
-					source = "if_many",
-					spacing = 2,
-					format = function(diagnostic)
-						local diagnostic_message = {
-							[vim.diagnostic.severity.ERROR] = diagnostic.message,
-							[vim.diagnostic.severity.WARN] = diagnostic.message,
-							[vim.diagnostic.severity.INFO] = diagnostic.message,
-							[vim.diagnostic.severity.HINT] = diagnostic.message,
-						}
-						return diagnostic_message[diagnostic.severity]
-					end,
-				},
+
+				-- virtual_text = false,
+				-- virtual_text = false,
+				-- virtual_lines = true,
+				-- virtual_lines = { only_current_line = true },
+				-- virtual_text = {
+				-- 	source = "if_many",
+				-- 	spacing = 2,
+				-- 	format = function(diagnostic)
+				-- 		local diagnostic_message = {
+				-- 			[vim.diagnostic.severity.ERROR] = diagnostic.message,
+				-- 			[vim.diagnostic.severity.WARN] = diagnostic.message,
+				-- 			[vim.diagnostic.severity.INFO] = diagnostic.message,
+				-- 			[vim.diagnostic.severity.HINT] = diagnostic.message,
+				-- 		}
+				-- 		return diagnostic_message[diagnostic.severity]
+				-- 	end,
+				-- },
 				severity_sort = true,
 				update_in_insert = true,
 			}),
@@ -81,8 +93,8 @@ return {
 			["]d"] = "lua vim.diagnostic.goto_next()",
 		},
 
-		on_attach = function()
-
+		on_attach = function(client, bufnr)
+			require("better-diagnostic-virtual-text.api").setup_buf(bufnr, { inline = false })
 			-- diagnostic on curosr hold
 			-- vim.api.nvim_create_autocmd("CursorHold", {
 			-- 	buffer = bufnr,
@@ -114,6 +126,32 @@ return {
 			taplo = {},
 			omnisharp = {},
 			ruff = {},
+			pylsp = {
+				-- settings = {
+				-- 	pylsp = {
+				-- 		plugins = {
+				-- 			ruff = {
+				-- 				enabled = true, -- Enable the plugin
+				-- 				formatEnabled = true, -- Enable formatting using ruffs formatter
+				-- 				-- extendSelect = { "I" }, -- Rules that are additionally used by ruff
+				-- 				-- extendIgnore = { "C90" }, -- Rules that are additionally ignored by ruff
+				-- 				-- format = { "I" }, -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
+				-- 				-- severities = { ["D212"] = "I" }, -- Optional table of rules where a custom severity is desired
+				-- 				-- unsafeFixes = false, -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
+				--
+				-- 				-- Rules that are ignored when a pyproject.toml or ruff.toml is present:
+				-- 				-- lineLength = 88, -- Line length to pass to ruff checking and formatting
+				-- 				-- exclude = { "__about__.py" }, -- Files to be excluded by ruff checking
+				-- 				-- select = { "F" }, -- Rules to be enabled by ruff
+				-- 				-- ignore = { "D210" }, -- Rules to be ignored by ruff
+				-- 				-- perFileIgnores = { ["__init__.py"] = "CPY001" }, -- Rules that should be ignored for specific files
+				-- 				-- preview = false, -- Whether to enable the preview style linting and formatting.
+				-- 				-- targetVersion = "py310", -- The minimum python version to target (applies for both linting and formatting).
+				-- 			},
+				-- 		},
+				-- 	},
+				-- },
+			},
 			lua_ls = {
 				-- settings = {
 				-- Lua = {

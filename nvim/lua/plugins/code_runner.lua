@@ -27,6 +27,10 @@ return {
 				"rustc $fileName &&",
 				"$dir/$fileNameWithoutExt",
 			},
+			cs = {
+				"cd $dir &&",
+				"dotnet run",
+			},
 			c = function(...)
 				c_base = {
 					"cd $dir &&",

@@ -49,3 +49,9 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
 	end,
 })
+
+-- Set leetcode to python
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+	pattern = "leetcode.com_*.txt",
+	command = "set filetype=python",
+})
