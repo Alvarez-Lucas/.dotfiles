@@ -122,6 +122,7 @@ return {
 			-- end)
 		end,
 		servers = {
+			jsonls = {},
 			powershell_es = {},
 			taplo = {},
 			omnisharp = {},

@@ -25,7 +25,7 @@
   "neorg": { "branch": "main", "commit": "ed43ed58116caa0a17bbbc7aa663e32bf94bc531" },
   "neorg-interim-ls": { "branch": "main", "commit": "348cd121d8b872248e9b0e48e3611c54dfad83f0" },
   "newpaper.nvim": { "branch": "main", "commit": "f686be12d4f3e92a80d71fc51c2cfdf27fd381f1" },
-  "nightfly": { "branch": "master", "commit": "43cd633951ea75cad622a881953b02094fdd4b46" },
+  "nightfly": { "branch": "master", "commit": "275532b004ddda91be7626fae227aaf33302d6f0" },
   "nord.nvim": { "branch": "master", "commit": "80c1e5321505aeb22b7a9f23eb82f1e193c12470" },
   "nvim-lspconfig": { "branch": "master", "commit": "2574ad38c6ee4f0bef3a1ca305cd5df627a52bb3" },
   "nvim-nio": { "branch": "master", "commit": "21f5324bfac14e22ba26553caf69ec76ae8a7662" },
