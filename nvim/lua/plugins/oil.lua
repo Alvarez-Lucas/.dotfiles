@@ -1,5 +1,6 @@
 return {
 	"stevearc/oil.nvim",
+	lazy = false,
 	keys = {
 		{ "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
 	},
@@ -46,4 +47,7 @@ return {
 	dependencies = { { "echasnovski/mini.icons", opts = {} } },
 	-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
 	--
+	config = function(_, opts)
+		require("oil").setup(opts)
+	end,
 }

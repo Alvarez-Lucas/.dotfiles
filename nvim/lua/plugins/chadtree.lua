@@ -1,10 +1,14 @@
 return {
 	-- dependencies = "nvim-tree/nvim-web-devicons",
-	enabled = false,
+	lazy = false,
+	enabled = true,
 	"ms-jpq/chadtree",
 	branch = "chad",
 	build = "python3 -m chadtree deps",
 	-- https://github.com/ms-jpq/chadtree/blob/chad/config/defaults.yml
+	keys = {
+		{ "<leader>e", "<cmd>CHADopen<cr>" },
+	},
 	opts = {
 		keymap = {
 			primary = {
@@ -15,18 +19,20 @@ return {
 				"h",
 			},
 			quit = {
+				"<Esc>",
 				"q",
-				-- "<Esc>",
 			},
+			change_dir = { "." },
+			toggle_hidden = { "H" },
 		},
 		options = {
 			close_on_open = true,
 			follow = true,
 			-- icon_glyph_set = devicons,
 		},
+		view = { window_options = { foldenable = true } },
 	},
 	config = function(_, opts)
-		vim.keymap.set("n", "<leader>e", "<cmd>CHADopen<cr>")
 		vim.api.nvim_set_var("chadtree_settings", opts)
 	end,
 }
