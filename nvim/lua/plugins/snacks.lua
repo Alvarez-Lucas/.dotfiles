@@ -44,37 +44,37 @@ return -- lazy.nvim
 					},
 				},
 			},
-			sources = {
-				files = {
-					win = {
-						input = {
-							keys = {
-								["<c-e>"] = {
-									function(picker)
-										picker:close()
-										Snacks.picker.explorer()
-									end,
-									mode = { "n", "i" },
-								},
-							},
-						},
-					},
-				},
-				explorer = {
-					replace_netrw = false,
-					auto_close = true,
-					matcher = {
-						fuzzy = true,
-					},
-					win = {
-						list = {
-							keys = { ["f"] = "picker_files" },
-						},
-					},
-				},
-			},
+			-- sources = {
+			-- files = {
+			-- 	win = {
+			-- 		input = {
+			-- 			keys = {
+			-- 				["<c-e>"] = {
+			-- 					function(picker)
+			-- 						picker:close()
+			-- 						Snacks.picker.explorer()
+			-- 					end,
+			-- 					mode = { "n", "i" },
+			-- 				},
+			-- 			},
+			-- 		},
+			-- 	},
+			-- },
+			-- explorer = {
+			-- 	replace_netrw = false,
+			-- 	auto_close = true,
+			-- 	matcher = {
+			-- 		fuzzy = true,
+			-- 	},
+			-- 	win = {
+			-- 		list = {
+			-- 			keys = { ["f"] = "picker_files" },
+			-- 		},
+			-- 	},
+			-- },
+			-- },
 		},
-		explorer = { enabled = true },
+		-- explorer = { enabled = true },
 	},
 	keys = {
 		{
@@ -151,13 +151,13 @@ return -- lazy.nvim
 		-- 	end,
 		-- 	desc = "Notification History",
 		-- },
-		{
-			"<leader>e",
-			function()
-				Snacks.picker.explorer({})
-			end,
-			desc = "File Explorer",
-		},
+		-- {
+		-- 	"<leader>e",
+		-- 	function()
+		-- 		Snacks.picker.explorer({})
+		-- 	end,
+		-- 	desc = "File Explorer",
+		-- },
 		-- -- find
 		{
 			"<leader>b",

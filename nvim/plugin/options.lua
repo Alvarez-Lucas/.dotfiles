@@ -1,3 +1,4 @@
+vim.cmd("let &fcs='eob: '")
 -- vim.opt.background = "light"
 vim.opt.inccommand = "split" -- Preview for substitute
 vim.opt.laststatus = 3 -- Global status line
