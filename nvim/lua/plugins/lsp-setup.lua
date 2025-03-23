@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	"junnplus/lsp-setup.nvim",
 	event = { "BufReadPost", "BufNewFile", "VeryLazy" },
@@ -15,29 +16,155 @@ return {
 		},
 		"williamboman/mason.nvim", -- optional
 		"williamboman/mason-lspconfig.nvim", -- optional
-		{ "sontungexpt/better-diagnostic-virtual-text", lazy = true },
-		-- {
-		-- 	url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		-- 	config = function()
-		-- 		require("lsp_lines").setup()
-		-- 	end,
-		-- },
+		{
+			"rachartier/tiny-inline-diagnostic.nvim",
+			opts = {
+				-- Default configuration
+				-- Style preset for diagnostic messages
+				-- Available options:
+				-- "modern", "classic", "minimal", "powerline",
+				-- "ghost", "simple", "nonerdfont", "amongus"
+				preset = "powerline",
+
+				transparent_bg = false, -- Set the background of the diagnostic to transparent
+
+				hi = {
+					error = "DiagnosticError", -- Highlight group for error messages
+					warn = "DiagnosticWarn", -- Highlight group for warning messages
+					info = "DiagnosticInfo", -- Highlight group for informational messages
+					hint = "DiagnosticHint", -- Highlight group for hint or suggestion messages
+					arrow = "NonText", -- Highlight group for diagnostic arrows
+
+					-- Background color for diagnostics
+					-- Can be a highlight group or a hexadecimal color (#RRGGBB)
+					background = "CursorLine",
+
+					-- Colo}r blending option for the diagnostic background
+					-- Use "None" or a hexadecimal color (#RRGGBB) to blend with another color
+					mixing_color = "None",
+				},
+
+				options = {
+					-- Display the source of the diagnostic (e.g., basedpyright, vsserver, lua_ls etc.)
+					show_source = false,
+
+					-- Use icons defined in the diagnostic configuration
+					use_icons_from_diagnostic = false,
+
+					-- Set the arrow icon to the same color as the first diagnostic severity
+					set_arrow_to_diag_color = false,
+
+					-- Add messages to diagnostics when multiline diagnostics are enabled
+					-- If set to false, only signs will be displayed
+					add_messages = true,
+
+					-- Time (in milliseconds) to throttle updates while moving the cursor
+					-- Increase this value for better performance if your computer is slow
+					-- or set to 0 for immediate updates and better visual
+					throttle = 0,
+
+					-- Minimum message length before wrapping to a new line
+					softwrap = 30,
+					multilines = {
+						-- Enable multiline diagnostic messages
+						enabled = true,
+
+						-- Always show messages on all lines for multiline diagnostics
+						always_show = true,
+					},
+
+					-- Display all diagnostic messages on the cursor line
+					show_all_diags_on_cursorline = false,
+
+					-- Enable diagnostics in Insert mode
+					-- If enabled, it is better to set the `throttle` option to 0 to avoid visual artifacts
+					enable_on_insert = true,
+
+					-- Enable diagnostics in Select mode (e.g when auto inserting with Blink)
+					enable_on_select = false,
+
+					overflow = {
+						-- Manage how diagnostic messages handle overflow
+						-- Options:
+						-- "wrap" - Split long messages into multiple lines
+						-- "none" - Do not truncate messages
+						-- "oneline" - Keep the message on a single line, even if it's long
+						mode = "wrap",
+
+						-- Trigger wrapping to occur this many characters earlier when mode == "wrap".
+						-- Increase this value appropriately if you notice that the last few characters
+						-- of wrapped diagnostics are sometimes obscured.
+						padding = 0,
+					},
+
+					-- Configuration for breaking long messages into separate lines
+					break_line = {
+						-- Enable the feature to break messages after a specific length
+						enabled = false,
+
+						-- Number of characters after which to break the line
+						after = 30,
+					},
+
+					-- Custom format function for diagnostic messages
+					-- Example:
+					-- format = function(diagnostic)
+					--     return diagnostic.message .. " [" .. diagnostic.source .. "]"
+					-- end
+					format = nil,
+
+					virt_texts = {
+						-- Priority for virtual text display
+						priority = 2048,
+					},
+
+					-- Filter diagnostics by severity
+					-- Available severities:
+					-- vim.diagnostic.severity.ERROR
+					-- vim.diagnostic.severity.WARN
+					-- vim.diagnostic.severity.INFO
+					-- vim.diagnostic.severity.HINT
+					severity = {
+						vim.diagnostic.severity.ERROR,
+						vim.diagnostic.severity.WARN,
+						vim.diagnostic.severity.INFO,
+						vim.diagnostic.severity.HINT,
+					},
+
+					-- Events to attach diagnostics to buffers
+					-- You should not change this unless the plugin does not work with your configuration
+					overwrite_events = nil,
+				},
+				disabled_ft = {}, -- List of filetypes to disable the plugin
+			},
+			config = function(_, opts)
+				require("tiny-inline-diagnostic").setup(opts)
+
+				-- local p = require("nightfly").palette
+				-- vim.api.nvim_set_hl(0, "TinyInlineDiagnosticVirtualTextError", { bg = p.slate_blue, fg = p.watermelon })
+				-- vim.api.nvim_set_hl(0, "TinyInlineDiagnosticVirtualTextWarn", {fg=, bg=})
+				-- vim.api.nvim_set_hl(0, "TinyInlineDiagnosticVirtualTextInfo", {fg=, bg=})
+				-- vim.api.nvim_set_hl(0, "TinyInlineDiagnosticVirtualTextHint", {fg=, bg=})
+				-- vim.api.nvim_set_hl(0, "TinyInlineDiagnosticVirtualTextArrow", {fg=, bg=})
+			end,
+		},
 	},
-	-- config = function()
-	-- vim.o.updatetime = 250
-	-- vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-	-- 	group = vim.api.nvim_create_augroup("float_diagnostic", { clear = true }),
-	-- 	callback = function()
-	-- 		vim.diagnostic.open_float(nil, { focus = false })
-	-- 	end,
-	-- })
-	-- end,
 	opts = {
-		-- Default mappings
 		default_mappings = false,
 		settings = {
 			vim.diagnostic.config({
 				signs = {
+					-- text = {
+					-- 	[vim.diagnostic.severity.ERROR] = "",
+					-- 	[vim.diagnostic.severity.WARN] = "",
+					-- },
+					-- linehl = {
+					-- 	[vim.diagnostic.severity.ERROR] = "ErrorMsg",
+					-- },
+					-- numhl = {
+					-- 	[vim.diagnostic.severity.WARN] = "WarningMsg",
+					-- },
+
 					text = {
 						[vim.diagnostic.severity.ERROR] = "󰅚 ",
 						[vim.diagnostic.severity.WARN] = "󰀪 ",
@@ -45,26 +172,13 @@ return {
 						[vim.diagnostic.severity.HINT] = "󰌶 ",
 					},
 				},
-
-				-- virtual_text = false,
-				-- virtual_text = false,
-				-- virtual_lines = true,
-				-- virtual_lines = { only_current_line = true },
-				-- virtual_text = {
-				-- 	source = "if_many",
-				-- 	spacing = 2,
-				-- 	format = function(diagnostic)
-				-- 		local diagnostic_message = {
-				-- 			[vim.diagnostic.severity.ERROR] = diagnostic.message,
-				-- 			[vim.diagnostic.severity.WARN] = diagnostic.message,
-				-- 			[vim.diagnostic.severity.INFO] = diagnostic.message,
-				-- 			[vim.diagnostic.severity.HINT] = diagnostic.message,
-				-- 		}
-				-- 		return diagnostic_message[diagnostic.severity]
-				-- 	end,
-				-- },
 				severity_sort = true,
-				update_in_insert = true,
+				update_in_insert = false,
+				virtual_text = false,
+				-- virtual_text = { current_line =  true, source = "if_many", severity = { vim.diagnostic.severity.ERROR } },
+				underline = true,
+				virtual_lines = false,
+				float = { source = "if_many" },
 			}),
 		},
 		inlay_hints = { enabled = true },
@@ -85,8 +199,8 @@ return {
 		mappings = {
 			gd = "lua vim.lsp.buf.definition()",
 			gt = "lua vim.lsp.buf.type_definition()",
-			["K"] = "lua vim.diagnostic.open_float()",
 			["<space>k"] = "lua vim.lsp.buf.hover()",
+			-- ["K"] = "lua vim.lsp.buf.hover()",
 			["<space>rn"] = "lua vim.lsp.buf.rename()",
 			["<space>ca"] = "lua vim.lsp.buf.code_action()",
 			["[d"] = "lua vim.diagnostic.goto_prev()",
@@ -94,8 +208,32 @@ return {
 		},
 
 		on_attach = function(client, bufnr)
-			require("better-diagnostic-virtual-text.api").setup_buf(bufnr, { inline = false })
-			-- diagnostic on curosr hold
+			local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+
+			local border = {
+				{ "🭽", "FloatBorder" },
+				{ "▔", "FloatBorder" },
+				{ "🭾", "FloatBorder" },
+				{ "▕", "FloatBorder" },
+				{ "🭿", "FloatBorder" },
+				{ "▁", "FloatBorder" },
+				{ "🭼", "FloatBorder" },
+				{ "▏", "FloatBorder" },
+			}
+
+			function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+				opts = opts or {}
+				opts.border = opts.border or border
+				return orig_util_open_floating_preview(contents, syntax, opts, ...)
+			end
+
+			-- vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+			-- 	group = vim.api.nvim_create_augroup("float_diagnostic", { clear = true }),
+			-- 	callback = function()
+			-- 		vim.diagnostic.open_float(nil, { focus = false })
+			-- 	end,
+			-- })
+
 			-- vim.api.nvim_create_autocmd("CursorHold", {
 			-- 	buffer = bufnr,
 			-- 	callback = function()
@@ -110,16 +248,19 @@ return {
 			-- 		vim.diagnostic.open_float(nil, opts)
 			-- 	end,
 			-- })
-
-			-- TODO: Bind K to vim.diagnostic.open_float() and then to require("ufo").peekFoldedLinesUnderCursor()
-			-- peek ufo
-			-- vim.keymap.set("n", "K", function()
-			-- 	local winid = require("ufo").peekFoldedLinesUnderCursor()
-			-- 	if not winid then
-			-- 		-- choose one of coc.nvim and nvim lsp
-			-- 		vim.diagnostic.open_float()
-			-- 	end
-			-- end)
+			vim.keymap.set("n", "K", function()
+				-- vim.diagnostic.open_float()
+				vim.lsp.buf.hover()
+			end)
+			vim.keymap.set("n", "gl", function()
+				vim.diagnostic.open_float()
+			end)
+			vim.keymap.set("n", "gK", function()
+				require("blink.cmp").show_signature()
+			end)
+			vim.keymap.set("i", "<c-k>", function()
+				require("blink.cmp").show_signature()
+			end)
 		end,
 		servers = {
 			yamlls = {},
@@ -128,48 +269,12 @@ return {
 			taplo = {},
 			omnisharp = {},
 			ruff = {},
-			pylsp = {
-				-- settings = {
-				-- 	pylsp = {
-				-- 		plugins = {
-				-- 			ruff = {
-				-- 				enabled = true, -- Enable the plugin
-				-- 				formatEnabled = true, -- Enable formatting using ruffs formatter
-				-- 				-- extendSelect = { "I" }, -- Rules that are additionally used by ruff
-				-- 				-- extendIgnore = { "C90" }, -- Rules that are additionally ignored by ruff
-				-- 				-- format = { "I" }, -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
-				-- 				-- severities = { ["D212"] = "I" }, -- Optional table of rules where a custom severity is desired
-				-- 				-- unsafeFixes = false, -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
-				--
-				-- 				-- Rules that are ignored when a pyproject.toml or ruff.toml is present:
-				-- 				-- lineLength = 88, -- Line length to pass to ruff checking and formatting
-				-- 				-- exclude = { "__about__.py" }, -- Files to be excluded by ruff checking
-				-- 				-- select = { "F" }, -- Rules to be enabled by ruff
-				-- 				-- ignore = { "D210" }, -- Rules to be ignored by ruff
-				-- 				-- perFileIgnores = { ["__init__.py"] = "CPY001" }, -- Rules that should be ignored for specific files
-				-- 				-- preview = false, -- Whether to enable the preview style linting and formatting.
-				-- 				-- targetVersion = "py310", -- The minimum python version to target (applies for both linting and formatting).
-				-- 			},
-				-- 		},
-				-- 	},
-				-- },
-			},
-			lua_ls = {
-				-- settings = {
-				-- Lua = {
-				-- 	-- To have lsp references when editing neovim config
-				-- 	workspace = {
-				-- 		checkThirdParty = true,
-				-- 		library = {
-				-- 			vim.env.VIMRUNTIME,
-				-- 		},
-				-- 	},
-				-- },
-				-- },
-			},
+			pylsp = {},
+			lua_ls = {},
 		},
 	},
 }
+
 -- gD = "lua vim.lsp.buf.declaration()",
 -- Example mappings for telescope pickers:
 -- gd = 'lua require"telescope.builtin".lsp_definitions()',

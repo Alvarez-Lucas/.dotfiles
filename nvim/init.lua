@@ -1,5 +1,5 @@
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 -- vim.g.loaded_gzip = 0
 -- vim.g.loaded_tar = 0
 -- vim.g.loaded_tarPlugin = 0

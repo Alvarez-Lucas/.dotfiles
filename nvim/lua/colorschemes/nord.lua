@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	enabled = false,
 	"shaunsingh/nord.nvim",

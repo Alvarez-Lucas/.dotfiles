@@ -3,3 +3,4 @@ links:
   package.toml: ~/appdata/Roaming/yazi/config/package.toml
   theme.toml: ~/appdata/Roaming/yazi/config/theme.toml
   yazi.toml: ~/appdata/Roaming/yazi/config/yazi.toml
+  init.lua: ~/appdata/Roaming/yazi/config/init.lua

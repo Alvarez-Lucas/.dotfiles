@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	enabled = false,
 	"yorik1984/newpaper.nvim",

@@ -6,12 +6,13 @@
 -- 	",",
 -- },
 --
+---@type LazySpec
 return {
 	enabled = true,
 	"saghen/blink.cmp",
 	-- optional: provides snippets for the snippet source
 	event = { "InsertEnter", "BufNewFile", "VeryLazy" },
-	dependencies = { "rafamadriz/friendly-snippets" },
+	dependencies = { "rafamadriz/friendly-snippets", { "echasnovski/mini.icons", opts = {} } },
 	-- dependencies = { "rafamadriz/friendly-snippets", "nvim-tree/nvim-web-devicons", "onsails/lspkind.nvim" },
 
 	-- use a release tag to download pre-built binaries

@@ -97,5 +97,6 @@ vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory" })
 
 -- vim.keymap.set("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
 -- vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
---
---
+
+-- vim.keymap.set("n", "<leader>e", "<cmd>Lexplore<cr>")
+-- vim.keymap.set("n", "<leader>E", "<cmd>Lexplore %:p:h<cr>")

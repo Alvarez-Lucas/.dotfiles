@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	enabled = false,
 	"miikanissi/modus-themes.nvim",

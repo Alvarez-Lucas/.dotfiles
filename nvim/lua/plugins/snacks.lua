@@ -1,7 +1,8 @@
-return -- lazy.nvim
-{
+---@type LazySpec
+return {
 	"folke/snacks.nvim",
-	lazy = false,
+	event = "VeryLazy",
+	lazy = true,
 	---@module "snacks"
 	---@type snacks.Config
 	opts = {
@@ -45,6 +46,28 @@ return -- lazy.nvim
 				},
 			},
 			-- sources = {
+			--   files = {
+			--     win = {
+			--       input = {
+			--         keys = {
+			--           ["<c-e>"] = {
+			--           function (picker)
+			--               Snacks.picker.ac
+			--
+			--           end}
+			--
+			--
+			--         }
+			--
+			--       }
+			--
+			--
+			--     }
+			--
+			--   }
+			--
+			-- }
+			-- sources = {
 			-- files = {
 			-- 	win = {
 			-- 		input = {
@@ -59,19 +82,6 @@ return -- lazy.nvim
 			-- 			},
 			-- 		},
 			-- 	},
-			-- },
-			-- explorer = {
-			-- 	replace_netrw = false,
-			-- 	auto_close = true,
-			-- 	matcher = {
-			-- 		fuzzy = true,
-			-- 	},
-			-- 	win = {
-			-- 		list = {
-			-- 			keys = { ["f"] = "picker_files" },
-			-- 		},
-			-- 	},
-			-- },
 			-- },
 		},
 		-- explorer = { enabled = true },
@@ -94,7 +104,7 @@ return -- lazy.nvim
 		{
 			"<leader>g",
 			function()
-				Snacks.picker.grep()
+				Snacks.picker.grep({ need_search = false })
 			end,
 			desc = "Grep",
 		},
@@ -193,6 +203,13 @@ return -- lazy.nvim
 		-- 	desc = "Find Git Files",
 		-- },
 		{
+			"<leader>Z",
+			function()
+				Snacks.picker.zoxide()
+			end,
+			desc = "Zoxide",
+		},
+		{
 			"<leader>z",
 			function()
 				Snacks.picker.projects({
@@ -218,14 +235,13 @@ return -- lazy.nvim
 						else
 							picker:close()
 						end
-						-- Snacks.picker.pick("explorer", { layout = { fullscreen = true } })
 					end,
 				})
 			end,
 			desc = "Projects",
 		},
 		{
-			"<leader>o",
+			"<leader>O",
 			function()
 				Snacks.picker.recent()
 			end,
@@ -295,13 +311,13 @@ return -- lazy.nvim
 			end,
 			desc = "Buffer Diagnostics",
 		},
-		-- 	{
-		-- 		"<leader>sh",
-		-- 		function()
-		-- 			Snacks.picker.help()
-		-- 		end,
-		-- 		desc = "Help Pages",
-		-- 	},
+		{
+			"<leader>H",
+			function()
+				Snacks.picker.help()
+			end,
+			desc = "Help Pages",
+		},
 		-- 	{
 		-- 		"<leader>sH",
 		-- 		function()

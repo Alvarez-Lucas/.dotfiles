@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	enabled = false,
 	"chiendo97/intellij.vim",

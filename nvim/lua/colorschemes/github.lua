@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	enabled = false,
 	"projekt0n/github-nvim-theme",

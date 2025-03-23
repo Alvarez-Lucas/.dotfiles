@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	enabled = false,
 	"bluz71/vim-moonfly-colors",

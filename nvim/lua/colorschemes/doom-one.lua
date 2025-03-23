@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
 	enabled = false,
 	"NTBBloodbath/doom-one.nvim",
