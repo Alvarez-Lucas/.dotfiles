@@ -28,7 +28,7 @@ return {
 		},
 		picker = {
 			-- layout = { preset = "top" },
-			layout = { preset = "vertical" },
+			-- layout = { preset = "vertical" },
 			-- layout = { preset = "select" },
 			-- layout = { preset = "ivy", layout = { position = "bottom" } },
 			-- layout = { preset = "ivy" },
@@ -37,12 +37,17 @@ return {
 			-- layout = { preset = "vscode" },
 			-- layout = { preset = "dropdown" },
 			-- layout = { preset = "bottom" },
-			-- layout = { preset = "telescope"},
+			layout = { preset = "telescope" },
 			win = {
 				input = {
 					keys = {
 						["<Esc>"] = { "close", mode = { "n", "i" } },
 					},
+				},
+			},
+			sources = {
+				git_status = {
+					layout = { preset = "default" },
 				},
 			},
 			-- sources = {
@@ -161,14 +166,6 @@ return {
 		-- 	end,
 		-- 	desc = "Notification History",
 		-- },
-		-- {
-		-- 	"<leader>e",
-		-- 	function()
-		-- 		Snacks.picker.explorer({})
-		-- 	end,
-		-- 	desc = "File Explorer",
-		-- },
-		-- -- find
 		{
 			"<leader>b",
 			function()
@@ -181,27 +178,6 @@ return {
 			end,
 			desc = "Buffers",
 		},
-		-- {
-		-- 	"<leader>fc",
-		-- 	function()
-		-- 		Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
-		-- 	end,
-		-- 	desc = "Find Config File",
-		-- },
-		-- {
-		-- 	"<leader>ff",
-		-- 	function()
-		-- 		Snacks.picker.files()
-		-- 	end,
-		-- 	desc = "Find Files",
-		-- },
-		-- {
-		-- 	"<leader>fg",
-		-- 	function()
-		-- 		Snacks.picker.git_files()
-		-- 	end,
-		-- 	desc = "Find Git Files",
-		-- },
 		{
 			"<leader>Z",
 			function()
@@ -226,16 +202,34 @@ return {
 						"dot.json",
 						"dot.toml",
 					},
-					-- confirm = {"picker_explorer" },
 					confirm = function(picker, item)
 						if item then
 							vim.cmd.tcd(Snacks.picker.util.dir(item))
 							picker:close()
 							Snacks.picker.files()
+						-- TODO: Consider replacing with dashboard so we can have on click access to either files or explorer
 						else
 							picker:close()
 						end
 					end,
+					-- win = {
+					-- 	input = {
+					-- 		keys = {
+					-- 			["<c-e>"] = {
+					-- 				function(picker, item)
+					-- 					if item then
+					-- 						vim.cmd.tcd(Snacks.picker.util.dir(item))
+					-- 						picker:close()
+					--
+					-- 					else
+					-- 						picker:close()
+					-- 					end
+					-- 				end,
+					-- 				mode = { "n", "i" },
+					-- 			},
+					-- 		},
+					-- 	},
+					-- },
 				})
 			end,
 			desc = "Projects",
@@ -247,7 +241,6 @@ return {
 			end,
 			desc = "Recent",
 		},
-		-- -- git
 		{
 			"<leader>vb",
 			function()
