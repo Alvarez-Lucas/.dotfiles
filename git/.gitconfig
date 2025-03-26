@@ -1,0 +1,16 @@
+[core]
+	editor = nvim
+	fsmonitor = true
+	untrackedcache = true
+	commitgraph = true
+	autocrlf = true
+[feature]
+	manyFiles = true
+[fetch]
+	writeCommitGraph = true
+[include]
+	path = ~/.gitconfig.local
+[commit]
+	verbose = true
+[diff]
+	algorithm = histogram

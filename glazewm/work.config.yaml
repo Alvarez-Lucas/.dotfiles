@@ -112,7 +112,7 @@ window_rules:
       - window_process: {equals: ueli}
 
   # Autocad
-  - commands: [set-tiling]
+  - commands: [move --workspace a]
     match:
       - window_process: {equals: acad}
 
@@ -121,11 +121,10 @@ window_rules:
     match:
       - window_process: {equals: ShareX}
 
-  # Visual Studio
-  - commands: [move --workspace v, focus --workspace v, set-tiling]
+  # LINQPad
+  - commands: [move --workspace v, focus --workspace v]
     match:
-      - window_process: {equals: LINQPad}
-        # window_title: { regex: '^((?!output).)*$' }
+      - window_title: {regex: LINQPad \d}
 
   # Visual Studio
   - commands: [set-floating]
@@ -134,16 +133,9 @@ window_rules:
         # window_title: { regex: '^((?!output).)*$' }
 
   # Visual Studio
-  - commands: [move --workspace c, focus --workspace c, set-floating]
+  - commands: [move --workspace c, focus --workspace c, set-tiling]
     match:
       - window_title: {regex: .*Microsoft Visual Studio Preview.*}
-
-  # Visual Studio - Immediate Window (Output)
-  # - commands:
-  #     ["move --workspace o", "set-tiling"]
-  #   match:
-  #     - window_process: { equals: "devenv" }
-  #       window_title: { equals: 'ESI-Term-2023-1.00' }
 
   # Visual Studio Code
   - commands: [move --workspace c, focus --workspace c, set-tiling]
@@ -166,13 +158,10 @@ window_rules:
       - window_title: {equals: Search}
       - window_title: {equals: Search everywhere}
       - window_title: {equals: Find all}
-  - commands: [set-tiling]
+  - commands: [move --workspace d, set-floating]
     match:
-      - window_title: {regex: .*Microsoft Visual Studio Preview}
-  - commands: [move --workspace d, focus --workspace d, set-floating]
-    match:
-      - window_process: {equals: ESI-Term}
-      - window_process: {equals: ESI Flash Utility}
+      - window_process: {regex: ESI-Term*}
+      - window_process: {regex: ESI Flash Utility*}
   - commands: [move --workspace 6, focus --workspace 6]
     match:
       - window_process: {equals: CamBam}
@@ -198,18 +187,16 @@ window_rules:
       - window_process: {equals: olk}
       - window_process: {equals: ms-teams}
 
-  # Vivaldi
+  # Web Browsers (brave, vivaldi, zen)
   - commands: [move --workspace b, focus --workspace b]
     match:
       - window_process: {equals: vivaldi}
-  - commands: [move --workspace b, focus --workspace b]
-    match:
       - window_process: {equals: brave}
+      - window_process: {equals: zen}
 
   # Windows Terminal
   # - commands: ["move --workspace w", "focus --workspace w"]
-  - commands: [set-floating --x-pos 0 --y-pos 0 --width 1920 --height 1440]
-  # - commands: [ "set-floating", "size --width 1280 --height 768"]
+  - commands: [set-floating --x-pos 0 --y-pos 0 --width 2880 --height 2050]
   # - commands: ["set-fullscreen"]
     match:
       - window_process: {equals: WindowsTerminal}

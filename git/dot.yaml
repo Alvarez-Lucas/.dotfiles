@@ -1,0 +1,9 @@
+---
+windows[whoami.username="lucas"]:
+  links:
+    .gitconfig: ~/.gitconfig
+    .gitconfig.local.home: ~/.gitconfig.local
+windows[whoami.username="LAlvarez"]:
+  links:
+    .gitconfig: ~/.gitconfig
+    .gitconfig.local.work: ~/.gitconfig.local

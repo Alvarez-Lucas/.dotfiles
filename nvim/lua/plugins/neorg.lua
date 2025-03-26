@@ -108,6 +108,7 @@ return {
 					["core.dirman.utils"] = {},
 					["core.summary"] = {},
 					["core.itero"] = {},
+					["core.looking-glass"] = {},
 					["core.journal"] = {
 						config = {
 							strategy = "flat",
