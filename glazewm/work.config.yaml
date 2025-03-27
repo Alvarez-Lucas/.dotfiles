@@ -162,9 +162,9 @@ window_rules:
     match:
       - window_process: {regex: ESI-Term*}
       - window_process: {regex: ESI Flash Utility*}
-  - commands: [move --workspace 6, focus --workspace 6]
-    match:
-      - window_process: {equals: CamBam}
+  # - commands: [move --workspace a, focus --workspace a]
+  #   match:
+  #     - window_process: {equals: CamBam}
 
   # Git
   - commands: [move --workspace gitbutler, focus --workspace gitbutler]

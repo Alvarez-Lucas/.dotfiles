@@ -4,13 +4,32 @@
 	untrackedcache = true
 	commitgraph = true
 	autocrlf = true
+	preloadindex = true
+[gc]
+  auto = 8000
+[pack]
+  threads = 0
+  packSizeLimit = 2g
 [feature]
 	manyFiles = true
 [fetch]
 	writeCommitGraph = true
+	parallel = 4
 [include]
 	path = ~/.gitconfig.local
 [commit]
 	verbose = true
 [diff]
 	algorithm = histogram
+[log]
+  date = relative
+[format]
+  pretty = format:%h %Cblue%ad%Creset %ae %Cgreen%s%Creset
+  ; pretty = format:%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(12,trunc)%ad %C(auto,green)%<(7,trunc)%aN%C(auto,reset)%s%C(auto,red)% gD% D
+  ; pretty = format:"%C(yellow)%h %ar %C(auto)%d %Creset %s , %Cblue%cn" --graph --all'
+[credential]
+	helper = cache
+[show]
+	UntrackedFiles = true
+[push]
+	autoSetupRemote = true

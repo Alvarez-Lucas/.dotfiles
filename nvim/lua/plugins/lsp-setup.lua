@@ -268,7 +268,7 @@ return {
 			powershell_es = {},
 			taplo = {},
 			omnisharp = {},
-			ruff = {},
+			-- ruff = {},
 			pylsp = {},
 			lua_ls = {},
 		},

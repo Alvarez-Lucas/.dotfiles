@@ -18,7 +18,7 @@ return {
 			ps1 = { lsp_format = "prefer" },
 			lua = { "stylua", stop_after_first = true },
 			-- Conform will run multiple formatters sequentially
-			python = {},
+			python = { "black" },
 			-- You can customize some of the format options for the filetype (:help conform.format)
 			rust = { "rustfmt", lsp_format = "fallback" },
 			-- Conform will run the first available formatter
