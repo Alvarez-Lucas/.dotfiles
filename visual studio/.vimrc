@@ -155,6 +155,8 @@ nnoremap <leader>de :vsc Debug.StopDebugging<cr>
 " close debugger and clean breakpoints
 nnoremap <leader>dE :vsc Debug.StopDebugging<Cr>:vsc Debug.DeleteAllBreakpoints<cr>
 
+nnoremap gO :vsc View.DocumentOutline<cr>
+
 vnoremap <Leader>y "+y
 vnoremap <Leader>p "+p
 nnoremap <Leader>p "+p
@@ -173,9 +175,8 @@ nnoremap ]m :vsc Edit.PreviousMethod<cr>
 
 " Quick Info
 nnoremap K :vsc Edit.QuickInfo<cr>
-nnoremap gk :vsc Edit.ParameterInfo<cr>
 inoremap <c-k> <c-o>:vsc Edit.ParameterInfo<cr>
-nnoremap <c-k> :vsc Edit.ParameterInfo<cr>
+nnoremap gk :vsc Edit.ParameterInfo<cr>
 
 " Code Actions
 nnoremap <leader>ca :vsc View.QuickActions<cr>
@@ -214,31 +215,35 @@ vnoremap <A-j> :move '>+1<CR>gv-gv<CR>gv=gv
 vnoremap <A-k> :move '<-2<CR>gv-gv<CR>gv=gv
 
 
-nnoremap <leader>h :vsc View.HarpoonToolWindow<cr>
-nnoremap <leader>a :vsc Harpoon.AppendTab<cr>
-nnoremap <leader>d :vsc Harpoon.DeleteTab<cr>
-nnoremap <leader>D :vsc Harpoon.ClearAll<cr>
-nnoremap <c-h> :vsc Harpoon.PreviousTab<cr>
-nnoremap <c-l> :vsc Harpoon.NextTab<cr>
-nnoremap <leader>1 :vsc Harpoon.SwitchToTab0<cr>
-nnoremap <leader>2 :vsc Harpoon.SwitchToTab1<cr>
-nnoremap <leader>3 :vsc Harpoon.SwitchToTab2<cr>
-nnoremap <leader>4 :vsc Harpoon.SwitchToTab3<cr>
-nnoremap <leader>5 :vsc Harpoon.SwitchToTab4<cr>
-nnoremap <leader>6 :vsc Harpoon.SwitchToTab6<cr>
-nnoremap <leader>7 :vsc Harpoon.SwitchToTab6<cr>
-nnoremap <leader>8 :vsc Harpoon.SwitchToTab7<cr>
-nnoremap <leader>9 :vsc Harpoon.SwitchToTab8<cr>
-nnoremap <C-1> :vsc Harpoon.OverwriteTab0<cr>
-nnoremap <C-2> :vsc Harpoon.OverwriteTab1<cr>
-nnoremap <C-3> :vsc Harpoon.OverwriteTab2<cr>
-nnoremap <C-4> :vsc Harpoon.OverwriteTab3<cr>
-nnoremap <C-5> :vsc Harpoon.OverwriteTab4<cr>
-nnoremap <C-6> :vsc Harpoon.OverwriteTab6<cr>
-nnoremap <C-7> :vsc Harpoon.OverwriteTab6<cr>
-nnoremap <C-8> :vsc Harpoon.OverwriteTab7<cr>
-nnoremap <C-9> :vsc Harpoon.OverwriteTab8<cr>
+nnoremap <leader>H :vsc View.HarpoonToolWindow<cr>
+nnoremap <leader>ha :vsc Harpoon.AppendTab<cr>
+nnoremap <leader>hd :vsc Harpoon.DeleteTab<cr>
+nnoremap <leader>hc :vsc Harpoon.ClearAll<cr>
+"nnoremap <c-h> :vsc Harpoon.PreviousTab<cr>
+"nnoremap <c-l> :vsc Harpoon.NextTab<cr>
+"nnoremap <leader>1 :vsc Harpoon.SwitchToTab0<cr>
+"nnoremap <leader>2 :vsc Harpoon.SwitchToTab1<cr>
+"nnoremap <leader>3 :vsc Harpoon.SwitchToTab2<cr>
+"nnoremap <leader>4 :vsc Harpoon.SwitchToTab3<cr>
+"nnoremap <leader>5 :vsc Harpoon.SwitchToTab4<cr>
+"nnoremap <leader>6 :vsc Harpoon.SwitchToTab6<cr>
+"nnoremap <leader>7 :vsc Harpoon.SwitchToTab6<cr>
+"nnoremap <leader>8 :vsc Harpoon.SwitchToTab7<cr>
+"nnoremap <leader>9 :vsc Harpoon.SwitchToTab8<cr>
+"nnoremap <C-1> :vsc Harpoon.OverwriteTab0<cr>
+"nnoremap <C-2> :vsc Harpoon.OverwriteTab1<cr>
+"nnoremap <C-3> :vsc Harpoon.OverwriteTab2<cr>
+"nnoremap <C-4> :vsc Harpoon.OverwriteTab3<cr>
+"nnoremap <C-5> :vsc Harpoon.OverwriteTab4<cr>
+"nnoremap <C-6> :vsc Harpoon.OverwriteTab6<cr>
+"nnoremap <C-7> :vsc Harpoon.OverwriteTab6<cr>
+"nnoremap <C-8> :vsc Harpoon.OverwriteTab7<cr>
+"nnoremap <C-9> :vsc Harpoon.OverwriteTab8<cr>
 
+nnoremap <c-j> :vsc Harpoon.SwitchToTab0<cr>
+nnoremap <c-k> :vsc Harpoon.SwitchToTab1<cr>
+nnoremap <c-l> :vsc Harpoon.SwitchToTab2<cr>
+nnoremap <c-;> :vsc Harpoon.SwitchToTab3<cr>
 
 "xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
 "xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
