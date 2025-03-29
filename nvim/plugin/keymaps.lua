@@ -59,10 +59,14 @@ vim.keymap.set("n", "<left>", "<cmd>bprevious<cr>", defaultOpts)
 vim.keymap.set("n", "<right>", "<cmd>bnext<cr>", defaultOpts)
 
 -- Navigate split
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", defaultOpts)
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", defaultOpts)
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", defaultOpts)
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+-- vim.keymap.set("n", "<C-h>", "<C-w><C-h>", defaultOpts)
+-- vim.keymap.set("n", "<C-j>", "<C-w><C-j>", defaultOpts)
+-- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", defaultOpts)
+-- vim.keymap.set("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+vim.keymap.set("n", "<C-S-h>", "<C-w><C-h>", defaultOpts)
+vim.keymap.set("n", "<C-S-j>", "<C-w><C-j>", defaultOpts)
+vim.keymap.set("n", "<C-S-k>", "<C-w><C-k>", defaultOpts)
+vim.keymap.set("n", "<C-S-l>", "<C-w><C-l>", defaultOpts)
 
 -- Create veritcal and horizontal split
 vim.keymap.set("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts)
