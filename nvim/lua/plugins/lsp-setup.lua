@@ -18,6 +18,14 @@ return {
 		"williamboman/mason-lspconfig.nvim", -- optional
 		{
 			"rachartier/tiny-inline-diagnostic.nvim",
+			keys = {
+				{
+					"<leader>ck",
+					function()
+						require("tiny-inline-diagnostic").toggle()
+					end,
+				},
+			},
 			opts = {
 				-- Default configuration
 				-- Style preset for diagnostic messages

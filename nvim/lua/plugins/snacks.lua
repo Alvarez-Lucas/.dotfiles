@@ -28,7 +28,7 @@ return {
 		},
 		picker = {
 			-- layout = { preset = "top" },
-			-- layout = { preset = "vertical" },
+			layout = { preset = "vertical", preview = nil },
 			-- layout = { preset = "select" },
 			-- layout = { preset = "ivy", layout = { position = "bottom" } },
 			-- layout = { preset = "ivy" },
@@ -37,7 +37,7 @@ return {
 			-- layout = { preset = "vscode" },
 			-- layout = { preset = "dropdown" },
 			-- layout = { preset = "bottom" },
-			layout = { preset = "telescope" },
+			-- layout = { preset = "telescope" },
 			win = {
 				input = {
 					keys = {

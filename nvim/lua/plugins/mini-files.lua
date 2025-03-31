@@ -19,9 +19,9 @@ return {
 		mappings = {
 			close = "q",
 			go_in = "L",
-			go_in_plus = "l",
-			go_out = "h",
-			go_out_plus = "H",
+			go_in_plus = "",
+			go_out = "H",
+			go_out_plus = "",
 			mark_goto = "'",
 			mark_set = "m",
 			reset = "<BS>",
@@ -45,7 +45,7 @@ return {
 			-- Maximum number of windows to show side by side
 			max_number = math.huge,
 			-- Whether to show preview of file/directory under cursor
-			preview = false,
+			preview = true,
 			-- Width of focused window
 			width_focus = 30,
 			-- -- Width of non-focused window
@@ -58,10 +58,28 @@ return {
 	config = function(_, opts)
 		require("mini.files").setup(opts)
 
-		vim.api.nvim_set_hl(0, "MiniFilesNormal", { bg = require("nightfly").palette.bg })
-		vim.api.nvim_set_hl(0, "MiniFilesTitle", { bg = require("nightfly").palette.bg })
-		vim.api.nvim_set_hl(0, "MiniFilesTitleFocused", { bg = require("nightfly").palette.bg })
-		vim.api.nvim_set_hl(0, "MiniFilesCursorLine", { bg = require("nightfly").palette.dark_blue })
+		-- local config = vim.fn["gruvbox_material#get_configuration"]()
+		-- local palette =
+		-- 	vim.fn["gruvbox_material#get_palette"](config.background, config.foreground, config.colors_override)
+		-- vim.api.nvim_set_hl(0, "MiniFilesNormal", { bg = palette.background })
+		-- vim.api.nvim_set_hl(0, "MiniFilesTitle", { bg = palette.background })
+		-- vim.api.nvim_set_hl(0, "MiniFilesTitleFocused", { bg = palette.background })
+		-- vim.api.nvim_set_hl(0, "MiniFilesCursorLine", { bg = palette.background })
+		-- vim.api.nvim_set_hl(0, "MiniFiles", { bg = palette.background })
+
+		-- * `MiniFilesBorder` - border of regular windows.
+		-- * `MiniFilesBorderModified` - border of windows showing modified buffer.
+		-- * `MiniFilesCursorLine` - cursor line in explorer windows.
+		-- * `MiniFilesDirectory` - text and icon representing directory.
+		-- * `MiniFilesFile` - text representing file.
+		-- * `MiniFilesNormal` - basic foreground/background highlighting.
+		-- * `MiniFilesTitle` - title of regular windows.
+		-- * `MiniFilesTitleFocused` - title of focused window.
+
+		-- local set_hl = vim.fn["gruvbox_material#highlight"]
+		--
+		-- set_hl("Search", palette.none, palette.bg_visual_yellow)
+		-- set_hl("IncSearch", palette.none, palette.bg_visual_red)
 
 		vim.api.nvim_create_autocmd("User", {
 			pattern = "MiniFilesWindowOpen",
@@ -69,7 +87,7 @@ return {
 				local win_id = args.data.win_id
 
 				-- Customize window-local settings
-				vim.api.nvim_win_set_config(win_id, { border = "single" })
+				vim.api.nvim_win_set_config(win_id, { border = "rounded" })
 			end,
 		})
 

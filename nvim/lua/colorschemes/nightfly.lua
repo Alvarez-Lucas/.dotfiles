@@ -1,6 +1,6 @@
 ---@type LazySpec
 return {
-	enabled = true,
+	enabled = false,
 	"bluz71/vim-nightfly-colors",
 	name = "nightfly",
 	lazy = false,

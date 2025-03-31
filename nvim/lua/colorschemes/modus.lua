@@ -16,10 +16,10 @@ return {
 		styles = {
 			-- Style to be applied to different syntax groups
 			-- Value is any valid attr-list value for `:help nvim_set_hl`
-			-- comments = { italic =  },
-			-- keywords = { italic = true },
-			-- functions = {},
-			-- variables = {},
+			comments = {},
+			keywords = {},
+			functions = {},
+			variables = {},
 		},
 
 		--- You can override specific color groups to use other groups or a hex color
@@ -36,7 +36,7 @@ return {
 		on_highlights = function(highlights, colors) end,
 	},
 	config = function()
-		vim.opt.background = "light"
+		vim.opt.background = "dark"
 		vim.cmd.colorscheme("modus")
 	end,
 }
