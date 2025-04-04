@@ -1,0 +1,5 @@
+---
+links:
+  okcolors/: ~/.glzr/zebar/okcolors/
+  settings.json: ~/.glzr/zebar/settings.json
+  normalize.css: ~/.glzr/zebar/normalize.css
