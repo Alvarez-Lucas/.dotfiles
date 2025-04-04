@@ -59,6 +59,23 @@ local defaultOpts = { noremap = true, silent = true }
 -- vim.keymap.set("", "<leader>d", "<cmd>bdelete<cr>", defaultOpts)
 -- k("n", "<C-s>", "<cms>w<cr>", defaultOpts)
 -- k("n", "<leader>s", "<cmd>w<cr>", defaultOpts)
+--
+if g.neovide then
+	g.neovide_scale_factor = 1.0
+	g.neovide_padding_top = 8
+	g.neovide_padding_bottom = 8
+	g.neovide_padding_right = 8
+	g.neovide_padding_left = 8
+	local change_scale_factor = function(delta)
+		g.neovide_scale_factor = g.neovide_scale_factor * delta
+	end
+	k("n", "<C-=>", function()
+		change_scale_factor(1.25)
+	end)
+	k("n", "<C-->", function()
+		change_scale_factor(1 / 1.25)
+	end)
+end
 
 -- System clipboard
 k({ "n", "v" }, "<leader>y", '"+y') -- yank motion
@@ -190,23 +207,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	command = "set filetype=python",
 })
 
-if g.neovide then
-	g.neovide_scale_factor = 1.0
-	g.neovide_padding_top = 8
-	g.neovide_padding_bottom = 8
-	g.neovide_padding_right = 8
-	g.neovide_padding_left = 8
-	local change_scale_factor = function(delta)
-		g.neovide_scale_factor = g.neovide_scale_factor * delta
-	end
-	k("n", "<C-=>", function()
-		change_scale_factor(1.25)
-	end)
-	k("n", "<C-->", function()
-		change_scale_factor(1 / 1.25)
-	end)
-end
-
 require("lazy").setup({
 	change_detection = {
 		notify = false,
@@ -231,17 +231,49 @@ require("lazy").setup({
 	spec = {
 
 		{
-			"catppuccin/nvim",
-			config = function()
-				c.colorscheme("catppuccin")
+			"e-q/okcolors.nvim",
+			name = "okcolors",
+			lazy = false, -- make sure we load this during startup if it is your main colorscheme
+			priority = 1000, -- make sure to load this before all the other start plugins
+			opts = {
+				variant = "smooth", -- "smooth" or "sharp", defaults to "smooth"
+			},
+			config = function(_, opts)
+				o.background = "light"
+				require("okcolors").setup(opts)
+				vim.cmd.colorscheme("okcolors")
 			end,
 		},
 
 		{
+			"norcalli/nvim-colorizer.lua",
+			lazy = true,
+			event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
+			opts = {},
+		},
+
+		-- {
+		-- 	enabled = false,
+		-- 	"catppuccin/nvim",
+		-- 	config = function()
+		-- 		c.colorscheme("catppuccin")
+		-- 	end,
+		-- },
+
+		{
 			"saghen/blink.cmp",
-			dependencies = { "rafamadriz/friendly-snippets" },
+			dependencies = { "rafamadriz/friendly-snippets", "nvim-tree/nvim-web-devicons" },
 			version = "1.*",
+			---@module 'blink.cmp'
+			---@type blink.cmp.Config
 			opts = {
+				keymap = { preset = "super-tab" },
+				cmdline = {
+					keymap = { preset = "inherit" },
+					completion = { menu = { auto_show = true } },
+				},
+				signature = { enabled = true },
+				fuzzy = { implementation = "prefer_rust_with_warning" },
 				sources = {
 					default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 					providers = {
@@ -291,7 +323,6 @@ require("lazy").setup({
 					},
 				},
 				view = {
-
 					centralize_selection = true,
 					float = {
 						enable = true,
@@ -716,11 +747,18 @@ require("lazy").setup({
 					}),
 				},
 				inlay_hints = { enabled = true },
-				-- capabilities = require("blink.cmp").get_lsp_capabilities(),
-				-- capabilities = vim.tbl_deep_extend(
-				-- 	"force",
+				-- capabilities = require("blink.cmp").get_lsp_capabilities({
+				-- 	textDocument = {
+				-- 		foldingRange = {
+				-- 			dynamicRegistration = false,
+				-- 			lineFoldingOnly = true,
+				-- 		},
+				-- 	},
+				-- }),
+				-- capabilities = vim.tbl_deep_extend(),
+				-- "force",
+				--     capabilities = vim.tbl_deep_extend(
 				-- 	vim.lsp.protocol.make_client_capabilities(),
-				-- 	require("blink.cmp").get_lsp_capabilities(),
 				-- 	{
 				-- 		textDocument = {
 				-- 			foldingRange = {
@@ -1211,9 +1249,12 @@ require("lazy").setup({
 					{ "<leader>nw", "<cmd>Neorg workspace<cr>" },
 					{
 						"<leader>ne",
-						function()
-							MiniFiles.open("~/notes/")
-						end,
+						"<cmd>NvimTreeToggle ~/notes/<cr>",
+						desc = "Find Neorg Files",
+					},
+					{
+						"<leader>nje",
+						"<cmd>NvimTreeToggle ~/notes/journal/<cr>",
 						desc = "Find Neorg Files",
 					},
 					{
@@ -1226,7 +1267,7 @@ require("lazy").setup({
 					{
 						"<leader>njf",
 						function()
-							Snacks.picker.files({ dirs = { "~/notes/journal/" } })
+							Snacks.picker.files({ dirs = { "~/notes/journal/" }, sort = { fields = { "file" } } })
 						end,
 						desc = "Find Neorg Files",
 					},
@@ -1239,11 +1280,24 @@ require("lazy").setup({
 					},
 				},
 				config = function()
+					vim.api.nvim_create_autocmd("FileType", {
+						group = vim.api.nvim_create_augroup("neorg_keymaps", { clear = true }),
+						pattern = { "norg" },
+						callback = function()
+							k(
+								"n",
+								"<leader>tt",
+								"<Plug>(neorg.qol.todo-items.todo.task-cycle)",
+								{ buffer = true, silent = true }
+							)
+						end,
+					})
+
 					require("neorg").setup({
 						load = {
 							["core.defaults"] = {},
 							["core.ui"] = {},
-							["core.concealer"] = { config = { icon_preset = "diamond" } },
+							["core.concealer"] = { config = { icon_preset = "varied" } },
 							["core.dirman"] = {
 								config = {
 									workspaces = {
@@ -1281,6 +1335,13 @@ require("lazy").setup({
 					vim.wo.conceallevel = 2
 				end,
 			},
+		},
+
+		{
+			ft = { "norg", "markdown" },
+			"lukas-reineke/headlines.nvim",
+			dependencies = "nvim-treesitter/nvim-treesitter",
+			config = true, -- or `opts = {}`
 		},
 	},
 })

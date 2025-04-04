@@ -913,3 +913,11 @@ source ~/.zoxide.nu
 
 # Starship - Prompt
 use ~/.cache/starship/init.nu
+
+alias v = nvim
+alias vh = nvim .
+alias E = explorer.exe
+alias e = explorer.exe .
+
+
+

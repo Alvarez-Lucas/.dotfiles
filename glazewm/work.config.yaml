@@ -3,6 +3,7 @@ general:
   startup_commands: [shell-exec zebar]
   focus_follows_cursor: false
   toggle_workspace_on_refocus: false
+  show_all_in_taskbar: false
   cursor_jump:
     enabled: true
     trigger: window_focus
@@ -32,7 +33,7 @@ window_behavior:
       maximized: false
       shown_on_top: false
 workspaces:
-  - name: b
+  - name: browser
     display_name: Browser
     bind_to_monitor: 0
   - name: c
@@ -188,7 +189,7 @@ window_rules:
       - window_process: {equals: ms-teams}
 
   # Web Browsers (brave, vivaldi, zen)
-  - commands: [move --workspace b, focus --workspace b]
+  - commands: [move --workspace browser, focus --workspace browser]
     match:
       - window_process: {equals: vivaldi}
       - window_process: {equals: brave}
@@ -337,76 +338,109 @@ keybindings:
     # bindings: ['alt+q']
 
   # Change focus to a workspace defined in `workspaces` config.
+    #
   - commands: [focus --workspace d]
     bindings: [alt+d]
   - commands: [move --workspace d, focus --workspace d]
     bindings: [alt+shift+d]
+
+    #
   - commands: [focus --workspace a]
     bindings: [alt+a]
   - commands: [move --workspace a, focus --workspace a]
     bindings: [alt+shift+a]
+
+    #
   - commands: [focus --workspace n]
     bindings: [alt+n]
   - commands: [move --workspace n, focus --workspace n]
     bindings: [alt+shift+n]
+
+    #
   - commands: [focus --workspace s]
     bindings: [alt+s]
   - commands: [move --workspace s, focus --workspace s]
     bindings: [alt+shift+s]
-  - commands: [focus --workspace b]
+
+    # Browser
+  - commands: [focus --workspace browser]
     bindings: [alt+b]
-  - commands: [move --workspace b, focus --workspace b]
+  - commands: [move --workspace browser, focus --workspace browser]
     bindings: [alt+shift+b]
+
+    #
   - commands: [focus --workspace c]
     bindings: [alt+c]
   - commands: [move --workspace c, focus --workspace c]
     bindings: [alt+shift+c]
+
+    #
   - commands: [focus --workspace v]
     bindings: [alt+v]
   - commands: [move --workspace v, focus --workspace v]
     bindings: [alt+shift+v]
+
+    #
   - commands: [focus --workspace e]
     bindings: [alt+e]
   - commands: [move --workspace e, focus --workspace e]
     bindings: [alt+shift+e]
+
+    #
   - commands: [focus --workspace gitbutler]
     bindings: [alt+g]
   - commands: [move --workspace gitbutler, focus --workspace gitbutler]
     bindings: [alt+shift+g]
+
+    #
   - commands: [focus --workspace gitkraken]
     bindings: [control+alt+g]
   - commands: [move --workspace gitkraken, focus --workspace gitkraken]
     bindings: [control+alt+shift+g]
+
+    #
   - commands: [focus --workspace w]
     bindings: [alt+w]
   - commands: [move --workspace w, focus --workspace w]
     bindings: [alt+shift+w]
+
+    #
   - commands: [focus --workspace 1]
     bindings: [alt+1]
   - commands: [move --workspace 1, focus --workspace 1]
     bindings: [alt+shift+1]
+
+    #
   - commands: [focus --workspace 2]
     bindings: [alt+2]
   - commands: [move --workspace 2, focus --workspace 2]
     bindings: [alt+shift+2]
+
+    #
   - commands: [focus --workspace 3]
     bindings: [alt+3]
   - commands: [move --workspace 3, focus --workspace 3]
     bindings: [alt+shift+3]
+
+    #
   - commands: [focus --workspace 4]
     bindings: [alt+4]
   - commands: [move --workspace 4, focus --workspace 4]
     bindings: [alt+shift+4]
+
+    #
   - commands: [focus --workspace 5]
     bindings: [alt+5]
   - commands: [move --workspace 5, focus --workspace 5]
     bindings: [alt+shift+5]
   # - commands: ["focus --workspace o"]
   #   bindings: ["alt+o"]
+    #
   - commands: [focus --workspace 6]
     bindings: [alt+6]
   - commands: [move --workspace 6, focus --workspace 6]
     bindings: [alt+shift+6]
+    #
   - commands: [focus --workspace 7]
     bindings: [alt+7]
   - commands: [move --workspace 7, focus --workspace 7]
@@ -434,48 +468,3 @@ keybindings:
     bindings: [alt+shift+up]
   - commands: [move-workspace --direction down]
     bindings: [alt+shift+down]
-
-  # Move focused window to a workspace defined in `workspaces` config.
-  # - commands: ["move --workspace o", "focus --workspace o"]
-  #   bindings: ["alt+shift+o"]
-
-  # Move focused window to a workspace defined in `workspaces` config.
-  # BUT DON'T SWITCH
-  # - commands: ["move --workspace d", "wm-redraw"]
-  #   bindings: ["alt+shift+d"]
-  # - commands: ["move --workspace a", "wm-redraw"]
-  #   bindings: ["alt+shift+a"]
-  # - commands: ["move --workspace n", "wm-redraw"]
-  #   bindings: ["alt+shift+n"]
-  # - commands: ["move --workspace s", "wm-redraw"]
-  #   bindings: ["alt+shift+s"]
-  # - commands: ["move --workspace b", "wm-redraw"]
-  #   bindings: ["alt+shift+b"]
-  # - commands: ["move --workspace c", "wm-redraw"]
-  #   bindings: ["alt+shift+c"]
-  # - commands: ["move --workspace e", "wm-redraw"]
-  #   bindings: ["alt+shift+e"]
-  # - commands: ["move --workspace 1", "wm-redraw"]
-  #   bindings: ["alt+shift+1"]
-  # - commands: ["move --workspace 2", "wm-redraw"]
-  #   bindings: ["alt+shift+2"]
-  # - commands: ["move --workspace 3", "wm-redraw"]
-  #   bindings: ["alt+shift+3"]
-  # - commands: ["move --workspace 4", "wm-redraw"]
-  #   bindings: ["alt+shift+4"]
-  # - commands: ["move --workspace 5", "wm-redraw"]
-  #   bindings: ["alt+shift+5"]
-  # - commands: ["move --workspace 6", "wm-redraw"]
-  #   bindings: ["alt+shift+6"]
-  # - commands: ["move --workspace 7", "wm-redraw"]
-  #   bindings: ["alt+shift+7"]
-  # - commands: ["move --workspace 8", "wm-redraw"]
-  #   bindings: ["alt+shift+8"]
-  # - commands: ["move --workspace 9", "wm-redraw"]
-  #   bindings: ["alt+shift+9"]
-  # - commands: ["move --workspace 0", "wm-redraw"]
-  #   bindings: ["alt+shift+0"]
-  # - commands: ["move --workspace g", "wm-redraw"]
-  #   bindings: ["alt+shift+g"]
-  # - commands: ["move --workspace w", "wm-redraw"]
-  #   bindings: ["alt+shift+w"]

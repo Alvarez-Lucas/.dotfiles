@@ -1,19 +1,19 @@
-[[plugin.deps]]
-use = "yazi-rs/plugins:no-status"
-rev = "2730199"
-hash = "79196e7749e451df682db6fdc497f686"
-
-[[flavor.deps]]
-use = "tkapias/nightfly"
-rev = "599b8ad"
-hash = "2c32a36c552fea0035a4e30e72698ea8"
-
-[[flavor.deps]]
-use = "yazi-rs/flavors:catppuccin-mocha"
-rev = "b929df6"
-hash = "800799d6ab64ece50a4e516641b96fa0"
-
-[[flavor.deps]]
-use = "BennyOe/tokyo-night"
-rev = "695dac6"
-hash = "f0f5c785422a8551adabbdffab5c63b5"
+# [[plugin.deps]]
+# use = "yazi-rs/plugins:no-status"
+# rev = "2730199"
+# hash = "79196e7749e451df682db6fdc497f686"
+#
+# [[flavor.deps]]
+# use = "tkapias/nightfly"
+# rev = "599b8ad"
+# hash = "2c32a36c552fea0035a4e30e72698ea8"
+#
+# [[flavor.deps]]
+# use = "yazi-rs/flavors:catppuccin-mocha"
+# rev = "b929df6"
+# hash = "800799d6ab64ece50a4e516641b96fa0"
+#
+# [[flavor.deps]]
+# use = "BennyOe/tokyo-night"
+# rev = "695dac6"
+# hash = "f0f5c785422a8551adabbdffab5c63b5"

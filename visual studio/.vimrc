@@ -64,6 +64,8 @@ nnoremap gi `i
 nnoremap <leader>t :vsc Debug.StopDebugging<CR>
 " remap to yank to end of line
 
+"let @p='oDebug.Print("")<Left><Left>'
+
 " window binds
 "nnoremap <C-J> <C-W>J
 "nnoremap <C-J> <C-W><C-J>
@@ -209,7 +211,7 @@ noremap <leader>o :vsc View.Output<cr>
 
 
 " faster macros
-nnoremap Q @q
+nnoremap Q @n
 
 vnoremap <A-j> :move '>+1<CR>gv-gv<CR>gv=gv
 vnoremap <A-k> :move '<-2<CR>gv-gv<CR>gv=gv
@@ -219,6 +221,8 @@ nnoremap <leader>H :vsc View.HarpoonToolWindow<cr>
 nnoremap <leader>ha :vsc Harpoon.AppendTab<cr>
 nnoremap <leader>hd :vsc Harpoon.DeleteTab<cr>
 nnoremap <leader>hc :vsc Harpoon.ClearAll<cr>
+nnoremap <leader>hh :vsc Harpoon.SwapLeft<cr>
+nnoremap <leader>hl :vsc Harpoon.SwapRight<cr>
 "nnoremap <c-h> :vsc Harpoon.PreviousTab<cr>
 "nnoremap <c-l> :vsc Harpoon.NextTab<cr>
 "nnoremap <leader>1 :vsc Harpoon.SwitchToTab0<cr>

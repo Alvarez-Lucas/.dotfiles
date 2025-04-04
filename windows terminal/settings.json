@@ -22,12 +22,13 @@
     {
         "defaults": 
         {
-            "colorScheme": "GruvboxDarkHard",
+            "colorScheme": "Custom Theme",
             "font": 
             {
                 "face": "CommitMono Nerd Font",
                 "size": 16
-            }
+            },
+            "intenseTextStyle": "all"
         },
         "list": 
         [
@@ -80,10 +81,6 @@
                 "source": "Windows.Terminal.VisualStudio"
             },
             {
-                "colorScheme": 
-                {
-                    "light": "Dark+"
-                },
                 "guid": "{47302f9c-1ac4-566c-aa3e-8cf29889d6ab}",
                 "hidden": false,
                 "name": "Nushell",
@@ -94,56 +91,80 @@
                 "hidden": false,
                 "name": "Git Bash",
                 "source": "Git"
+            },
+            {
+                "guid": "{18b296e0-e071-5657-aa54-fce45357da88}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{fd98ae20-41f4-564c-9e1e-6a670ba27e67}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{b56f7184-4bd3-5437-8ca2-f3a37361ff69}",
+                "hidden": true,
+                "name": "Developer Command Prompt for VS 2022 [Preview]",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{9158dc1a-fbed-5ed0-bdd6-a840b01ee077}",
+                "hidden": true,
+                "name": "Developer PowerShell for VS 2022 [Preview]",
+                "source": "Windows.Terminal.VisualStudio"
             }
         ]
     },
     "schemes": 
     [
         {
-            "background": "#282828",
-            "black": "#282828",
-            "blue": "#458588",
-            "brightBlack": "#928374",
-            "brightBlue": "#83A598",
-            "brightCyan": "#8EC07C",
-            "brightGreen": "#B8BB26",
-            "brightPurple": "#D3869B",
-            "brightRed": "#FB4934",
-            "brightWhite": "#EBDBB2",
-            "brightYellow": "#FABD2F",
-            "cursorColor": "#EBDBB2",
-            "cyan": "#689D6A",
-            "foreground": "#EBDBB2",
-            "green": "#98971A",
-            "name": "GruvboxDark",
-            "purple": "#B16286",
-            "red": "#CC241D",
-            "selectionBackground": "#665C54",
-            "white": "#A89984",
-            "yellow": "#D79921"
+            "background": "#1E1E2E",
+            "black": "#45475A",
+            "blue": "#89B4FA",
+            "brightBlack": "#585B70",
+            "brightBlue": "#89B4FA",
+            "brightCyan": "#94E2D5",
+            "brightGreen": "#A6E3A1",
+            "brightPurple": "#F5C2E7",
+            "brightRed": "#F38BA8",
+            "brightWhite": "#A6ADC8",
+            "brightYellow": "#F9E2AF",
+            "cursorColor": "#F5E0DC",
+            "cyan": "#94E2D5",
+            "foreground": "#CDD6F4",
+            "green": "#A6E3A1",
+            "name": "Catppuccin Mocha",
+            "purple": "#F5C2E7",
+            "red": "#F38BA8",
+            "selectionBackground": "#585B70",
+            "white": "#BAC2DE",
+            "yellow": "#F9E2AF"
         },
         {
-            "background": "#1B1B1B",
-            "black": "#1B1B1B",
-            "blue": "#458588",
-            "brightBlack": "#928374",
-            "brightBlue": "#83A598",
-            "brightCyan": "#8EC07C",
-            "brightGreen": "#B8BB26",
-            "brightPurple": "#D3869B",
-            "brightRed": "#FB4934",
-            "brightWhite": "#EBDBB2",
-            "brightYellow": "#FABD2F",
-            "cursorColor": "#EBDBB2",
-            "cyan": "#689D6A",
-            "foreground": "#EBDBB2",
-            "green": "#98971A",
-            "name": "GruvboxDarkHard",
-            "purple": "#B16286",
-            "red": "#CC241D",
-            "selectionBackground": "#665C54",
-            "white": "#A89984",
-            "yellow": "#D79921"
+            "background": "#FEFCF4",
+            "black": "#2C2E33",
+            "blue": "#6377B6",
+            "brightBlack": "#2C2E33",
+            "brightBlue": "#6377B6",
+            "brightCyan": "#028A9B",
+            "brightGreen": "#4B8B5A",
+            "brightPurple": "#896AA9",
+            "brightRed": "#D7314B",
+            "brightWhite": "#E0DED7",
+            "brightYellow": "#91772A",
+            "cursorColor": "#2C2E33",
+            "cyan": "#028A9B",
+            "foreground": "#028A9B",
+            "green": "#4B8B5A",
+            "name": "Custom Theme",
+            "purple": "#896AA9",
+            "red": "#D7314B",
+            "selectionBackground": "#D0CEC7",
+            "white": "#E0DED7",
+            "yellow": "#91772A"
         }
     ],
     "themes": []

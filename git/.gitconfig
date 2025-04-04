@@ -5,13 +5,14 @@
 	commitgraph = true
 	autocrlf = true
 	preloadindex = true
+	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 [gc]
   auto = 8000
 [pack]
   threads = 0
   packSizeLimit = 2g
-[feature]
-	manyFiles = true
+; [feature]
+; 	manyFiles = true
 [fetch]
 	writeCommitGraph = true
 	parallel = 4
