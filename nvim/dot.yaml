@@ -1,4 +1,4 @@
 ---
 links:
-  lazy-lock.json: ~\AppData\Local\nvim\lazy-lock.json
+  # lazy-lock.json: ~\AppData\Local\nvim\lazy-lock.json
   init.lua: ~\AppData\Local\nvim\init.lua

@@ -124,37 +124,20 @@ nnoremap <bs> <c-^>
 "nnoremap :vsc Edit.SwitchToQuickReplace<cr>
 "nnoremap :vsc Edit.Quick<cr>
 " keymaps source https://harrisoncramer.me/debugging-in-neovim/
-"start debugger
+
+
+
+"nnoremap <leader>dc :vsc Debug.Start<cr>
 nnoremap <leader>ds :vsc Debug.Restart<CR>:vsc Debug.Start<CR>
-
-"run debugger to here/line with curosr
-nnoremap <leader>dh :vsc Debug.RunToCursor<cr>
-
-"debug hover?
-nnoremap <leader>dl 
-
-" Clear breakpoints
-nnoremap <leader>dC :vsc Debug.DeleteAllBreakpoints<cr>
-
-"debug continue TODO: Confirm
-nnoremap <leader>dc :vsc Debug.Start<cr>
-
+nnoremap <leader>di :vsc Debug.QuickWatch<cr>
+"nnoremap <leader>dC :vsc Debug.DeleteAllBreakpoints<cr>
+"nnoremap <leader>dh :vsc Debug.RunToCursor<cr>
 " toggle breakpoints TODO: Confirm
-nnoremap <leader>db :vsc Debug.ToggleBreakpoint<cr>
-
-" step over
-nnoremap <leader>dn :vsc Debug.StepOver<cr>
-
-" step into 
-nnoremap <leader>di :vsc Debug.StepInto<cr>
-
-" step out 
-nnoremap <leader>do :vsc Debug.Stepout<cr>
-
-" close debugger
+"nnoremap <leader>db :vsc Debug.ToggleBreakpoint<cr>
+"nnoremap <leader>dl :vsc Debug.StepOver<cr>
+"nnoremap <leader>dl :vsc Debug.StepInto<cr>
+"nnoremap <leader>dk :vsc Debug.Stepout<cr>
 nnoremap <leader>de :vsc Debug.StopDebugging<cr>
-
-" close debugger and clean breakpoints
 nnoremap <leader>dE :vsc Debug.StopDebugging<Cr>:vsc Debug.DeleteAllBreakpoints<cr>
 
 nnoremap gO :vsc View.DocumentOutline<cr>
@@ -177,10 +160,12 @@ nnoremap ]m :vsc Edit.PreviousMethod<cr>
 
 " Quick Info
 nnoremap K :vsc Edit.QuickInfo<cr>
-inoremap <c-k> <c-o>:vsc Edit.ParameterInfo<cr>
+inoremap <c-k> :vsc Edit.ParameterInfo<cr>
 nnoremap gk :vsc Edit.ParameterInfo<cr>
 
 " Code Actions
+" Rename TODO: add to you config
+nnoremap <leader>cn :vsc Refactor.Rename<cr>
 nnoremap <leader>ca :vsc View.QuickActions<cr>
 "nnoremap <leader>ck :vsc Edit.PeekHelp<cr>
 "nnoremap :vsc EditorContextMenus.CodeWindow.QuickActionsForPosition<cr>
@@ -198,8 +183,6 @@ nnoremap <leader>ca :vsc View.QuickActions<cr>
 "noremap cc "_cc
 "noremap r "_r
 
-" Rename TODO: add to you config
-noremap <leader>cn :vsc Refactor.Rename<cr>
 
 noremap gr :vsc Edit.FindAllReferences<cr>
 
