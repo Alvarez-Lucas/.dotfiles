@@ -233,15 +233,27 @@ require("lazy").setup({
 		{
 			"e-q/okcolors.nvim",
 			name = "okcolors",
-			lazy = false, -- make sure we load this during startup if it is your main colorscheme
-			priority = 1000, -- make sure to load this before all the other start plugins
+			lazy = false,
+			priority = 1000,
 			opts = {
-				variant = "smooth", -- "smooth" or "sharp", defaults to "smooth"
+				variant = "smooth",
 			},
 			config = function(_, opts)
+				vim.api.nvim_create_autocmd("ColorScheme", {
+					group = vim.api.nvim_create_augroup("custom_highlights_okcolors", {}),
+					pattern = "okcolors",
+					callback = function()
+						vim.api.nvim_set_hl(0, "SnacksPicker", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "SnacksPickerTitle", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "StatusLine", { bg = "#FEFCF4" })
+					end,
+				})
 				o.background = "light"
 				require("okcolors").setup(opts)
-				vim.cmd.colorscheme("okcolors")
+				c.colorscheme("okcolors")
 			end,
 		},
 
