@@ -133,7 +133,7 @@ nnoremap <leader>di :vsc Debug.QuickWatch<cr>
 "nnoremap <leader>dC :vsc Debug.DeleteAllBreakpoints<cr>
 "nnoremap <leader>dh :vsc Debug.RunToCursor<cr>
 " toggle breakpoints TODO: Confirm
-"nnoremap <leader>db :vsc Debug.ToggleBreakpoint<cr>
+nnoremap <leader>db :vsc Debug.ToggleBreakpoint<cr>
 "nnoremap <leader>dl :vsc Debug.StepOver<cr>
 "nnoremap <leader>dl :vsc Debug.StepInto<cr>
 "nnoremap <leader>dk :vsc Debug.Stepout<cr>

@@ -201,12 +201,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- Set leetcode to python
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-	pattern = "leetcode.com_*.txt",
-	command = "set filetype=python",
-})
-
 require("lazy").setup({
 	change_detection = {
 		notify = false,
@@ -676,6 +670,13 @@ require("lazy").setup({
 			module = false,
 			build = function()
 				vim.fn["firenvim#install"](0)
+			end,
+			config = function()
+				vim.api.nvim_create_autocmd({ "BufEnter" }, {
+					group = vim.api.nvim_create_augroup("firenvim_filetypes", { clear = true }),
+					pattern = "leetcode.com_*.txt",
+					command = "set filetype=python",
+				})
 			end,
 			-- ":call firenvim#install(0)", -- Old build
 		},
