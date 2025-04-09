@@ -3,8 +3,8 @@
   "app_specific_configuration_path": "$Env:USERPROFILE/applications.json",
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
-  "default_workspace_padding": 20,
-  "default_container_padding": 20,
+  "default_workspace_padding": 8,
+  "default_container_padding": 8,
   "border": true,
   "border_width": 8,
   "border_offset": -1,
@@ -26,15 +26,15 @@
       "workspaces": [
         {
           "name": "I",
-          "layout": "BSP"
+          "layout": "UltrawideVerticalStack"
         },
         {
           "name": "II",
-          "layout": "VerticalStack"
+          "layout": "UltrawideVerticalStack"
         },
         {
           "name": "III",
-          "layout": "HorizontalStack"
+          "layout": "UltrawideVerticalStack"
         },
         {
           "name": "IV",
@@ -42,15 +42,47 @@
         },
         {
           "name": "V",
-          "layout": "Rows"
+          "layout": "UltrawideVerticalStack"
         },
         {
           "name": "VI",
-          "layout": "Grid"
+          "layout": "UltrawideVerticalStack"
         },
         {
           "name": "VII",
-          "layout": "RightMainVerticalStack"
+          "layout": "UltrawideVerticalStack"
+        }
+      ]
+    },
+    {
+      "workspaces": [
+        {
+          "name": "I",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "II",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "III",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "IV",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "V",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "VI",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "VII",
+          "layout": "UltrawideVerticalStack"
         }
       ]
     }
