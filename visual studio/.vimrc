@@ -160,7 +160,7 @@ nnoremap ]m :vsc Edit.PreviousMethod<cr>
 
 " Quick Info
 nnoremap K :vsc Edit.QuickInfo<cr>
-inoremap <c-k> :vsc Edit.ParameterInfo<cr>
+inoremap <c-k> <c-o>:vsc Edit.ParameterInfo<cr>
 nnoremap gk :vsc Edit.ParameterInfo<cr>
 
 " Code Actions

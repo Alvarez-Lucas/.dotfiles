@@ -20,7 +20,7 @@ $env.LS_COLORS = "*~=0;38;2;112;113;117:bd=0;38;2;2;138;155;48;2;112;113;117:ca=
 # https://github.com/nushell/nu_scripts/blob/main/custom-completions/git/git-completions.nu
 # https://github.com/nushell/nu_scripts/tree/main?tab=readme-ov-file
 
-$env.Path = ($env.Path | split row (char esep) | prepend "C:/Users/lucas/AppData/Roaming/carapace/bin")
+$env.Path = ($env.Path | split row (char esep) | prepend "~/AppData/Roaming/carapace/bin")
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
 
 $env.NU_LIB_DIRS = [
@@ -36,7 +36,7 @@ $env.NU_LIB_DIRS = [
 #   '~/nushell/modules'
 # ]
 
-use rg-completions.nu *
+# use rg-completions.nu *
 
 
 mkdir ($nu.data-dir | path join "vendor/autoload")
