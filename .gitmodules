@@ -1,0 +1,3 @@
+[submodule "nu/-f"]
+	path = nu/-f
+	url = git@github.com:nushell/nu_scripts.git
