@@ -1,7 +1,7 @@
 local g = vim.g
-local o = vim.opt
-local c = vim.cmd
-local k = vim.keymap.set
+local opt = vim.opt
+local cmd = vim.cmd
+local map = vim.keymap.set
 
 local HEIGHT_RATIO = 0.8 -- Nvimtree
 local WIDTH_RATIO = 0.5
@@ -9,45 +9,54 @@ local WIDTH_RATIO = 0.5
 g.mapleader = " "
 g.maplocalleader = " "
 
-c("let &fcs='eob: '")
-o.cmdheight = 1
-o.inccommand = "split" -- Preview for substitute
-o.laststatus = 3 -- Global status line
-o.number = true -- Line numbers
-o.relativenumber = true -- Relative line numbers
-o.splitbelow = true -- Vertical split direction
-o.splitright = true -- Horizontal split direction
-o.expandtab = true --
-o.smarttab = true --
-o.ignorecase = true --
-o.smartcase = true --
-o.hlsearch = true --
-o.incsearch = true --
-o.signcolumn = "yes" --
-o.swapfile = false --
-o.wrap = true --
-o.linebreak = true --
-o.breakindent = true --
-o.shiftwidth = 2 --
-o.tabstop = 2 --
-o.cursorline = true --
-o.mouse = "" --
-o.scrolloff = 8 --
-o.sidescrolloff = 8 --
-o.termguicolors = true --
-o.showmode = false
-o.undofile = true
-o.updatetime = 250
-o.hidden = true
-o.confirm = true
-o.iskeyword:append("-")
-o.shortmess:append({ I = true }) -- Removes the nvim splash screen
+cmd("let &fcs='eob: '")
+opt.cmdheight = 1
+opt.inccommand = "split" -- Preview for substitute
+opt.laststatus = 3 -- Global status line
+opt.number = true -- Line numbers
+opt.relativenumber = true -- Relative line numbers
+opt.splitbelow = true -- Vertical split direction
+opt.splitright = true -- Horizontal split direction
+opt.expandtab = true --
+opt.smarttab = true --
+opt.ignorecase = true --
+opt.smartcase = true --
+opt.hlsearch = true --
+opt.incsearch = true --
+opt.signcolumn = "yes" --
+opt.swapfile = false --
+opt.wrap = true --
+opt.linebreak = true --
+opt.breakindent = true --
+opt.shiftwidth = 2 --
+opt.tabstop = 2 --
+opt.cursorline = true --
+opt.mouse = "" --
+opt.scrolloff = 8 --
+opt.sidescrolloff = 8 --
+opt.termguicolors = true --
+opt.showmode = false
+opt.undofile = true
+opt.undolevels = 10000
+opt.updatetime = 250
+opt.confirm = true
+opt.virtualedit = "block"
+opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
+opt.autowriteall = true -- Enable auto write
+opt.autoread = true -- Enable auto write
+opt.hidden = true
+
+opt.iskeyword:append("-")
+-- opt.shortmess:append({ I = true }) -- Removes the nvim splash screen
+opt.shortmess:append({ W = true, I = true, c = true, C = true })
+opt.jumpoptions = "view" -- TODO: Test
+opt.grepprg = "rg --vimgrep" -- Does this work?
 -- vim.opt.shortmess = "" -- What do?
 -- vim.opt.fillchars = { eob = " " } -- Remove end of buffer character
 
 -- What does this do?
 -- Don't have `o` add a comment
--- o.formatoptions:remove "o"
+-- opt.formatoptions:remove "o"
 -- g.netrw_keepdir = 0
 -- g.netrw_winsize = 30
 -- g.netrw_banner = 0
@@ -57,8 +66,8 @@ local defaultOpts = { noremap = true, silent = true }
 
 -- Delete a buffer
 -- vim.keymap.set("", "<leader>d", "<cmd>bdelete<cr>", defaultOpts)
--- k("n", "<C-s>", "<cms>w<cr>", defaultOpts)
--- k("n", "<leader>s", "<cmd>w<cr>", defaultOpts)
+-- map("n", "<C-s>", "<cms>w<cr>", defaultOpts)
+-- map("n", "<leader>s", "<cmd>w<cr>", defaultOpts)
 --
 if g.neovide then
 	g.neovide_scale_factor = 1.0
@@ -69,68 +78,125 @@ if g.neovide then
 	local change_scale_factor = function(delta)
 		g.neovide_scale_factor = g.neovide_scale_factor * delta
 	end
-	k("n", "<C-=>", function()
+	map("n", "<C-=>", function()
 		change_scale_factor(1.25)
 	end)
-	k("n", "<C-->", function()
+	map("n", "<C-->", function()
 		change_scale_factor(1 / 1.25)
 	end)
 end
 
 -- System clipboard
-k({ "n", "v" }, "<leader>y", '"+y') -- yank motion
-k({ "n", "v" }, "<leader>Y", '"+Y') -- yank line
-k({ "n", "v" }, "<leader>d", '"+d') -- delete motion
-k({ "n", "v" }, "<leader>D", '"+D') -- delete line
-k("n", "<leader>p", '"+p') -- paste after cursor
-k("n", "<leader>P", '"+P') -- paste before cursor
-k("v", "<leader>p", '"+p')
-k("n", "<Leader>xy", "<cmd>call setreg('+', getreg('@'))<CR>", defaultOpts)
+map({ "n", "v" }, "<leader>y", '"+y', defaultOpts) -- yank motion
+map({ "n", "v" }, "<leader>Y", '"+Y', defaultOpts) -- yank line
+map({ "n", "v" }, "<leader>d", '"+d', defaultOpts) -- delete motion
+map({ "n", "v" }, "<leader>D", '"+D', defaultOpts) -- delete line
+map("n", "<leader>p", '"+p', defaultOpts) -- paste after cursor
+map("n", "<leader>P", '"+P', defaultOpts) -- paste before cursor
+map("v", "<leader>p", '"+p', defaultOpts)
+map("n", "<Leader>xy", "<cmd>call setreg('+', getreg('@'))<CR>", defaultOpts)
 
-k("n", "<c-d>", "<c-d>zz", defaultOpts) -- Keep cursor line centered on page scroll
-k("n", "<c-u>", "<c-u>zz", defaultOpts)
+map("n", "<c-d>", "<c-d>zz", defaultOpts) -- Keep cursor line centered on page scroll
+map("n", "<c-u>", "<c-u>zz", defaultOpts)
 
-k("n", "<Esc>", "<cmd>nohlsearch<cr>", defaultOpts)
+-- better up/down TODO: Still testing
+map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
-k("v", "p", '"_dP', defaultOpts) -- Keep register after paste
+map("n", "<Esc>", "<cmd>nohlsearch<cr>", defaultOpts)
 
-k("n", "<bs>", "<C-^>", defaultOpts) -- Quick switch to previous buffer
+map("v", "p", '"_dP', defaultOpts) -- Keep register after paste
 
-k("v", "Y", "y$", defaultOpts) -- Yank to end of line
+map("v", "Y", "y$", defaultOpts) -- Yank to end of line
 
-c(":vnoremap < <gv", defaultOpts) -- Keep Selection After Indent TODO: Convert to lua
-c(":vnoremap > >gv", defaultOpts)
+map("v", "<", "<gv")
+map("v", ">", ">gv")
 
-k("v", "J", ":m '>+1<cr>gv=gv") -- Move Text
-k("v", "K", ":m '<-2<cr>gv=gv")
+-- TODO: Add todo plugin and snack binding for todos and jumps for todos
 
-k("n", "H", "<cmd>bprevious<cr>", defaultOpts) -- Navidate buffers
-k("n", "L", "<cmd>bnext<cr>", defaultOpts)
+-- TODO: Add formatting keybind
+-- -- formatting
+-- map({ "n", "v" }, "<leader>cf", function()
+-- 	LazyVim.format({ force = true })
+-- end, { desc = "Format" })
 
-k("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
-k("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
-k("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
-k("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+-- TODO: Test this
+-- if vim.lsp.inlay_hint then
+-- 	Snacks.toggle.inlay_hints():map("<leader>uh")
+-- end
 
-k("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
-k("n", "<C-j>", "<C-w><C-j>", defaultOpts)
-k("n", "<C-k>", "<C-w><C-k>", defaultOpts)
-k("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
+map("n", "<leader>uI", function()
+	vim.treesitter.inspect_tree()
+	vim.api.nvim_input("I")
+end, { desc = "Inspect Tree" })
 
-k("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts) -- Create veritcal and horizontal split
-k("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>", defaultOpts)
-k("n", "<leader>oK", "<cmd>set nosplitright<cr><cmd>split<cr><C-w><c-k>", defaultOpts)
-k("n", "<leader>oH", "<cmd>set nosplitbelow<cr><cmd>vsplit<cr><C-w><c-h>", defaultOpts)
+-- better indenting
+map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
+map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
-k("n", "<C-Up>", "<cmd>resize -5<CR>", defaultOpts) -- Resize split
-k("n", "<C-Down>", "<cmd>resize +5<CR>", defaultOpts)
-k("n", "<C-Left>", "<cmd>vertical resize -5<CR>", defaultOpts)
-k("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
+map("n", "<leader>xl", function()
+	local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
+	if not success and err then
+		vim.notify(err, vim.log.levels.ERROR)
+	end
+end, { desc = "Location List" })
 
-k("t", "<Esc>", "<C-\\><C-N>", defaultOpts)
-k("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+-- quickfix list
+map("n", "<leader>xq", function()
+	local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
+	if not success and err then
+		vim.notify(err, vim.log.levels.ERROR)
+	end
+end, { desc = "Quickfix List" })
 
-k("n", "<leader>l", "<cmd>Lazy<cr>", defaultOpts)
+map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
+map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
+
+map("v", "J", ":m '>+1<cr>gv=gv") -- Move Text
+map("v", "K", ":m '<-2<cr>gv=gv")
+
+map("n", "<bs>", "<C-^>", defaultOpts) -- Quick switch to previous buffer
+
+map("n", "H", "<cmd>bprevious<cr>", defaultOpts) -- Navidate buffers
+map("n", "L", "<cmd>bnext<cr>", defaultOpts)
+
+map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
+
+map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
+map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
+map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
+map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
+map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
+map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+
+map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
+map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
+map("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
+map("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+
+map("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
+map("n", "<C-j>", "<C-w><C-j>", defaultOpts)
+map("n", "<C-k>", "<C-w><C-k>", defaultOpts)
+map("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+
+map("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts) -- Create veritcal and horizontal split
+map("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>", defaultOpts)
+map("n", "<leader>oK", "<cmd>set nosplitright<cr><cmd>split<cr><C-w><c-k>", defaultOpts)
+map("n", "<leader>oH", "<cmd>set nosplitbelow<cr><cmd>vsplit<cr><C-w><c-h>", defaultOpts)
+
+map("n", "<C-Up>", "<cmd>resize -5<CR>", defaultOpts) -- Resize split
+map("n", "<C-Down>", "<cmd>resize +5<CR>", defaultOpts)
+map("n", "<C-Left>", "<cmd>vertical resize -5<CR>", defaultOpts)
+map("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
+
+map("t", "<Esc>", "<C-\\><C-N>", defaultOpts)
+map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+
+map("n", "<leader>l", "<cmd>Lazy<cr>", defaultOpts)
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -147,7 +213,31 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 		os.exit(1)
 	end
 end
-o.rtp:prepend(lazypath)
+opt.rtp:prepend(lazypath)
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	desc = "Open Help files in new buffer",
+	pattern = "*",
+	callback = function(event)
+		if vim.bo[event.buf].filetype == "help" then
+			cmd.only()
+			vim.bo[event.buf].buflisted = true
+			vim.bo[event.buf].bt = "nowrite"
+		end
+	end,
+})
+
+-- Auto create dir when saving a file, in case some intermediate directory does not exist
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+	group = vim.api.nvim_create_augroup("auto_create_dir", {}),
+	callback = function(event)
+		if event.match:match("^%w%w+:[\\/][\\/]") then
+			return
+		end
+		local file = vim.uv.fs_realpath(event.match) or event.match
+		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+	end,
+})
 
 -- Highlight yanked text
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -245,9 +335,9 @@ require("lazy").setup({
 						vim.api.nvim_set_hl(0, "StatusLine", { bg = "#FEFCF4" })
 					end,
 				})
-				o.background = "light"
+				opt.background = "light"
 				require("okcolors").setup(opts)
-				c.colorscheme("okcolors")
+				cmd.colorscheme("okcolors")
 			end,
 		},
 
@@ -301,6 +391,11 @@ require("lazy").setup({
 				{
 					"<leader>e",
 					"<cmd>NvimTreeToggle<cr>",
+					function() end,
+				},
+				{
+					"<leader>E",
+					"<cmd>NvimTreeFindFileToggle<cr>",
 					function() end,
 				},
 			},
@@ -502,16 +597,20 @@ require("lazy").setup({
 						vim.keymap.set("n", keys, mapping[1], opts(mapping[2]))
 					end
 
+					map("n", "b", function()
+						api.tree.close()
+						vim.cmd([[NvimTreeFindFile]])
+					end, opts("Close"))
 					-- custom mappings
-					k("n", "<BS>", change_root_to_parent, opts("Up"))
-					k("n", "?", api.tree.toggle_help, opts("Help"))
+					map("n", "<BS>", change_root_to_parent, opts("Up"))
+					map("n", "?", api.tree.toggle_help, opts("Help"))
 
-					k("n", "l", edit_or_open, opts("Edit Or Open"))
-					k("n", "L", vsplit_preview, opts("Vsplit Preview"))
-					-- k("n", "h", api.tree.close, opts("Close"))
-					k("n", "H", api.tree.collapse_all, opts("Collapse All"))
+					map("n", "l", edit_or_open, opts("Edit Or Open"))
+					map("n", "L", vsplit_preview, opts("Vsplit Preview"))
+					-- map("n", "h", api.tree.close, opts("Close"))
+					map("n", "H", api.tree.collapse_all, opts("Collapse All"))
 
-					k("n", "F", function(node)
+					map("n", "F", function(node)
 						if node == nil then
 							node = api.tree.get_node_under_cursor()
 						end
@@ -524,7 +623,7 @@ require("lazy").setup({
 						end
 					end, opts("Find files under directory"))
 
-					k("n", "<leader>F", function(node)
+					map("n", "<leader>F", function(node)
 						if node == nil then
 							node = api.tree.get_node_under_cursor()
 						end
@@ -537,13 +636,13 @@ require("lazy").setup({
 						else
 							Snacks.picker.files()
 						end
-					end, opts("Find files under directory"))
+					end, opts("CD to directory and find files"))
 
-					k("n", "f", function()
+					map("n", "f", function()
 						Snacks.picker.files()
 					end, opts("Find files"))
 
-					k("n", "z", function()
+					map("n", "z", function()
 						Snacks.picker.projects({
 							dev = { "~/repos", "~/.dotfiles" },
 							patterns = {
@@ -961,7 +1060,21 @@ require("lazy").setup({
 					desc = "Smart Find Files",
 				},
 				{
-					"<leader>b",
+					"<leader>bd",
+					function()
+						Snacks.bufdelete()
+					end,
+					desc = "Delete Buffer",
+				},
+				{
+					"<leader>bo",
+					function()
+						Snacks.bufdelete.other()
+					end,
+					desc = "Delete Other Buffers",
+				},
+				{
+					"<leader>,",
 					function()
 						Snacks.picker.buffers({
 							on_show = function()
@@ -1009,81 +1122,165 @@ require("lazy").setup({
 					desc = "Projects",
 				},
 				{
-					"<leader>O",
+					"<leader>sr",
 					function()
 						Snacks.picker.recent()
 					end,
 					desc = "Recent",
 				},
 				{
-					"<leader>vb",
+					"<leader>sk",
 					function()
-						Snacks.picker.git_branches()
+						Snacks.picker.keymaps()
 					end,
-					desc = "Git Branches",
+					desc = "keymaps",
 				},
 				{
-					"<leader>vl",
+					"<leader>sm",
 					function()
-						Snacks.picker.git_log()
+						Snacks.picker.marks()
 					end,
-					desc = "Git Log",
+					desc = "keymaps",
 				},
 				{
-					"<leader>vL",
+					"<leader>sM",
 					function()
-						Snacks.picker.git_log_line()
+						Snacks.picker.notifications()
 					end,
-					desc = "Git Log Line",
+					desc = "keymaps",
 				},
 				{
-					"<leader>vs",
+					"<leader>su",
 					function()
-						Snacks.picker.git_status()
+						Snacks.picker.undo()
 					end,
-					desc = "Git Status",
+					desc = "Undo History",
 				},
 				{
-					"<leader>vS",
+					'<leader>s"',
 					function()
-						Snacks.picker.git_stash()
+						Snacks.picker.registers()
 					end,
-					desc = "Git Stash",
+					desc = "Registers",
 				},
+				-- {
+				-- 	"<leader>vb",
+				-- 	function()
+				-- 		Snacks.picker.git_branches()
+				-- 	end,
+				-- 	desc = "Git Branches",
+				-- },
+				-- {
+				-- 	"<leader>vl",
+				-- 	function()
+				-- 		Snacks.picker.git_log()
+				-- 	end,
+				-- 	desc = "Git Log",
+				-- },
+				-- {
+				-- 	"<leader>vL",
+				-- 	function()
+				-- 		Snacks.picker.git_log_line()
+				-- 	end,
+				-- 	desc = "Git Log Line",
+				-- },
+				-- {
+				-- 	"<leader>vs",
+				-- 	function()
+				-- 		Snacks.picker.git_status()
+				-- 	end,
+				-- 	desc = "Git Status",
+				-- },
+				-- {
+				-- 	"<leader>vS",
+				-- 	function()
+				-- 		Snacks.picker.git_stash()
+				-- 	end,
+				-- 	desc = "Git Stash",
+				-- },
+				-- {
+				-- 	"<leader>vd",
+				-- 	function()
+				-- 		Snacks.picker.git_diff()
+				-- 	end,
+				-- 	desc = "Git Diff (Hunks)",
+				-- },
+				-- {
+				-- 	"<leader>vf",
+				-- 	function()
+				-- 		Snacks.picker.git_log_file()
+				-- 	end,
+				-- 	desc = "Git Log File",
+				-- },
 				{
-					"<leader>vd",
-					function()
-						Snacks.picker.git_diff()
-					end,
-					desc = "Git Diff (Hunks)",
-				},
-				{
-					"<leader>vf",
-					function()
-						Snacks.picker.git_log_file()
-					end,
-					desc = "Git Log File",
-				},
-				{
-					"<leader>Q",
+					"<leader>sD",
 					function()
 						Snacks.picker.diagnostics()
 					end,
 					desc = "Diagnostics",
 				},
 				{
-					"<leader>q",
+					"<leader>sd",
 					function()
 						Snacks.picker.diagnostics_buffer()
 					end,
 					desc = "Buffer Diagnostics",
 				},
 				{
-					"<leader>H",
+					"<leader>sh",
 					function()
 						Snacks.picker.help()
 					end,
 					desc = "Help Pages",
+				},
+				{
+					"<leader>sH",
+					function()
+						Snacks.picker.highlights()
+					end,
+					desc = "Highlights",
+				},
+				{
+					"<leader>ss",
+					function()
+						Snacks.picker.lsp_symbols()
+					end,
+					desc = "Highlights",
+				},
+				{
+					"<leader>sS",
+					function()
+						Snacks.picker.lsp_workspace_symbols()
+					end,
+					desc = "Highlights",
+				},
+				{
+					"<leader>sj",
+					function()
+						Snacks.picker.jumps()
+					end,
+					desc = "Highlights",
+				},
+				{
+					"<leader>sl",
+					function()
+						Snacks.picker.loclist()
+					end,
+					desc = "Location List",
+				},
+				{
+					"<leader>sR",
+					function()
+						Snacks.picker.resume()
+					end,
+					desc = "Resume",
+				},
+				{
+					"<leader>sq",
+					function()
+						Snacks.picker.qflist()
+					end,
+					desc = "Quickfix List",
 				},
 				{
 					"gD",
@@ -1099,6 +1296,20 @@ require("lazy").setup({
 					end,
 					nowait = true,
 					desc = "References",
+				},
+				{
+					"gI",
+					function()
+						Snacks.picker.lsp_implementations()
+					end,
+					desc = "Goto Implementation",
+				},
+				{
+					"gy",
+					function()
+						Snacks.picker.lsp_type_definitions()
+					end,
+					desc = "Goto T[y]pe Definition",
 				},
 			},
 			---@module "snacks"
@@ -1298,7 +1509,7 @@ require("lazy").setup({
 						group = vim.api.nvim_create_augroup("neorg_keymaps", { clear = true }),
 						pattern = { "norg" },
 						callback = function()
-							k(
+							map(
 								"n",
 								"<leader>tt",
 								"<Plug>(neorg.qol.todo-items.todo.task-cycle)",

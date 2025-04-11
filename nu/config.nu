@@ -113,3 +113,7 @@ alias vh = nvim .
 alias E = explorer.exe
 alias e = explorer.exe .
 
+# use /nu_scripts/
+# https://github.com/nushell/nu_scripts
+use nu_scripts\aliases\git\git-aliases.nu *
+
