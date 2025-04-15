@@ -3,8 +3,8 @@ local opt = vim.opt
 local cmd = vim.cmd
 local map = vim.keymap.set
 
-local HEIGHT_RATIO = 0.8 -- Nvimtree
-local WIDTH_RATIO = 0.5
+-- local HEIGHT_RATIO = 0.8 -- Nvimtree
+-- local WIDTH_RATIO = 0.5
 
 g.mapleader = " "
 g.maplocalleader = " "
@@ -330,8 +330,8 @@ require("lazy").setup({
 						vim.api.nvim_set_hl(0, "SnacksPicker", { bg = "#FEFCF4" })
 						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { bg = "#FEFCF4" })
 						vim.api.nvim_set_hl(0, "SnacksPickerTitle", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = "#FEFCF4" })
+						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = "#FEFCF4" })
+						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = "#FEFCF4" })
 						vim.api.nvim_set_hl(0, "StatusLine", { bg = "#FEFCF4" })
 					end,
 				})
