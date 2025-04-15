@@ -384,7 +384,91 @@ require("lazy").setup({
 		},
 
 		{
+			"nvim-neo-tree/neo-tree.nvim",
+			enabled = true,
+			branch = "v3.x",
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+				"MunifTanjim/nui.nvim",
+				-- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+			},
+			lazy = false, -- neo-tree will lazily load itself
+			---@module "neo-tree"
+			---@type neotree.Config?
+			opts = {
+				window = {
+					mappings = {
+						["E"] = function()
+							vim.api.nvim_exec2("Neotree close", { output = true })
+							vim.api.nvim_exec2("Neotree focus float reveal", { output = true })
+						end,
+						["e"] = function()
+							vim.api.nvim_exec2("Neotree focus filesystem float", { output = true })
+						end,
+						["b"] = function()
+							vim.api.nvim_exec2("Neotree focus buffers float", { output = true })
+						end,
+						["g"] = function()
+							vim.api.nvim_exec2("Neotree focus git_status float", { output = true })
+						end,
+						["h"] = function(state)
+							local node = state.tree:get_node()
+							if node.type == "directory" and node:is_expanded() then
+								require("neo-tree.sources.filesystem").toggle_directory(state, node)
+							else
+								require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
+							end
+						end,
+						["l"] = function(state)
+							local node = state.tree:get_node()
+							if node.type == "directory" then
+								if not node:is_expanded() then
+									require("neo-tree.sources.filesystem").toggle_directory(state, node)
+								elseif node:has_children() then
+									require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
+								end
+							end
+						end,
+						["/"] = "noop",
+					},
+				},
+				close_if_last_window = true,
+				default_component_configs = {
+					indent = {
+						with_markers = true,
+						with_expanders = true,
+					},
+				},
+				filesystem = {
+					filtered_items = {
+						visible = true,
+					},
+					hijack_netrw_behavior = "open_current",
+					use_libuv_file_watcher = true,
+				},
+				event_handlers = {
+					{
+						event = "file_opened",
+						handler = function(_)
+							-- do something, the value of arg varies by event.
+							vim.cmd("Neotree close")
+						end,
+					},
+				},
+			},
+			keys = {
+				{ "<leader>e", "<cmd>Neotree toggle float<cr>" },
+				{ "<leader>E", "<cmd>Neotree toggle float reveal<cr>" },
+				{ "<leader>g", "<cmd>Neotree toggle float git_status<cr>" },
+				-- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
+				{ "<leader>.", "<cmd>Neotree toggle float reveal buffers<cr>" },
+			},
+		},
+
+		{
 			"nvim-tree/nvim-tree.lua",
+			enabled = false,
 			lazy = false,
 			version = "*",
 			keys = {
@@ -1022,29 +1106,29 @@ require("lazy").setup({
 			"folke/snacks.nvim",
 			event = "VeryLazy",
 			keys = {
+				-- {
+				-- 	"<leader>.",
+				-- 	function()
+				-- 		Snacks.scratch()
+				-- 	end,
+				-- 	desc = "Toggle Scratch Buffer",
+				-- },
+				-- {
+				-- 	"<leader>S",
+				-- 	function()
+				-- 		Snacks.scratch.select()
+				-- 	end,
+				-- 	desc = "Select Scratch Buffer",
+				-- },
 				{
-					"<leader>.",
-					function()
-						Snacks.scratch()
-					end,
-					desc = "Toggle Scratch Buffer",
-				},
-				{
-					"<leader>S",
-					function()
-						Snacks.scratch.select()
-					end,
-					desc = "Select Scratch Buffer",
-				},
-				{
-					"<leader>g",
+					"<leader>sg",
 					function()
 						Snacks.picker.grep({ need_search = false })
 					end,
 					desc = "Grep",
 				},
 				{
-					"<leader>g",
+					"<leader>sg",
 					function()
 						Snacks.picker.grep_word()
 					end,
