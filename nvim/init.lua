@@ -428,6 +428,8 @@ require("lazy").setup({
 								elseif node:has_children() then
 									require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
 								end
+							else
+								require("neo-tree.sources.filesystem.commands").open(state)
 							end
 						end,
 						["/"] = "noop",
@@ -1563,7 +1565,7 @@ require("lazy").setup({
 					},
 					{
 						"<leader>nje",
-						"<cmd>NvimTreeToggle ~/notes/journal/<cr>",
+						"<cmd>Neotree focus float dir=~/notes/journal/<cr>",
 						desc = "Find Neorg Files",
 					},
 					{
