@@ -1560,7 +1560,7 @@ require("lazy").setup({
 					{ "<leader>nw", "<cmd>Neorg workspace<cr>" },
 					{
 						"<leader>ne",
-						"<cmd>NvimTreeToggle ~/notes/<cr>",
+						"<cmd>Neotree focus float dir=~/notes/<cr>",
 						desc = "Find Neorg Files",
 					},
 					{
