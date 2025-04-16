@@ -1,3 +1,4 @@
+vim.loader.enable(true)
 local g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
@@ -217,6 +218,67 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 opt.rtp:prepend(lazypath)
 
+local lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
+
+local function lazy_file()
+	-- Add support for the LazyFile event
+	local Event = require("lazy.core.handler.event")
+
+	-- We'll handle delayed execution of events ourselves
+	Event.mappings.LazyFile = { id = "LazyFile", event = "User", pattern = "LazyFile" }
+	Event.mappings["User LazyFile"] = Event.mappings.LazyFile
+
+	local events = {} ---@type {event: string, buf: number, data?: any}[]
+
+	local done = false
+	local function load()
+		if #events == 0 or done then
+			return
+		end
+		done = true
+		vim.api.nvim_del_augroup_by_name("lazy_file")
+
+		---@type table<string,string[]>
+		local skips = {}
+		for _, event in ipairs(events) do
+			skips[event.event] = skips[event.event] or Event.get_augroups(event.event)
+		end
+
+		vim.api.nvim_exec_autocmds("User", { pattern = "LazyFile", modeline = false })
+		for _, event in ipairs(events) do
+			if vim.api.nvim_buf_is_valid(event.buf) then
+				Event.trigger({
+					event = event.event,
+					exclude = skips[event.event],
+					data = event.data,
+					buf = event.buf,
+				})
+				if vim.bo[event.buf].filetype then
+					Event.trigger({
+						event = "FileType",
+						buf = event.buf,
+					})
+				end
+			end
+		end
+		vim.api.nvim_exec_autocmds("CursorMoved", { modeline = false })
+		events = {}
+	end
+
+	-- schedule wrap so that nested autocmds are executed
+	-- and the UI can continue rendering without blocking
+	load = vim.schedule_wrap(load)
+
+	vim.api.nvim_create_autocmd(lazy_file_events, {
+		group = vim.api.nvim_create_augroup("lazy_file", { clear = true }),
+		callback = function(event)
+			table.insert(events, event)
+			load()
+		end,
+	})
+end
+lazy_file()
+
 vim.api.nvim_create_autocmd("BufWinEnter", {
 	desc = "Open Help files in new buffer",
 	pattern = "*",
@@ -349,7 +411,7 @@ require("lazy").setup({
 		{
 			"norcalli/nvim-colorizer.lua",
 			lazy = true,
-			event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
+			event = { "LazyFile", "VeryLazy" },
 			opts = {},
 		},
 
@@ -363,7 +425,8 @@ require("lazy").setup({
 
 		{
 			"saghen/blink.cmp",
-			dependencies = { "rafamadriz/friendly-snippets", "nvim-tree/nvim-web-devicons" },
+			lazy = false,
+			dependencies = { "rafamadriz/friendly-snippets" },
 			version = "1.*",
 			---@module 'blink.cmp'
 			---@type blink.cmp.Config
@@ -394,7 +457,6 @@ require("lazy").setup({
 			branch = "v3.x",
 			dependencies = {
 				"nvim-lua/plenary.nvim",
-				"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
 				"MunifTanjim/nui.nvim",
 				-- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
 			},
@@ -441,12 +503,12 @@ require("lazy").setup({
 								{ output = true }
 							)
 						end,
-						["g"] = function()
-							vim.api.nvim_exec2(
-								"Neotree action=focus source=git_status position=left",
-								{ output = true }
-							)
-						end,
+						-- ["g"] = function()
+						-- 	vim.api.nvim_exec2(
+						-- 		"Neotree action=focus source=git_status position=left",
+						-- 		{ output = true }
+						-- 	)
+						-- end,
 						["h"] = function(state)
 							local node = state.tree:get_node()
 							if node.type == "directory" and node:is_expanded() then
@@ -848,13 +910,9 @@ require("lazy").setup({
 					end, opts("Collapse All"))
 				end,
 			},
-			dependencies = {
-				"nvim-tree/nvim-web-devicons",
-			},
 		},
 
 		{
-
 			"CRAG666/code_runner.nvim",
 			keys = {
 				{
@@ -905,6 +963,11 @@ require("lazy").setup({
 					end,
 				},
 			},
+		},
+
+		{
+			"nvim-tree/nvim-web-devicons",
+			lazy = true,
 		},
 
 		{
@@ -975,7 +1038,7 @@ require("lazy").setup({
 
 		{
 			"junnplus/lsp-setup.nvim",
-			event = { "BufReadPost", "BufNewFile", "VeryLazy" },
+			event = { "LazyFile", "VeryLazy" },
 			cmd = { "LspInfo", "LspInstall", "LspUninstall" },
 			dependencies = {
 				{
@@ -1114,9 +1177,19 @@ require("lazy").setup({
 		},
 
 		{
-			event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
+			-- event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
 			"nvim-treesitter/nvim-treesitter",
-			lazy = true,
+			event = { "LazyFile", "VeryLazy" },
+			lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+			init = function(plugin)
+				-- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
+				-- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
+				-- no longer trigger the **nvim-treesitter** module to be loaded in time.
+				-- Luckily, the only things that those plugins need are the custom queries, which we make available
+				-- during startup.
+				require("lazy.core.loader").add_to_rtp(plugin)
+				require("nvim-treesitter.query_predicates")
+			end,
 			build = ":TSUpdate",
 			config = function()
 				require("nvim-treesitter.install").prefer_git = false
@@ -1186,11 +1259,13 @@ require("lazy").setup({
 			opts = {
 				mode = "topline",
 			},
+			event = { "LazyFile", "VeryLazy" },
+			lazy = vim.fn.argc(-1) == 0,
 		},
 
 		{
 			"HiPhish/rainbow-delimiters.nvim",
-			event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
+			event = { "LazyFile", "VeryLazy" },
 			config = function()
 				require("rainbow-delimiters.setup").setup({})
 			end,
@@ -1204,12 +1279,13 @@ require("lazy").setup({
 
 		{
 			"tiagovla/scope.nvim",
+			lazy = false,
 			opts = {},
 		},
 
 		{
 			"folke/snacks.nvim",
-			event = "VeryLazy",
+			event = { "VeryLazy", "LazyFile" },
 			keys = {
 				-- {
 				-- 	"<leader>.",
@@ -1555,7 +1631,7 @@ require("lazy").setup({
 
 		{
 			"lewis6991/gitsigns.nvim",
-			event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
+			event = { "LazyFile" },
 			opts = {
 				on_attach = function(bufnr)
 					local gitsigns = require("gitsigns")
@@ -1759,7 +1835,6 @@ require("lazy").setup({
 			"MeanderingProgrammer/render-markdown.nvim",
 			-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
 			-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-			dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
 			ft = { "norg" },
 			---@module 'render-markdown'
 			---@type render.md.UserConfig
