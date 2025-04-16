@@ -165,13 +165,14 @@ map("n", "L", "<cmd>bnext<cr>", defaultOpts)
 
 map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
 
-map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
-map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
-map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
-map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
-map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
-map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+-- Tabs
+map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
+map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
+map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<leader>td", "<cmd>tabclose<cr>", { desc = "Close Tab" })
+map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
+map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 
 map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
 map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
@@ -1509,10 +1510,11 @@ require("lazy").setup({
 					end)
 					map("n", "<leader>hq", gitsigns.setqflist)
 
+					-- TODO:
 					-- Toggles
-					map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
-					map("n", "<leader>td", gitsigns.preview_hunk_inline())
-					map("n", "<leader>tw", gitsigns.toggle_word_diff)
+					-- map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
+					-- map("n", "<leader>td", gitsigns.preview_hunk_inline())
+					-- map("n", "<leader>tw", gitsigns.toggle_word_diff)
 
 					-- Text object
 					map({ "o", "x" }, "ih", gitsigns.select_hunk)
