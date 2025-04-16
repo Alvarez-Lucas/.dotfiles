@@ -1203,6 +1203,11 @@ require("lazy").setup({
 		},
 
 		{
+			"tiagovla/scope.nvim",
+			opts = {},
+		},
+
+		{
 			"folke/snacks.nvim",
 			event = "VeryLazy",
 			keys = {
@@ -1264,6 +1269,9 @@ require("lazy").setup({
 							on_show = function()
 								vim.cmd.stopinsert()
 							end,
+							-- filter = {
+							-- 	cwd = ,
+							-- },
 						})
 					end,
 					desc = "Buffers",
