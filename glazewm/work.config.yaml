@@ -197,10 +197,11 @@ window_rules:
 
   # Windows Terminal
   # - commands: ["move --workspace w", "focus --workspace w"]
-  - commands: [set-floating --x-pos 0 --y-pos 0 --width 2880 --height 2050]
+  # - commands: [set-floating --x-pos 0 --y-pos 0 --width 2880 --height 2050]
+  # - commands: [set-floating ]
   # - commands: ["set-fullscreen"]
-    match:
-      - window_process: {equals: WindowsTerminal}
+    # match:
+    #   - window_process: {equals: WindowsTerminal}
 
   # Obsidian
   - commands: [move --workspace n, focus --workspace n]
