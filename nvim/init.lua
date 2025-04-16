@@ -3,8 +3,8 @@ local opt = vim.opt
 local cmd = vim.cmd
 local map = vim.keymap.set
 
-local HEIGHT_RATIO = 0.8 -- Nvimtree
-local WIDTH_RATIO = 0.5
+-- local HEIGHT_RATIO = 0.8 -- Nvimtree
+-- local WIDTH_RATIO = 0.5
 
 g.mapleader = " "
 g.maplocalleader = " "
@@ -172,7 +172,8 @@ map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 map("n", "<leader>td", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
-map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
+map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
+-- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 
 map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
 map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
@@ -331,9 +332,12 @@ require("lazy").setup({
 						vim.api.nvim_set_hl(0, "SnacksPicker", { bg = "#FEFCF4" })
 						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { bg = "#FEFCF4" })
 						vim.api.nvim_set_hl(0, "SnacksPickerTitle", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = "#FEFCF4" })
+						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = "#FEFCF4" })
+						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = "#FEFCF4" })
 						vim.api.nvim_set_hl(0, "StatusLine", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "NeoTreeFloatTitle", { bg = "#FEFCF4" })
+						vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = "#FEFCF4" })
 					end,
 				})
 				opt.background = "light"
@@ -385,7 +389,179 @@ require("lazy").setup({
 		},
 
 		{
+			"nvim-neo-tree/neo-tree.nvim",
+			enabled = true,
+			branch = "v3.x",
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+				"MunifTanjim/nui.nvim",
+				-- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+			},
+			lazy = false, -- neo-tree will lazily load itself
+			---@module "neo-tree"
+			---@type neotree.Config?
+			opts = {
+				sources = {
+					"filesystem",
+					"buffers",
+					"git_status",
+				},
+				enable_normal_mode_for_inputs = true,
+				retain_hidden_root_indent = true,
+				popup_border_style = "rounded",
+				sort_case_insensitive = true,
+				-- source_selector = {
+				-- 	winbar = false,
+				-- 	truncation_character = "…", -- character to use when truncating the tab label
+				-- 	highlight_tab = "NeoTreeTabInactive",
+				-- 	highlight_tab_active = "NeoTreeTabActive",
+				-- 	highlight_background = "NeoTreeTabInactive",
+				-- 	highlight_separator = "NeoTreeTabSeparatorInactive",
+				-- 	highlight_separator_active = "NeoTreeTabSeparatorActive",
+				-- },
+				window = {
+					mappings = {
+						["E"] = function()
+							vim.api.nvim_exec2("Neotree action=close", { output = true })
+							vim.api.nvim_exec2(
+								"Neotree action=focus source=filesystem reveal=true position=left",
+								{ output = true }
+							)
+						end,
+						["e"] = function()
+							vim.api.nvim_exec2(
+								"Neotree action=focus source=filesystem position=left",
+								{ output = true }
+							)
+						end,
+						["b"] = function()
+							vim.api.nvim_exec2(
+								"Neotree action=focus source=buffers position=left reveal=true",
+								{ output = true }
+							)
+						end,
+						["g"] = function()
+							vim.api.nvim_exec2(
+								"Neotree action=focus source=git_status position=left",
+								{ output = true }
+							)
+						end,
+						["h"] = function(state)
+							local node = state.tree:get_node()
+							if node.type == "directory" and node:is_expanded() then
+								require("neo-tree.sources.filesystem").toggle_directory(state, node)
+							else
+								require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
+							end
+						end,
+						["l"] = function(state)
+							local node = state.tree:get_node()
+							if node.type == "directory" then
+								if not node:is_expanded() then
+									require("neo-tree.sources.filesystem").toggle_directory(state, node)
+								elseif node:has_children() then
+									require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
+								end
+							else
+								require("neo-tree.sources.filesystem.commands").open(state)
+							end
+						end,
+						["/"] = "noop",
+						["<esc>"] = function()
+							require("neo-tree.command").execute({
+								action = "close",
+							})
+						end,
+					},
+				},
+				close_if_last_window = true,
+				default_component_configs = {
+					indent = {
+						with_markers = true,
+						with_expanders = true,
+					},
+					last_modified = {
+						format = "relative",
+					},
+					-- git_status = {
+					-- 	align = "left",
+					-- },
+				},
+				filesystem = {
+					filtered_items = {
+						visible = true,
+						hide_dotfiles = false,
+					},
+					hijack_netrw_behavior = "open_current",
+					use_libuv_file_watcher = true,
+					async_directory_scan = "always",
+					group_empty_dirs = true,
+					find_by_full_path_words = true,
+					window = {
+						mappings = {
+							["a"] = {
+								"add",
+								config = {
+									show_path = "relative", -- "none", "relative", "absolute"
+								},
+							},
+							["i"] = {
+								"show_file_details",
+								config = {
+									created_format = "relative",
+									modified_format = "relative",
+								},
+							},
+						},
+						fuzzy_finder_mappings = {
+							["<C-j>"] = "move_cursor_down",
+							["<C-k>"] = "move_cursor_up",
+						},
+					},
+				},
+				buffers = {
+					follow_current_file = {
+						enabled = true,
+					},
+					window = {
+						mappings = {
+							["d"] = "buffer_delete",
+							["i"] = {
+								"show_file_details",
+								config = {
+									created_format = "relative",
+									modified_format = "relative",
+								},
+							},
+						},
+					},
+				},
+				event_handlers = {
+					{
+						event = "file_opened",
+						handler = function(_)
+							-- do something, the value of arg varies by event.
+							vim.cmd("Neotree close")
+						end,
+					},
+				},
+			},
+			keys = {
+				{ "<leader>e", "<cmd>Neotree source=filesystem action=focus toggle=true position=left<cr>" },
+				{
+					"<leader>E",
+					"<cmd>Neotree source=filesystem action=focus toggle=true reveal=true position=left<cr>",
+				},
+				{ "<leader>g", "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>" },
+				-- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
+				{ "<leader>.", "<cmd>Neotree source=buffers toggle=true reveal=true position=left<cr>" },
+			},
+		},
+
+		{
 			"nvim-tree/nvim-tree.lua",
+			enabled = false,
 			lazy = false,
 			version = "*",
 			keys = {
@@ -629,10 +805,10 @@ require("lazy").setup({
 							node = api.tree.get_node_under_cursor()
 						end
 						if node ~= nil and node.type == "directory" then
-							vim.cmd.cd(node.absolute_path)
+							vim.cmd.tcd(node.absolute_path)
 							Snacks.picker.files()
 						elseif node ~= nil then
-							vim.cmd.cd(node.parent_path)
+							vim.cmd.tcd(node.parent_path)
 							Snacks.picker.files()
 						else
 							Snacks.picker.files()
@@ -660,7 +836,7 @@ require("lazy").setup({
 							},
 							confirm = function(picker, item)
 								if item then
-									vim.cmd.cd(Snacks.picker.util.dir(item))
+									vim.cmd.tcd(Snacks.picker.util.dir(item))
 									picker:close()
 									require("nvim-tree.api").tree.open({ focus = true, find_file = true })
 									-- Snacks.picker.files()
@@ -693,7 +869,7 @@ require("lazy").setup({
 				filetype = {
 					ps1 = {
 						"cd $dir &&",
-						"powershell ./$fileName",
+						"owershell ./$fileName",
 					},
 					java = {
 						"cd $dir &&",
@@ -1006,6 +1182,13 @@ require("lazy").setup({
 		},
 
 		{
+			"nvim-treesitter/nvim-treesitter-context",
+			opts = {
+				mode = "topline",
+			},
+		},
+
+		{
 			"HiPhish/rainbow-delimiters.nvim",
 			event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
 			config = function()
@@ -1020,32 +1203,37 @@ require("lazy").setup({
 		},
 
 		{
+			"tiagovla/scope.nvim",
+			opts = {},
+		},
+
+		{
 			"folke/snacks.nvim",
 			event = "VeryLazy",
 			keys = {
+				-- {
+				-- 	"<leader>.",
+				-- 	function()
+				-- 		Snacks.scratch()
+				-- 	end,
+				-- 	desc = "Toggle Scratch Buffer",
+				-- },
+				-- {
+				-- 	"<leader>S",
+				-- 	function()
+				-- 		Snacks.scratch.select()
+				-- 	end,
+				-- 	desc = "Select Scratch Buffer",
+				-- },
 				{
-					"<leader>.",
-					function()
-						Snacks.scratch()
-					end,
-					desc = "Toggle Scratch Buffer",
-				},
-				{
-					"<leader>S",
-					function()
-						Snacks.scratch.select()
-					end,
-					desc = "Select Scratch Buffer",
-				},
-				{
-					"<leader>g",
+					"<leader>sg",
 					function()
 						Snacks.picker.grep({ need_search = false })
 					end,
 					desc = "Grep",
 				},
 				{
-					"<leader>g",
+					"<leader>sg",
 					function()
 						Snacks.picker.grep_word()
 					end,
@@ -1081,6 +1269,9 @@ require("lazy").setup({
 							on_show = function()
 								vim.cmd.stopinsert()
 							end,
+							-- filter = {
+							-- 	cwd = ,
+							-- },
 						})
 					end,
 					desc = "Buffers",
@@ -1111,7 +1302,7 @@ require("lazy").setup({
 							},
 							confirm = function(picker, item)
 								if item then
-									vim.cmd.cd(Snacks.picker.util.dir(item))
+									vim.cmd.tcd(Snacks.picker.util.dir(item))
 									picker:close()
 									Snacks.picker.files()
 								else
@@ -1476,12 +1667,12 @@ require("lazy").setup({
 					{ "<leader>nw", "<cmd>Neorg workspace<cr>" },
 					{
 						"<leader>ne",
-						"<cmd>NvimTreeToggle ~/notes/<cr>",
+						"<cmd>Neotree focus float dir=~/notes/<cr>",
 						desc = "Find Neorg Files",
 					},
 					{
 						"<leader>nje",
-						"<cmd>NvimTreeToggle ~/notes/journal/<cr>",
+						"<cmd>Neotree focus float dir=~/notes/journal/<cr>",
 						desc = "Find Neorg Files",
 					},
 					{
