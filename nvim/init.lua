@@ -228,6 +228,7 @@ end
 opt.rtp:prepend(lazypath)
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
+	group = vim.api.nvim_create_augroup("help_files_new_buffer_with_bindings", {}),
 	desc = "Open Help files in new buffer",
 	pattern = "*",
 	callback = function(event)
@@ -235,6 +236,12 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 			cmd.only()
 			vim.bo[event.buf].buflisted = true
 			vim.bo[event.buf].bt = "nowrite"
+			map("n", "<esc>", function()
+				cmd("bdelete")
+			end, { buffer = event.buf })
+			map("n", "q", function()
+				cmd("bdelete")
+			end, { buffer = event.buf })
 		end
 	end,
 })
@@ -305,7 +312,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ "FileType" }, {
-	group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
+	group = vim.api.nvim_create_augroup("coneal", { clear = true }),
 	pattern = { "json", "jsonc", "json5" },
 	callback = function()
 		vim.opt_local.conceallevel = 0
@@ -317,6 +324,11 @@ require("lazy").setup({
 		notify = false,
 	},
 	checker = { enabled = true },
+	ui = {
+		border = "rounded",
+		title = " Lazy Nvim ",
+	},
+	-- profiling = { require = true },
 	performance = {
 		rtp = {
 			disabled_plugins = {
@@ -386,11 +398,14 @@ require("lazy").setup({
 
 						vim.api.nvim_set_hl(0, "TreesitterContext", { bg = pallete.surface })
 
+						vim.api.nvim_set_hl(0, "LazyBackdrop", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "LazyNormal", { bg = pallete.bg })
+
 						vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "IblIndent", { fg = pallete.hilite_mid })
 						--fg = pallete.blue,
 
-						vim.api.nvim_set_hl(0, "NormalFloat", { bg = pallete.bg })
+						-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
 					end,
@@ -464,7 +479,7 @@ require("lazy").setup({
 					"buffers",
 					"git_status",
 				},
-				enable_normal_mode_for_inputs = true,
+				-- enable_normal_mode_for_inputs = true, -- TODO: Find alternative
 				retain_hidden_root_indent = true,
 				popup_border_style = "rounded",
 				sort_case_insensitive = true,
@@ -1518,7 +1533,6 @@ require("lazy").setup({
 						},
 					})
 					vim.wo.foldlevel = 99
-					vim.wo.conceallevel = 2
 				end,
 			},
 		},
