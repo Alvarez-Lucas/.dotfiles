@@ -293,6 +293,15 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+-- Fix conceallevel for json files
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
+	pattern = { "json", "jsonc", "json5" },
+	callback = function()
+		vim.opt_local.conceallevel = 0
+	end,
+})
+
 require("lazy").setup({
 	change_detection = {
 		notify = false,
@@ -350,7 +359,9 @@ require("lazy").setup({
 			"norcalli/nvim-colorizer.lua",
 			lazy = true,
 			event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
-			opts = {},
+			config = function()
+				require("colorizer").setup()
+			end,
 		},
 
 		-- {
@@ -1513,12 +1524,12 @@ require("lazy").setup({
 					enabled = true,
 					animate = { enabled = false },
 					chunk = {
-						enabled = true,
+						enabled = false,
 						char = {
-							corner_top = "┌",
-							corner_bottom = "└",
-							-- corner_top = "╭",
-							-- corner_bottom = "╰",
+							-- corner_top = "┌",
+							-- corner_bottom = "└",
+							corner_top = "╭",
+							corner_bottom = "╰",
 							horizontal = "─",
 							vertical = "│",
 							arrow = ">",
@@ -1526,8 +1537,9 @@ require("lazy").setup({
 					},
 				},
 				picker = {
+					layout = "telescope",
 					-- layout = { preset = "top" },
-					layout = { preset = "vertical", preview = nil },
+					-- layout = { preset = "vertical", preview = nil },
 					-- layout = { preset = "select" },
 					-- layout = { preset = "ivy", layout = { position = "bottom" } },
 					-- layout = { preset = "ivy" },
