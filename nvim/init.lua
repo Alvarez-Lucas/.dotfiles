@@ -176,15 +176,25 @@ map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
 -- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 
-map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
-map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
-map("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
-map("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+-- map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
+-- map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
+-- map("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
+-- map("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+--
+-- map("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
+-- map("n", "<C-j>", "<C-w><C-j>", defaultOpts)
+-- map("n", "<C-k>", "<C-w><C-k>", defaultOpts)
+-- map("n", "<C-l>", "<C-w><C-l>", defaultOpts)
 
-map("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
-map("n", "<C-j>", "<C-w><C-j>", defaultOpts)
-map("n", "<C-k>", "<C-w><C-k>", defaultOpts)
-map("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+map("t", "<left>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
+map("t", "<down>", "<C-\\><C-N><C-w>j", defaultOpts)
+map("t", "<up>", "<C-\\><C-N><C-w>k", defaultOpts)
+map("t", "<right>", "<C-\\><C-N><C-w>l", defaultOpts)
+
+map("n", "<left>", "<C-w><C-h>", defaultOpts) -- Navigate split
+map("n", "<down>", "<C-w><C-j>", defaultOpts)
+map("n", "<up>", "<C-w><C-k>", defaultOpts)
+map("n", "<right>", "<C-w><C-l>", defaultOpts)
 
 map("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts) -- Create veritcal and horizontal split
 map("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>", defaultOpts)
@@ -280,6 +290,7 @@ end
 lazy_file()
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
+	group = vim.api.nvim_create_augroup("help_files_new_buffer_with_bindings", {}),
 	desc = "Open Help files in new buffer",
 	pattern = "*",
 	callback = function(event)
@@ -287,6 +298,12 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 			cmd.only()
 			vim.bo[event.buf].buflisted = true
 			vim.bo[event.buf].bt = "nowrite"
+			map("n", "<esc>", function()
+				cmd("bdelete")
+			end, { buffer = event.buf })
+			map("n", "q", function()
+				cmd("bdelete")
+			end, { buffer = event.buf })
 		end
 	end,
 })
@@ -355,11 +372,25 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+-- Fix conceallevel for json files
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	group = vim.api.nvim_create_augroup("coneal", { clear = true }),
+	pattern = { "json", "jsonc", "json5" },
+	callback = function()
+		vim.opt_local.conceallevel = 0
+	end,
+})
+
 require("lazy").setup({
 	change_detection = {
 		notify = false,
 	},
 	checker = { enabled = true },
+	ui = {
+		border = "rounded",
+		title = " Lazy Nvim ",
+	},
+	-- profiling = { require = true },
 	performance = {
 		rtp = {
 			disabled_plugins = {
@@ -391,15 +422,54 @@ require("lazy").setup({
 					group = vim.api.nvim_create_augroup("custom_highlights_okcolors", {}),
 					pattern = "okcolors",
 					callback = function()
-						vim.api.nvim_set_hl(0, "SnacksPicker", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "SnacksPickerTitle", { bg = "#FEFCF4" })
-						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = "#FEFCF4" })
-						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "StatusLine", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "NeoTreeFloatTitle", { bg = "#FEFCF4" })
-						vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = "#FEFCF4" })
+						local pallete = {
+							bg = "#fefcf4",
+							surface = "#f4f2ea",
+							overlay = "#e7e4dd",
+							hilite_lo = "#eeebe4",
+							hilite_mid = "#d0cec7",
+							hilite_hi = "#b0aea7",
+							muted = "#707175",
+							subtle = "#53555b",
+							tx = "#2c2e33",
+							black = "#202127",
+							dark_grey = "#383a40",
+							lite_grey = "#c0bdb7",
+							white = "#e0ded7",
+							red = "#d7314b",
+							orange = "#a8693d",
+							yellow = "#91772a",
+							green = "#4b8b5a",
+							cyan = "#028a9b",
+							blue = "#6377b6",
+							purple = "#896aa9",
+							magenta = "#c3399b",
+						}
+
+						vim.api.nvim_set_hl(0, "SnacksPicker", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "SnacksPickerTitle", { fg = pallete.blue, bg = pallete.bg })
+						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = pallete.bg })
+						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "StatusLine", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { fg = pallete.blue, bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "NeoTreeFloatTitle", { fg = pallete.blue, bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "NeoTreeRootName", { link = "Title" })
+
+						vim.api.nvim_set_hl(0, "TreesitterContext", { bg = pallete.surface })
+
+						vim.api.nvim_set_hl(0, "LazyBackdrop", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "LazyNormal", { bg = pallete.bg })
+
+						vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "IblIndent", { fg = pallete.hilite_mid })
+						--fg = pallete.blue,
+
+						-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
 					end,
 				})
 				opt.background = "light"
@@ -412,7 +482,9 @@ require("lazy").setup({
 			"norcalli/nvim-colorizer.lua",
 			lazy = true,
 			event = { "LazyFile", "VeryLazy" },
-			opts = {},
+			config = function()
+				require("colorizer").setup()
+			end,
 		},
 
 		-- {
@@ -469,7 +541,7 @@ require("lazy").setup({
 					"buffers",
 					"git_status",
 				},
-				enable_normal_mode_for_inputs = true,
+				-- enable_normal_mode_for_inputs = true, -- TODO: Find alternative
 				retain_hidden_root_indent = true,
 				popup_border_style = "rounded",
 				sort_case_insensitive = true,
@@ -540,7 +612,7 @@ require("lazy").setup({
 				close_if_last_window = true,
 				default_component_configs = {
 					indent = {
-						with_markers = true,
+						with_markers = false,
 						with_expanders = true,
 					},
 					last_modified = {
@@ -618,297 +690,6 @@ require("lazy").setup({
 				{ "<leader>g", "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>" },
 				-- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
 				{ "<leader>.", "<cmd>Neotree source=buffers toggle=true reveal=true position=left<cr>" },
-			},
-		},
-
-		{
-			"nvim-tree/nvim-tree.lua",
-			enabled = false,
-			lazy = false,
-			version = "*",
-			keys = {
-				{
-					"<leader>e",
-					"<cmd>NvimTreeToggle<cr>",
-					function() end,
-				},
-				{
-					"<leader>E",
-					"<cmd>NvimTreeFindFileToggle<cr>",
-					function() end,
-				},
-			},
-			opts = {
-
-				reload_on_bufenter = true,
-				hijack_unnamed_buffer_when_opening = false,
-				sync_root_with_cwd = true,
-				update_focused_file = {
-					enable = false,
-					update_root = {
-						enable = false,
-						ignore_list = {},
-					},
-					exclude = false,
-				},
-
-				ui = { confirm = { default_yes = true } },
-				actions = {
-					change_dir = { enable = true, global = true },
-				},
-				renderer = {
-					indent_width = 2,
-					indent_markers = {
-						enable = false,
-					},
-				},
-				view = {
-					centralize_selection = true,
-					float = {
-						enable = true,
-						open_win_config = function()
-							local screen_w = vim.opt.columns:get()
-							local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-							local window_w = screen_w * WIDTH_RATIO
-							local window_h = screen_h * HEIGHT_RATIO
-							local window_w_int = math.floor(window_w)
-							local window_h_int = math.floor(window_h)
-							local center_x = (screen_w - window_w) / 2
-							local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
-							return {
-								border = "rounded",
-								relative = "editor",
-								row = center_y,
-								col = center_x,
-								width = window_w_int,
-								height = window_h_int,
-							}
-						end,
-					},
-					width = function()
-						return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
-					end,
-				},
-				on_attach = function(bufnr)
-					local api = require("nvim-tree.api")
-
-					local function open_nvim_tree(data)
-						local real_file = vim.fn.filereadable(data.file) == 1
-						local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
-						if not real_file and not no_name then
-							return
-						end
-						require("nvim-tree.api").tree.open({ focus = true, find_file = true })
-						-- require("nvim-tree.api").tree.open({ focus = true, find_file = true, current_wind })
-					end
-					vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
-
-					local function edit_or_open()
-						local node = api.tree.get_node_under_cursor()
-						if node.nodes ~= nil then
-							api.node.open.edit() -- expand or collapse folder
-						else
-							api.node.open.edit() -- open file
-							api.tree.close() -- Close the tree if file was opened
-						end
-					end
-					local function vsplit_preview() -- open as vsplit on current node
-						local node = api.tree.get_node_under_cursor()
-						if node.nodes ~= nil then
-							api.node.open.edit() -- expand or collapse folder
-						else
-							api.node.open.vertical() -- open file as vsplit
-						end
-						api.tree.focus() -- Finally refocus on tree if it was lost
-					end
-
-					local function change_root_to_node(node)
-						if node == nil then
-							node = api.tree.get_node_under_cursor()
-						end
-
-						if node ~= nil and node.type == "directory" then
-							vim.api.nvim_set_current_dir(node.absolute_path)
-						end
-						api.tree.change_root_to_node(node)
-					end
-
-					local function change_root_to_parent(node)
-						local abs_path
-						if node == nil then
-							abs_path = api.tree.get_nodes().absolute_path
-						else
-							abs_path = node.absolute_path
-						end
-
-						local parent_path = vim.fs.dirname(abs_path)
-						vim.api.nvim_set_current_dir(parent_path)
-						api.tree.change_root(parent_path)
-					end
-
-					local tree_api = require("nvim-tree")
-					local tree_view = require("nvim-tree.view")
-					vim.api.nvim_create_augroup("NvimTreeResize", {
-						clear = true,
-					})
-					vim.api.nvim_create_autocmd({ "VimResized" }, {
-						group = "NvimTreeResize",
-						callback = function()
-							if tree_view.is_visible() then
-								tree_view.close()
-								tree_api.open()
-							end
-						end,
-					})
-
-					local function opts(desc)
-						return {
-							desc = "nvim-tree: " .. desc,
-							buffer = bufnr,
-							noremap = true,
-							silent = true,
-							nowait = true,
-						}
-					end
-
-					local mappings = {
-						-- BEGIN_DEFAULT_ON_ATTACH
-						-- ["<C-]>"] = { api.tree.change_root_to_node, "CD" },
-						-- ["<C-e>"] = { api.node.open.replace_tree_buffer, "Open: In Place" },
-						["<C-k>"] = { api.node.show_info_popup, "Info" },
-						["<C-r>"] = { api.fs.rename_sub, "Rename: Omit Filename" },
-						["<C-t>"] = { api.node.open.tab, "Open: New Tab" },
-						["<leader>l"] = { api.node.open.vertical, "Open: Vertical Split" },
-						["<leader>j"] = { api.node.open.horizontal, "Open: Horizontal Split" },
-						-- ["<BS>"] = { api.node.navigate.parent_close, "Close Directory" },
-						["<CR>"] = { api.node.open.edit, "Open" },
-						["<Tab>"] = { api.node.open.preview, "Open Preview" },
-						[">"] = { api.node.navigate.sibling.next, "Next Sibling" },
-						["<"] = { api.node.navigate.sibling.prev, "Previous Sibling" },
-						-- ["."] = { api.node.run.cmd, "Run Command" },
-						["-"] = { change_root_to_parent, "Up" },
-						["a"] = { api.fs.create, "Create" },
-						["bmv"] = { api.marks.bulk.move, "Move Bookmarked" },
-						["B"] = { api.tree.toggle_no_buffer_filter, "Toggle No Buffer" },
-						-- ["C"] = { api.tree.toggle_git_clean_filter, "Toggle Git Clean" },
-						["[c"] = { api.node.navigate.git.prev, "Prev Git" },
-						["]c"] = { api.node.navigate.git.next, "Next Git" },
-						["d"] = { api.fs.remove, "Delete" },
-						["D"] = { api.fs.trash, "Trash" },
-						["E"] = { api.tree.expand_all, "Expand All" },
-						["e"] = { api.fs.rename_basename, "Rename: Basename" },
-						["]e"] = { api.node.navigate.diagnostics.next, "Next Diagnostic" },
-						["[e"] = { api.node.navigate.diagnostics.prev, "Prev Diagnostic" },
-						["g?"] = { api.tree.toggle_help, "Help" },
-						["i"] = { api.tree.toggle_hidden_filter, "Toggle Dotfiles" },
-						["I"] = { api.tree.toggle_gitignore_filter, "Toggle Git Ignore" },
-						["J"] = { api.node.navigate.sibling.last, "Last Sibling" },
-						["K"] = { api.node.navigate.sibling.first, "First Sibling" },
-						["m"] = { api.marks.toggle, "Toggle Bookmark" },
-						["o"] = { api.node.open.edit, "Open" },
-						["O"] = { api.node.open.no_window_picker, "Open: No Window Picker" },
-						["p"] = { api.fs.paste, "Paste" },
-						["P"] = { api.node.navigate.parent, "Parent Directory" },
-						["q"] = { api.tree.close, "Close" },
-						["<esc>"] = { api.tree.close, "Close" },
-						["r"] = { api.fs.rename, "Rename" },
-						["R"] = { api.tree.reload, "Refresh" },
-						["s"] = { api.node.run.system, "Run System" },
-						["S"] = { api.tree.search_node, "Search" },
-						["U"] = { api.tree.toggle_custom_filter, "Toggle Hidden" },
-						["x"] = { api.fs.cut, "Cut" },
-						["yy"] = { api.fs.copy.node, "Copy" },
-						["yp"] = { api.fs.copy.absolute_path, "Copy Absolute Path" },
-						["yn"] = { api.fs.copy.filename, "Copy Name" },
-						["yr"] = { api.fs.copy.relative_path, "Copy Relative Path" },
-						["<2-LeftMouse>"] = { api.node.open.edit, "Open" },
-						["<2-RightMouse>"] = { change_root_to_node, "CD" },
-						-- END_DEFAULT_ON_ATTACH
-
-						-- Mappings migrated from view.mappings.list
-						["l"] = { api.node.open.edit, "Open" },
-						["h"] = { api.node.navigate.parent_close, "Close Directory" },
-						["v"] = { api.node.open.vertical, "Open: Vertical Split" },
-						["."] = { change_root_to_node, "CD" },
-					}
-
-					for keys, mapping in pairs(mappings) do
-						vim.keymap.set("n", keys, mapping[1], opts(mapping[2]))
-					end
-
-					map("n", "b", function()
-						api.tree.close()
-						vim.cmd([[NvimTreeFindFile]])
-					end, opts("Close"))
-					-- custom mappings
-					map("n", "<BS>", change_root_to_parent, opts("Up"))
-					map("n", "?", api.tree.toggle_help, opts("Help"))
-
-					map("n", "l", edit_or_open, opts("Edit Or Open"))
-					map("n", "L", vsplit_preview, opts("Vsplit Preview"))
-					-- map("n", "h", api.tree.close, opts("Close"))
-					map("n", "H", api.tree.collapse_all, opts("Collapse All"))
-
-					map("n", "F", function(node)
-						if node == nil then
-							node = api.tree.get_node_under_cursor()
-						end
-						if node ~= nil and node.type == "directory" then
-							Snacks.picker.files({ dirs = { node.absolute_path } })
-						elseif node ~= nil then
-							Snacks.picker.files({ dirs = { node.parent_path } })
-						else
-							Snacks.picker.files()
-						end
-					end, opts("Find files under directory"))
-
-					map("n", "<leader>F", function(node)
-						if node == nil then
-							node = api.tree.get_node_under_cursor()
-						end
-						if node ~= nil and node.type == "directory" then
-							vim.cmd.tcd(node.absolute_path)
-							Snacks.picker.files()
-						elseif node ~= nil then
-							vim.cmd.tcd(node.parent_path)
-							Snacks.picker.files()
-						else
-							Snacks.picker.files()
-						end
-					end, opts("CD to directory and find files"))
-
-					map("n", "f", function()
-						Snacks.picker.files()
-					end, opts("Find files"))
-
-					map("n", "z", function()
-						Snacks.picker.projects({
-							dev = { "~/repos", "~/.dotfiles" },
-							patterns = {
-								".git",
-								"_darcs",
-								".hg",
-								".bzr",
-								".svn",
-								"package.json",
-								"Makefile",
-								"dot.yaml",
-								"dot.json",
-								"dot.toml",
-							},
-							confirm = function(picker, item)
-								if item then
-									vim.cmd.tcd(Snacks.picker.util.dir(item))
-									picker:close()
-									require("nvim-tree.api").tree.open({ focus = true, find_file = true })
-									-- Snacks.picker.files()
-								else
-									picker:close()
-								end
-							end,
-						})
-					end, opts("Collapse All"))
-				end,
 			},
 		},
 
@@ -1149,6 +930,7 @@ require("lazy").setup({
 						opts.border = opts.border or border
 						return orig_util_open_floating_preview(contents, syntax, opts, ...)
 					end
+
 					vim.keymap.set("n", "K", function()
 						-- vim.diagnostic.open_float()
 						vim.lsp.buf.hover()
@@ -1287,20 +1069,6 @@ require("lazy").setup({
 			"folke/snacks.nvim",
 			event = { "VeryLazy", "LazyFile" },
 			keys = {
-				-- {
-				-- 	"<leader>.",
-				-- 	function()
-				-- 		Snacks.scratch()
-				-- 	end,
-				-- 	desc = "Toggle Scratch Buffer",
-				-- },
-				-- {
-				-- 	"<leader>S",
-				-- 	function()
-				-- 		Snacks.scratch.select()
-				-- 	end,
-				-- 	desc = "Select Scratch Buffer",
-				-- },
 				{
 					"<leader>sg",
 					function()
@@ -1380,7 +1148,8 @@ require("lazy").setup({
 								if item then
 									vim.cmd.tcd(Snacks.picker.util.dir(item))
 									picker:close()
-									Snacks.picker.files()
+									-- Snacks.picker.files()
+									vim.cmd("Neotree action=focus source=filesystem position=current")
 								else
 									picker:close()
 								end
@@ -1585,25 +1354,43 @@ require("lazy").setup({
 			opts = {
 				input = { enabled = true },
 				indent = {
-					priority = 1,
-					enabled = true,
-					animate = { enabled = false },
-					chunk = {
-						enabled = true,
-						char = {
-							corner_top = "┌",
-							corner_bottom = "└",
-							-- corner_top = "╭",
-							-- corner_bottom = "╰",
-							horizontal = "─",
-							vertical = "│",
-							arrow = ">",
+					enabled = false,
+					indent = {
+						priority = 1,
+						enabled = false,
+						animate = { enabled = false },
+						hl = {
+							"SnacksIndent1",
+							"SnacksIndent2",
+							"SnacksIndent3",
+							"SnacksIndent4",
+							"SnacksIndent5",
+							"SnacksIndent6",
+							"SnacksIndent7",
 						},
+						scope = {
+							enabled = true,
+							underline = true,
+						},
+						filter = function(buf)
+							local b = vim.b[buf]
+							local bo = vim.bo[buf]
+							local excluded_filetypes = {
+								markdown = true,
+								text = true,
+								harpoon = true,
+							}
+							return vim.g.snacks_indent ~= false
+								and b.snacks_indent ~= false
+								and bo.buftype == ""
+								and not excluded_filetypes[bo.filetype]
+						end,
 					},
 				},
 				picker = {
+					layout = "telescope",
 					-- layout = { preset = "top" },
-					layout = { preset = "vertical", preview = nil },
+					-- layout = { preset = "vertical", preview = nil },
 					-- layout = { preset = "select" },
 					-- layout = { preset = "ivy", layout = { position = "bottom" } },
 					-- layout = { preset = "ivy" },
@@ -1826,7 +1613,6 @@ require("lazy").setup({
 						},
 					})
 					vim.wo.foldlevel = 99
-					vim.wo.conceallevel = 2
 				end,
 			},
 		},
@@ -1841,6 +1627,105 @@ require("lazy").setup({
 			opts = {
 				file_types = { "norg", "markdown", "quarto" },
 			},
+		},
+
+		{
+			"ThePrimeagen/harpoon",
+			branch = "harpoon2",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			opts = {},
+			config = function(_, opts)
+				local harpoon = require("harpoon")
+				harpoon.setup(opts)
+
+				vim.api.nvim_set_hl(0, "HarpoonBorder", { fg = "#2c2e33", bg = "#FEFCF4" })
+				vim.api.nvim_set_hl(0, "HarpoonWindow", { fg = "#2c2e33", bg = "#FEFCF4" })
+
+				-- harpoon:extend({
+				-- 	UI_CREATE = function(cx)
+				-- 		map("n", "<C-t>", function()
+				-- 			harpoon.ui:select_menu_item({ tabedit = true })
+				-- 		end, { buffer = cx.bufnr })
+				-- 	end,
+				-- })
+
+				-- local harpoon_extensions = require("harpoon.extensions")
+				-- harpoon:extend(harpoon_extensions.builtins.highlight_current_file())
+				--
+
+				map("n", "<leader>a", function()
+					harpoon:list():add()
+				end)
+
+				map("n", "<C-e>", function()
+					harpoon.ui:toggle_quick_menu(harpoon:list())
+				end)
+
+				map("n", "<C-j>", function()
+					harpoon:list():select(1)
+				end)
+
+				map("n", "<C-k>", function()
+					harpoon:list():select(2)
+				end)
+
+				map("n", "<C-l>", function()
+					harpoon:list():select(3)
+				end)
+
+				map("n", "<C-;>", function()
+					harpoon:list():select(4)
+				end)
+			end,
+			keys = {
+				{ "<c-j>" },
+				{ "<c-k>" },
+				{ "<c-l>" },
+				{ "<c-p>" },
+				{ "<leader>a" },
+				{ "<c-e>" },
+			},
+		},
+
+		{
+			-- TODO: Make lazy
+			"lukas-reineke/indent-blankline.nvim",
+			main = "ibl",
+			config = function()
+				local highlight = {
+					"RainbowRed",
+					"RainbowYellow",
+					"RainbowBlue",
+					"RainbowOrange",
+					"RainbowGreen",
+					"RainbowViolet",
+					"RainbowCyan",
+				}
+				local hooks = require("ibl.hooks")
+				-- create the highlight groups in the highlight setup hook, so they are reset
+				-- every time the colorscheme changes
+				hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+					vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+					vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+					vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+					vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+					vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+					vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+					vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+				end)
+
+				vim.g.rainbow_delimiters = { highlight = highlight }
+				require("ibl").setup({
+					scope = { highlight = highlight },
+					indent = {
+						-- https://graphemica.com/%E2%96%8F#glyphs
+						-- char = "│",
+						char = "▏",
+					},
+				})
+
+				hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
+			end,
 		},
 	},
 })
