@@ -10,6 +10,8 @@ local map = vim.keymap.set
 g.mapleader = " "
 g.maplocalleader = " "
 
+-- print(vim.fn.isdirectory(vim.fn.argc(-1)(0)) == 0)
+
 cmd("let &fcs='eob: '")
 opt.cmdheight = 1
 opt.inccommand = "split" -- Preview for substitute
@@ -299,10 +301,10 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 			vim.bo[event.buf].buflisted = true
 			vim.bo[event.buf].bt = "nowrite"
 			map("n", "<esc>", function()
-				cmd("bdelete")
+				Snacks.bufdelete()
 			end, { buffer = event.buf })
 			map("n", "q", function()
-				cmd("bdelete")
+				Snacks.bufdelete()
 			end, { buffer = event.buf })
 		end
 	end,
@@ -470,6 +472,16 @@ require("lazy").setup({
 						-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
+
+						vim.api.nvim_create_autocmd("FileType", {
+							group = vim.api.nvim_create_augroup("harpoon_okcolors_highlight", { clear = true }),
+							pattern = { "harpoon" },
+							callback = function()
+								local ns_id = vim.api.nvim_create_namespace("harpoon_okcolors_highlight")
+								vim.api.nvim_set_hl_ns(ns_id)
+								vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+							end,
+						})
 					end,
 				})
 				opt.background = "light"
@@ -477,6 +489,9 @@ require("lazy").setup({
 				cmd.colorscheme("okcolors")
 			end,
 		},
+
+		{ "nvim-lua/plenary.nvim", lazy = true },
+		{ "MunifTanjim/nui.nvim", lazy = true },
 
 		{
 			"norcalli/nvim-colorizer.lua",
@@ -498,6 +513,8 @@ require("lazy").setup({
 		{
 			"saghen/blink.cmp",
 			lazy = false,
+			-- priority = 900,
+			-- event = { "VeryLazy", "InsertEnter" },
 			dependencies = { "rafamadriz/friendly-snippets" },
 			version = "1.*",
 			---@module 'blink.cmp'
@@ -527,12 +544,12 @@ require("lazy").setup({
 			"nvim-neo-tree/neo-tree.nvim",
 			enabled = true,
 			branch = "v3.x",
-			dependencies = {
-				"nvim-lua/plenary.nvim",
-				"MunifTanjim/nui.nvim",
-				-- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
-			},
-			lazy = false, -- neo-tree will lazily load itself
+			-- lazy = false, -- neo-tree will lazily load itself
+			-- lazy = false, -- neo-tree will lazily load itself
+			lazy = vim.fn.argc(-1) == 0 or vim.fn.isdirectory(vim.fn.argv(0)) == 0, -- TODO: Benchmark if this is worth it?
+			-- event = "VeryLazy",
+			cmd = "Neotree",
+			-- lazy = false,
 			---@module "neo-tree"
 			---@type neotree.Config?
 			opts = {
@@ -820,6 +837,7 @@ require("lazy").setup({
 		{
 			"junnplus/lsp-setup.nvim",
 			event = { "LazyFile", "VeryLazy" },
+			-- priority = 100,
 			cmd = { "LspInfo", "LspInstall", "LspUninstall" },
 			dependencies = {
 				{
@@ -881,27 +899,15 @@ require("lazy").setup({
 					}),
 				},
 				inlay_hints = { enabled = true },
-				-- capabilities = require("blink.cmp").get_lsp_capabilities({
-				-- 	textDocument = {
-				-- 		foldingRange = {
-				-- 			dynamicRegistration = false,
-				-- 			lineFoldingOnly = true,
-				-- 		},
-				-- 	},
-				-- }),
-				-- capabilities = vim.tbl_deep_extend(),
-				-- "force",
-				--     capabilities = vim.tbl_deep_extend(
-				-- 	vim.lsp.protocol.make_client_capabilities(),
-				-- 	{
-				-- 		textDocument = {
-				-- 			foldingRange = {
-				-- 				dynamicRegistration = false,
-				-- 				lineFoldingOnly = true,
-				-- 			},
-				-- 		},
-				-- 	}
-				-- ),
+				-- capabilities = require("blink.cmp").get_lsp_capabilities(),
+				-- {
+				-- 					textDocument = {
+				-- 						foldingRange = {
+				-- 							dynamicRegistration = false,
+				-- 							lineFoldingOnly = true,
+				-- 						},
+				-- 					},
+				-- 				}
 				mappings = {
 					gd = "lua vim.lsp.buf.definition()",
 					gt = "lua vim.lsp.buf.type_definition()",
@@ -1497,9 +1503,7 @@ require("lazy").setup({
 					"nvim-neorg/lua-utils.nvim",
 					"pysan3/pathlib.nvim",
 					"nvim-neotest/nvim-nio",
-					"nvim-lua/plenary.nvim",
 					"benlubas/neorg-interim-ls",
-					"folke/snacks.nvim",
 				},
 				ft = "norg",
 				lazy = true,
@@ -1632,7 +1636,6 @@ require("lazy").setup({
 		{
 			"ThePrimeagen/harpoon",
 			branch = "harpoon2",
-			dependencies = { "nvim-lua/plenary.nvim" },
 			opts = {},
 			config = function(_, opts)
 				local harpoon = require("harpoon")
