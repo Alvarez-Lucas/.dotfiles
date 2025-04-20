@@ -1,0 +1,51 @@
+---
+# watch_config_changes: Automatically reload borders whenever the config file is modified.
+watch_config_changes: false
+rendering_backend: V2  # options: V2, Legacy
+global:
+  border_width: 5
+  border_offset: -1
+  border_radius: Square  # Options: Auto, Square, Round, RoundSmall, radius: Integer value
+
+  # These can also be used to accommodate border animations (e.g., fade animations).
+  # initialize_delay: 200
+  # unminimize_delay: 150
+  initialize_delay: 0
+  unminimize_delay: 0
+  active_color: '#c3399b'
+  inactive_color: '#383a40'
+  komorebi_colors:
+    enabled: false
+  animations:
+    enabled: false
+  effects:
+    enabled: false
+window_rules:
+  # - match: Class
+  #   name: Windows.UI.Core.CoreWindow
+  #   enabled: false
+  # - match: Class
+  #   name: XamlExplorerHostIslandWindow
+  #   enabled: false
+  - match: Process
+    name: zebar
+    enabled: false
+  - match: Title
+    name: komorebi-bar
+    enabled: false
+  - match: Title
+    name: keyviz
+    enabled: false
+  - match: Title
+    name: Picture-in-Picture
+    enabled: false
+
+  # Example rule:
+  # - match: Class  # Match based on Class, Title, or Process
+  #   name: "MozillaWindowClass"  # Class/title/process name to match
+  #   strategy: Equals  # Matching strategy: Equals, Contains, or Regex (default: Equals)
+  #   enabled: True  # Border enabled: True, False, or Auto (default: Auto)
+  #
+  # Notes:
+  #   - Any option in the global config can also be defined in window_rules.
+  #   - If not defined in a rule, settings will fall back to global config values.

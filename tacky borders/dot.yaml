@@ -1,0 +1,4 @@
+---
+windows:
+  links:
+    config.yaml: ~/.config/tacky-borders/config.yaml
