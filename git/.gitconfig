@@ -81,6 +81,9 @@
   ; map-styles = bold purple => syntax magenta, bold cyan => syntax blue
   ; features = GitHub zebra-light
   features = GitHub zebra-light
+  ; hunk-header-decoration-style = ul
+  ; hunk-header-style = raw
+  hunk-header-decoration-style = box
 
 ; [delta "my-color-moved-theme"]
 ;     git-moved-from-style = bold purple     # An ad-hoc named style (must end in "-style")

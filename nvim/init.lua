@@ -980,7 +980,9 @@ require("lazy").setup({
 			end,
 			build = ":TSUpdate",
 			config = function()
-				require("nvim-treesitter.install").prefer_git = false
+				local installOptions = require("nvim-treesitter.install")
+				installOptions.prefer_git = false
+				installOptions.compilers = { "gcc" }
 				local configs = require("nvim-treesitter.configs")
 				---@diagnostic disable-next-line: missing-fields
 				configs.setup({

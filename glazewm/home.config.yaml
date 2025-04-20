@@ -19,10 +19,7 @@ gaps:
 window_effects:
   focused_window:
     border:
-      enabled: true
-      # color: '#8dbcff'
-      # color: '#21c7a8'
-      color: '#82aaff'
+      enabled: false
     hide_title_bar:
       enabled: false
     corner_style:
@@ -30,8 +27,7 @@ window_effects:
       style: square   # Options: 'square', 'rounded', 'small_rounded'
   other_windows:
     border:
-      enabled: true
-      color: '#a1a1a1'
+      enabled: false
     hide_title_bar:
       enabled: false
     corner_style:
@@ -59,6 +55,8 @@ workspaces:
     display_name: Windows Terminal
   - name: explorer
     display_name: Explorer
+  - name: git
+    display_name: Git
   - name: '1'
   - name: '2'
   - name: '3'
@@ -78,7 +76,8 @@ window_rules:
   # browser
   - commands: [move --workspace browser, focus --workspace browser]
     match:
-      - window_process: {equals: msedge|brave|chrome}
+      - window_process:
+        equals: msedge|brave|chrome|vivaldi
 
   # terminal
   - commands: [move --workspace terminal, focus --workspace terminal]
@@ -140,6 +139,12 @@ keybindings:
     bindings: [alt+e]
   - commands: [move --workspace explorer, focus --workspace explorer]
     bindings: [alt+shift+e]
+
+  # explorer
+  - commands: [focus --workspace git]
+    bindings: [alt+g]
+  - commands: [move --workspace git, focus --workspace git]
+    bindings: [alt+shift+g]
 
   # notes
   - commands: [focus --workspace notes]

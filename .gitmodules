@@ -1,3 +1,6 @@
 [submodule "nu/nu_scripts"]
 	path = nu/nu_scripts
 	url = git@github.com:nushell/nu_scripts.git
+[submodule "tacky borders/tacky-borders"]
+	path = tacky borders/tacky-borders
+	url = git@github.com:lukeyou05/tacky-borders.git
