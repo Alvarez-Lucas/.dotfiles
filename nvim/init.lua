@@ -147,7 +147,7 @@ map("n", "<leader>xl", function()
 	end
 end, { desc = "Location List" })
 
--- quickfix list
+-- -- quickfix list
 map("n", "<leader>xq", function()
 	local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
 	if not success and err then
@@ -173,7 +173,7 @@ map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
 map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
 map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-map("n", "<leader>td", "<cmd>tabclose<cr>", { desc = "Close Tab" })
+map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
 -- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
@@ -292,7 +292,7 @@ end
 lazy_file()
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
-	group = vim.api.nvim_create_augroup("help_files_new_buffer_with_bindings", {}),
+	group = vim.api.nvim_create_augroup("help_files_buffer", {}),
 	desc = "Open Help files in new buffer",
 	pattern = "*",
 	callback = function(event)
@@ -300,15 +300,40 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 			cmd.only()
 			vim.bo[event.buf].buflisted = true
 			vim.bo[event.buf].bt = "nowrite"
-			map("n", "<esc>", function()
-				Snacks.bufdelete()
-			end, { buffer = event.buf })
-			map("n", "q", function()
-				Snacks.bufdelete()
-			end, { buffer = event.buf })
+			vim.cmd("Helpview attach")
 		end
 	end,
 })
+--     function()
+-- vim.cmd([[nohlsearch \| lua Snacks.bufdelete()]])
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	group = vim.api.nvim_create_augroup("help_files_keymaps", {}),
+-- 	desc = "Add keymaps to help files",
+-- 	pattern = "help",
+-- 	callback = function(event)
+-- 		map("n", "<esc>", function()
+-- 			if vim.v.hlsearch == 1 then
+-- 				vim.cmd("nohlsearch")
+-- 			else
+-- 				Snacks.bufdelete()
+-- 			end
+-- 			-- local ok, result = pcall(function()
+-- 			-- 	if vim.v.hlsearch == 1 then
+-- 			-- 		vim.cmd("nohlsearch")
+-- 			-- 	else
+-- 			-- 		Snacks.bufdelete()
+-- 			-- 	end
+-- 			-- end)
+-- 			-- if not ok then
+-- 			-- 	Snacks.bufdelete()
+-- 			-- end
+-- 		end, { buffer = event.buf })
+--
+-- 		map("n", "q", function()
+-- 			Snacks.bufdelete()
+-- 		end, { buffer = event.buf })
+-- 	end,
+-- })
 
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
@@ -349,14 +374,27 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	group = vim.api.nvim_create_augroup("open_help_files_tab", { clear = true }),
+-- 	pattern = "help",
+-- 	callback = function(event)
+-- 		-- vim.cmd("wincmd T", { silent = true })
+-- 		if vim.bo[event.buf].filetype == "help" then
+-- 			cmd.only()
+-- 			vim.bo[event.buf].buflisted = true
+-- 			vim.bo[event.buf].bt = "nowrite"
+-- 		end
+-- 	end,
+-- })
+
 -- Close some filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
 	pattern = {
 		"PlenaryTestPopup",
-		"help",
 		"lspinfo",
 		"notify",
+		"help",
 		"qf",
 		"query",
 		"spectre_panel",
@@ -384,6 +422,10 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 
 require("lazy").setup({
+	defaults = {
+		version = false,
+		lazy = true,
+	},
 	change_detection = {
 		notify = false,
 	},
@@ -408,6 +450,7 @@ require("lazy").setup({
 		},
 	},
 
+	-- Plugin Specs
 	---@type LazySpec
 	spec = {
 
@@ -448,31 +491,37 @@ require("lazy").setup({
 							magenta = "#c3399b",
 						}
 
+						-- Borders
+						vim.api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
+
+						-- Status Line
+						vim.api.nvim_set_hl(0, "StatusLine", { bg = pallete.bg })
+
+						-- Snacks
 						vim.api.nvim_set_hl(0, "SnacksPicker", { bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "SnacksPickerTitle", { fg = pallete.blue, bg = pallete.bg })
-						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloat", { bg = pallete.bg })
-						-- vim.api.nvim_set_hl(0, "NvimTreeNormalFloatBorder", { bg = pallete.bg })
-						vim.api.nvim_set_hl(0, "StatusLine", { bg = pallete.bg })
-						vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { fg = pallete.blue, bg = pallete.bg })
+
+						-- Neotree
 						vim.api.nvim_set_hl(0, "NeoTreeFloatTitle", { fg = pallete.blue, bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = pallete.bg })
+						vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { fg = pallete.blue, bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "NeoTreeRootName", { link = "Title" })
 
+						-- TreesitterContext
 						vim.api.nvim_set_hl(0, "TreesitterContext", { bg = pallete.surface })
 
+						-- Lazy
 						vim.api.nvim_set_hl(0, "LazyBackdrop", { bg = pallete.bg })
 						vim.api.nvim_set_hl(0, "LazyNormal", { bg = pallete.bg })
 
-						vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = pallete.bg })
+						-- indent-blankline
 						vim.api.nvim_set_hl(0, "IblIndent", { fg = pallete.hilite_mid })
-						--fg = pallete.blue,
+						vim.api.nvim_set_hl(0, "IblScope", { fg = pallete.cyan })
 
-						-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = pallete.bg })
-						vim.api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
-						vim.api.nvim_set_hl(0, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
-
+						-- Harpoon
 						vim.api.nvim_create_autocmd("FileType", {
 							group = vim.api.nvim_create_augroup("harpoon_okcolors_highlight", { clear = true }),
 							pattern = { "harpoon" },
@@ -490,31 +539,29 @@ require("lazy").setup({
 			end,
 		},
 
-		{ "nvim-lua/plenary.nvim", lazy = true },
-		{ "MunifTanjim/nui.nvim", lazy = true },
+		{ "nvim-lua/plenary.nvim" },
+		{ "MunifTanjim/nui.nvim" },
+		{ "nvim-tree/nvim-web-devicons" }, -- Blink.cmp,
+		{ "williamboman/mason.nvim", opts = {} },
 
 		{
-			"norcalli/nvim-colorizer.lua",
-			lazy = true,
-			event = { "LazyFile", "VeryLazy" },
-			config = function()
-				require("colorizer").setup({ "*" })
-			end,
+			"folke/lazydev.nvim",
+			ft = "lua",
+			---@alias lazydev.Library {path:string, words:string[], mods:string[]}
+			---@alias lazydev.Library.spec string|{path:string, words?:string[], mods?:string[]}
+			---@class lazydev.Config
+			opts = {
+				library = {
+					"LazyVim",
+					"lazy.nvim",
+				},
+				integrations = { cmp = false },
+			},
 		},
-
-		-- {
-		-- 	enabled = false,
-		-- 	"catppuccin/nvim",
-		-- 	config = function()
-		-- 		c.colorscheme("catppuccin")
-		-- 	end,
-		-- },
 
 		{
 			"saghen/blink.cmp",
-			lazy = false,
-			-- priority = 900,
-			-- event = { "VeryLazy", "InsertEnter" },
+			event = { "VeryLazy", "InsertEnter" },
 			dependencies = { "rafamadriz/friendly-snippets" },
 			version = "1.*",
 			---@module 'blink.cmp'
@@ -542,14 +589,36 @@ require("lazy").setup({
 
 		{
 			"nvim-neo-tree/neo-tree.nvim",
-			enabled = true,
 			branch = "v3.x",
-			-- lazy = false, -- neo-tree will lazily load itself
-			-- lazy = false, -- neo-tree will lazily load itself
-			lazy = vim.fn.argc(-1) == 0 or vim.fn.isdirectory(vim.fn.argv(0)) == 0, -- TODO: Benchmark if this is worth it?
-			-- event = "VeryLazy",
 			cmd = "Neotree",
-			-- lazy = false,
+			keys = {
+				{ "<leader>e", "<cmd>Neotree source=filesystem action=focus toggle=true position=left<cr>" },
+				{
+					"<leader>E",
+					"<cmd>Neotree source=filesystem action=focus toggle=true reveal=true position=left<cr>",
+				},
+				{ "<leader>g", "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>" },
+				-- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
+				{ "<leader>.", "<cmd>Neotree source=buffers toggle=true reveal=true position=left<cr>" },
+			},
+			init = function()
+				-- Lazy load on open of directory to hijack netrw (https://www.lazyvim.org/extras/editor/neo-tree)
+				vim.api.nvim_create_autocmd("BufEnter", {
+					group = vim.api.nvim_create_augroup("Neotree_start_directory", { clear = true }),
+					desc = "Start Neo-tree with directory",
+					once = true,
+					callback = function()
+						if package.loaded["neo-tree"] then
+							return
+						else
+							local stats = vim.uv.fs_stat(vim.fn.argv(0))
+							if stats and stats.type == "directory" then
+								require("neo-tree")
+							end
+						end
+					end,
+				})
+			end,
 			---@module "neo-tree"
 			---@type neotree.Config?
 			opts = {
@@ -558,19 +627,11 @@ require("lazy").setup({
 					"buffers",
 					"git_status",
 				},
+				use_popups_for_input = true,
 				-- enable_normal_mode_for_inputs = true, -- TODO: Find alternative
 				retain_hidden_root_indent = true,
 				popup_border_style = "rounded",
 				sort_case_insensitive = true,
-				-- source_selector = {
-				-- 	winbar = false,
-				-- 	truncation_character = "…", -- character to use when truncating the tab label
-				-- 	highlight_tab = "NeoTreeTabInactive",
-				-- 	highlight_tab_active = "NeoTreeTabActive",
-				-- 	highlight_background = "NeoTreeTabInactive",
-				-- 	highlight_separator = "NeoTreeTabSeparatorInactive",
-				-- 	highlight_separator_active = "NeoTreeTabSeparatorActive",
-				-- },
 				window = {
 					mappings = {
 						["E"] = function()
@@ -592,12 +653,12 @@ require("lazy").setup({
 								{ output = true }
 							)
 						end,
-						-- ["g"] = function()
-						-- 	vim.api.nvim_exec2(
-						-- 		"Neotree action=focus source=git_status position=left",
-						-- 		{ output = true }
-						-- 	)
-						-- end,
+						["gs"] = function()
+							vim.api.nvim_exec2(
+								"Neotree action=focus source=git_status position=left",
+								{ output = true }
+							)
+						end,
 						["h"] = function(state)
 							local node = state.tree:get_node()
 							if node.type == "directory" and node:is_expanded() then
@@ -635,9 +696,6 @@ require("lazy").setup({
 					last_modified = {
 						format = "relative",
 					},
-					-- git_status = {
-					-- 	align = "left",
-					-- },
 				},
 				filesystem = {
 					filtered_items = {
@@ -698,108 +756,6 @@ require("lazy").setup({
 					},
 				},
 			},
-			keys = {
-				{ "<leader>e", "<cmd>Neotree source=filesystem action=focus toggle=true position=left<cr>" },
-				{
-					"<leader>E",
-					"<cmd>Neotree source=filesystem action=focus toggle=true reveal=true position=left<cr>",
-				},
-				{ "<leader>g", "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>" },
-				-- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
-				{ "<leader>.", "<cmd>Neotree source=buffers toggle=true reveal=true position=left<cr>" },
-			},
-		},
-
-		{
-			"CRAG666/code_runner.nvim",
-			keys = {
-				{
-					"<leader>ds",
-					function()
-						require("code_runner").run_code()
-					end,
-					{ desc = "Debug Start (Run Code)" },
-				},
-			},
-			opts = {
-				filetype = {
-					ps1 = {
-						"cd $dir &&",
-						"owershell ./$fileName",
-					},
-					java = {
-						"cd $dir &&",
-						"javac $fileName &&",
-						"java $fileNameWithoutExt",
-					},
-					python = "python3 -u",
-					typescript = "deno run",
-					rust = {
-						"cd $dir &&",
-						"rustc $fileName &&",
-						"$dir/$fileNameWithoutExt",
-					},
-					cs = {
-						"cd $dir &&",
-						"dotnet run",
-					},
-					c = function(...)
-						c_base = {
-							"cd $dir &&",
-							"gcc $fileName -o",
-							"/tmp/$fileNameWithoutExt",
-						}
-						local c_exec = {
-							"&& /tmp/$fileNameWithoutExt &&",
-							"rm /tmp/$fileNameWithoutExt",
-						}
-						vim.ui.input({ prompt = "Add more args:" }, function(input)
-							c_base[4] = input
-							vim.print(vim.tbl_extend("force", c_base, c_exec))
-							require("code_runner.commands").run_from_fn(vim.list_extend(c_base, c_exec))
-						end)
-					end,
-				},
-			},
-		},
-
-		{
-			"nvim-tree/nvim-web-devicons",
-			lazy = true,
-		},
-
-		{
-			"stevearc/conform.nvim",
-			event = {
-				"BufWritePre",
-			},
-			dependencies = {
-				"williamboman/mason.nvim",
-				{ "zapling/mason-conform.nvim", opts = {} },
-			},
-			opts = {
-				format_on_save = {
-					-- These options will be passed to conform.format()
-					timeout_ms = 3000,
-					lsp_format = "fallback",
-				},
-				formatters_by_ft = {
-					ps1 = { lsp_format = "prefer" },
-					lua = { "stylua", stop_after_first = true },
-					-- Conform will run multiple formatters sequentially
-					python = { "black" },
-					-- You can customize some of the format options for the filetype (:help conform.format)
-					rust = { "rustfmt", lsp_format = "fallback" },
-					-- Conform will run the first available formatter
-					javascript = { "prettierd", "prettier", stop_after_first = true },
-					-- toml = { "taplo" },
-					json = { "fixjson", "prettier" },
-					cs = { "csharpier" },
-					yaml = { "yamlfix" }, -- "yamlfmt",
-					-- nu = { "nufmt" }, -- Currently too alpha, broken
-					-- norg = { command = "C:/Users/lalvarez/source/repos/norg-fmt/target/release/norg-fmt.exe" },
-				},
-			},
 		},
 
 		{
@@ -819,156 +775,139 @@ require("lazy").setup({
 			-- ":call firenvim#install(0)", -- Old build
 		},
 
-		{
-			"folke/lazydev.nvim",
-			ft = "lua",
-			---@alias lazydev.Library {path:string, words:string[], mods:string[]}
-			---@alias lazydev.Library.spec string|{path:string, words?:string[], mods?:string[]}
-			---@class lazydev.Config
-			opts = {
-				library = {
-					"LazyVim",
-					"lazy.nvim",
-				},
-				integrations = { cmp = false },
-			},
-		},
+		-- {
+		-- 	"junnplus/lsp-setup.nvim",
+		-- 	event = { "LazyFile", "VeryLazy" },
+		-- 	-- priority = 100,
+		-- 	cmd = { "LspInfo", "LspInstall", "LspUninstall" },
+		-- 	dependencies = {
+		-- 		{
+		-- 			opts = {},
+		-- 		},
+		-- 		{
+		-- 			"neovim/nvim-lspconfig",
+		-- 			config = function()
+		-- 				require("lspconfig").nushell.setup({})
+		-- 			end,
+		-- 		},
+		-- 		"williamboman/mason.nvim",
+		-- 		"williamboman/mason-lspconfig.nvim",
+		-- 		{
+		-- 			"rachartier/tiny-inline-diagnostic.nvim",
+		-- 			keys = {
+		-- 				{
+		-- 					"<leader>ck",
+		-- 					function()
+		-- 						require("tiny-inline-diagnostic").toggle()
+		-- 					end,
+		-- 				},
+		-- 			},
+		-- 			opts = {
+		-- 				preset = "powerline", -- "modern", "classic", "minimal", "powerline","ghost", "simple", "nonerdfont", "amongus"
+		-- 				options = {
+		-- 					throttle = 0,
+		-- 					softwrap = 30,
+		-- 					multilines = {
+		-- 						enabled = true,
+		-- 						always_show = true,
+		-- 					},
+		-- 					show_all_diags_on_cursorline = false,
+		-- 					enable_on_insert = false,
+		-- 					enable_on_select = false,
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	},
+		-- 	opts = {
+		-- 		default_mappings = false,
+		-- 		settings = {
+		-- 			vim.diagnostic.config({
+		-- 				signs = {
+		-- 					text = {
+		-- 						[vim.diagnostic.severity.ERROR] = "󰅚 ",
+		-- 						[vim.diagnostic.severity.WARN] = "󰀪 ",
+		-- 						[vim.diagnostic.severity.INFO] = "󰋽 ",
+		-- 						[vim.diagnostic.severity.HINT] = "󰌶 ",
+		-- 					},
+		-- 				},
+		-- 				severity_sort = true,
+		-- 				update_in_insert = false,
+		-- 				virtual_text = false,
+		-- 				underline = true,
+		-- 				virtual_lines = false,
+		-- 				float = { source = "if_many" },
+		-- 			}),
+		-- 		},
+		-- 		inlay_hints = { enabled = true },
+		-- 		-- capabilities = require("blink.cmp").get_lsp_capabilities(),
+		-- 		-- {
+		-- 		-- 					textDocument = {
+		-- 		-- 						foldingRange = {
+		-- 		-- 							dynamicRegistration = false,
+		-- 		-- 							lineFoldingOnly = true,
+		-- 		-- 						},
+		-- 		-- 					},
+		-- 		-- 				}
+		-- 		mappings = {
+		-- 			gd = "lua vim.lsp.buf.definition()",
+		-- 			gt = "lua vim.lsp.buf.type_definition()",
+		-- 			["<space>k"] = "lua vim.lsp.buf.hover()",
+		-- 			-- ["K"] = "lua vim.lsp.buf.hover()",
+		-- 			["<space>rn"] = "lua vim.lsp.buf.rename()",
+		-- 			["<space>ca"] = "lua vim.lsp.buf.code_action()",
+		-- 			["[d"] = "lua vim.diagnostic.goto_prev()",
+		-- 			["]d"] = "lua vim.diagnostic.goto_next()",
+		-- 		},
+		--
+		-- 		on_attach = function(client, bufnr)
+		-- 			local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+		-- 			local border = {
+		-- 				{ "🭽", "FloatBorder" },
+		-- 				{ "▔", "FloatBorder" },
+		-- 				{ "🭾", "FloatBorder" },
+		-- 				{ "▕", "FloatBorder" },
+		-- 				{ "🭿", "FloatBorder" },
+		-- 				{ "▁", "FloatBorder" },
+		-- 				{ "🭼", "FloatBorder" },
+		-- 				{ "▏", "FloatBorder" },
+		-- 			}
+		-- 			function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+		-- 				opts = opts or {}
+		-- 				opts.border = opts.border or border
+		-- 				return orig_util_open_floating_preview(contents, syntax, opts, ...)
+		-- 			end
+		--
+		-- 			vim.keymap.set("n", "K", function()
+		-- 				-- vim.diagnostic.open_float()
+		-- 				vim.lsp.buf.hover()
+		-- 			end)
+		-- 			vim.keymap.set("n", "gl", function()
+		-- 				vim.diagnostic.open_float()
+		-- 			end)
+		-- 			vim.keymap.set("n", "gK", function()
+		-- 				require("blink.cmp").show_signature()
+		-- 			end)
+		-- 			vim.keymap.set("i", "<c-k>", function()
+		-- 				require("blink.cmp").show_signature()
+		-- 			end)
+		-- 		end,
+		-- 		servers = {
+		-- 			yamlls = {},
+		-- 			jsonls = {},
+		-- 			powershell_es = {},
+		-- 			taplo = {},
+		-- 			omnisharp = {},
+		-- 			-- ruff = {},
+		-- 			pylsp = {},
+		-- 			lua_ls = {},
+		-- 		},
+		-- 	},
+		-- },
 
 		{
-			"junnplus/lsp-setup.nvim",
+			"nvim-treesitter/nvim-treesitter", --nvim-treesitter/nvim-treesitter-context, HiPhish/rainbow-delimiters.nvim, windwp/nvim-autopairs
 			event = { "LazyFile", "VeryLazy" },
-			-- priority = 100,
-			cmd = { "LspInfo", "LspInstall", "LspUninstall" },
-			dependencies = {
-				{
-					"j-hui/fidget.nvim",
-					opts = {},
-				},
-				{
-					"neovim/nvim-lspconfig",
-					config = function()
-						require("lspconfig").nushell.setup({})
-					end,
-				},
-				"williamboman/mason.nvim",
-				"williamboman/mason-lspconfig.nvim",
-				{
-					"rachartier/tiny-inline-diagnostic.nvim",
-					keys = {
-						{
-							"<leader>ck",
-							function()
-								require("tiny-inline-diagnostic").toggle()
-							end,
-						},
-					},
-					opts = {
-						preset = "powerline", -- "modern", "classic", "minimal", "powerline","ghost", "simple", "nonerdfont", "amongus"
-						options = {
-							throttle = 0,
-							softwrap = 30,
-							multilines = {
-								enabled = true,
-								always_show = true,
-							},
-							show_all_diags_on_cursorline = false,
-							enable_on_insert = false,
-							enable_on_select = false,
-						},
-					},
-				},
-			},
-			opts = {
-				default_mappings = false,
-				settings = {
-					vim.diagnostic.config({
-						signs = {
-							text = {
-								[vim.diagnostic.severity.ERROR] = "󰅚 ",
-								[vim.diagnostic.severity.WARN] = "󰀪 ",
-								[vim.diagnostic.severity.INFO] = "󰋽 ",
-								[vim.diagnostic.severity.HINT] = "󰌶 ",
-							},
-						},
-						severity_sort = true,
-						update_in_insert = false,
-						virtual_text = false,
-						underline = true,
-						virtual_lines = false,
-						float = { source = "if_many" },
-					}),
-				},
-				inlay_hints = { enabled = true },
-				-- capabilities = require("blink.cmp").get_lsp_capabilities(),
-				-- {
-				-- 					textDocument = {
-				-- 						foldingRange = {
-				-- 							dynamicRegistration = false,
-				-- 							lineFoldingOnly = true,
-				-- 						},
-				-- 					},
-				-- 				}
-				mappings = {
-					gd = "lua vim.lsp.buf.definition()",
-					gt = "lua vim.lsp.buf.type_definition()",
-					["<space>k"] = "lua vim.lsp.buf.hover()",
-					-- ["K"] = "lua vim.lsp.buf.hover()",
-					["<space>rn"] = "lua vim.lsp.buf.rename()",
-					["<space>ca"] = "lua vim.lsp.buf.code_action()",
-					["[d"] = "lua vim.diagnostic.goto_prev()",
-					["]d"] = "lua vim.diagnostic.goto_next()",
-				},
-
-				on_attach = function(client, bufnr)
-					local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-					local border = {
-						{ "🭽", "FloatBorder" },
-						{ "▔", "FloatBorder" },
-						{ "🭾", "FloatBorder" },
-						{ "▕", "FloatBorder" },
-						{ "🭿", "FloatBorder" },
-						{ "▁", "FloatBorder" },
-						{ "🭼", "FloatBorder" },
-						{ "▏", "FloatBorder" },
-					}
-					function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-						opts = opts or {}
-						opts.border = opts.border or border
-						return orig_util_open_floating_preview(contents, syntax, opts, ...)
-					end
-
-					vim.keymap.set("n", "K", function()
-						-- vim.diagnostic.open_float()
-						vim.lsp.buf.hover()
-					end)
-					vim.keymap.set("n", "gl", function()
-						vim.diagnostic.open_float()
-					end)
-					vim.keymap.set("n", "gK", function()
-						require("blink.cmp").show_signature()
-					end)
-					vim.keymap.set("i", "<c-k>", function()
-						require("blink.cmp").show_signature()
-					end)
-				end,
-				servers = {
-					yamlls = {},
-					jsonls = {},
-					powershell_es = {},
-					taplo = {},
-					omnisharp = {},
-					-- ruff = {},
-					pylsp = {},
-					lua_ls = {},
-				},
-			},
-		},
-
-		{
-			-- event = { "BufReadPre", "BufNewFile", "InsertEnter", "VeryLazy" },
-			"nvim-treesitter/nvim-treesitter",
-			event = { "LazyFile", "VeryLazy" },
-			lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
 			init = function(plugin)
 				-- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
 				-- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
@@ -980,9 +919,8 @@ require("lazy").setup({
 			end,
 			build = ":TSUpdate",
 			config = function()
-				local installOptions = require("nvim-treesitter.install")
-				installOptions.prefer_git = false
-				installOptions.compilers = { "gcc" }
+				require("nvim-treesitter.install").prefer_git = false
+				require("nvim-treesitter.install").compilers = { "gcc" }
 				local configs = require("nvim-treesitter.configs")
 				---@diagnostic disable-next-line: missing-fields
 				configs.setup({
@@ -1046,18 +984,120 @@ require("lazy").setup({
 
 		{
 			"nvim-treesitter/nvim-treesitter-context",
+			event = { "LazyFile", "VeryLazy" },
+			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
 			opts = {
 				mode = "topline",
 			},
-			event = { "LazyFile", "VeryLazy" },
-			lazy = vim.fn.argc(-1) == 0,
 		},
 
 		{
 			"HiPhish/rainbow-delimiters.nvim",
 			event = { "LazyFile", "VeryLazy" },
+			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
 			config = function()
 				require("rainbow-delimiters.setup").setup({})
+			end,
+		},
+
+		{
+			"norcalli/nvim-colorizer.lua",
+			event = { "LazyFile", "VeryLazy" },
+			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+			config = function()
+				require("colorizer").setup({ "*" })
+			end,
+		},
+
+		{
+			"lukas-reineke/indent-blankline.nvim",
+			event = { "VeryLazy", "LazyFile" },
+			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+			main = "ibl",
+			config = function()
+				-- local highlight = {
+				-- 	"RainbowRed",
+				-- 	"RainbowYellow",
+				-- 	"RainbowBlue",
+				-- 	"RainbowOrange",
+				-- 	"RainbowGreen",
+				-- 	"RainbowViolet",
+				-- 	"RainbowCyan",
+				-- }
+				-- local hooks = require("ibl.hooks")
+				-- create the highlight groups in the highlight setup hook, so they are reset
+				-- every time the colorscheme changes
+				-- hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+				-- 	vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+				-- 	vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+				-- 	vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+				-- 	vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+				-- 	vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+				-- 	vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+				-- 	vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+				-- end)
+
+				require("ibl").setup({
+					scope = { enabled = true },
+					indent = {
+						-- https://graphemica.com/%E2%96%8F#glyphs
+						-- char = "│",
+						char = "▏",
+					},
+				})
+			end,
+		},
+
+		{
+			"folke/noice.nvim",
+			event = "VeryLazy",
+			dependencies = {
+				"MunifTanjim/nui.nvim",
+				"rcarriga/nvim-notify",
+			},
+			opts = {
+				presets = { bottom_search = true },
+			},
+		},
+
+		{
+			"williamboman/mason-lspconfig.nvim",
+			dependencies = "williamboman/mason.nvim",
+			event = "VeryLazy",
+			opts = {
+				ensure_installed = {
+					"jsonls",
+					"lua_ls",
+					"omnisharp",
+					"powershell_es",
+					"pylsp",
+					"taplo",
+					"yamlls",
+					-- ruff = {},
+				},
+			},
+		},
+
+		-- { "j-hui/fidget.nvim", opts = {} },
+
+		{
+			"neovim/nvim-lspconfig",
+			dependencies = {
+				"williamboman/mason-lspconfig.nvim", -- Install servers automatically
+				"saghen/blink.cmp", -- Advertise completion capabilities
+				-- "j-hui/fidget.nvim", -- Loading Progress
+				"folke/noice.nvim",
+			},
+			event = "LazyFile",
+			config = function()
+				vim.lsp.enable("jsonls")
+				vim.lsp.enable("lua_ls")
+				vim.lsp.enable("omnisharp")
+				vim.lsp.enable("powershell_es")
+				vim.lsp.enable("pylsp")
+				vim.lsp.enable("taplo")
+				vim.lsp.enable("yamlls")
+				-- ruff = {},
 			end,
 		},
 
@@ -1068,15 +1108,25 @@ require("lazy").setup({
 		},
 
 		{
-			"tiagovla/scope.nvim",
-			lazy = false,
-			opts = {},
-		},
-
-		{
 			"folke/snacks.nvim",
-			event = { "VeryLazy", "LazyFile" },
+			ft = "help",
 			keys = {
+				{
+					"<leader>nf",
+				},
+				{
+					"<leader>njf",
+				},
+				{
+					"<leader>ng",
+				},
+				{
+					"<leader>m",
+					function()
+						Snacks.picker.notifications()
+					end,
+					desc = "Notification History",
+				},
 				{
 					"<leader>sg",
 					function()
@@ -1101,7 +1151,7 @@ require("lazy").setup({
 					desc = "Smart Find Files",
 				},
 				{
-					"<leader>bd",
+					"<leader>w",
 					function()
 						Snacks.bufdelete()
 					end,
@@ -1360,41 +1410,7 @@ require("lazy").setup({
 			---@module "snacks"
 			---@type snacks.Config
 			opts = {
-				input = { enabled = true },
-				indent = {
-					enabled = false,
-					indent = {
-						priority = 1,
-						enabled = false,
-						animate = { enabled = false },
-						hl = {
-							"SnacksIndent1",
-							"SnacksIndent2",
-							"SnacksIndent3",
-							"SnacksIndent4",
-							"SnacksIndent5",
-							"SnacksIndent6",
-							"SnacksIndent7",
-						},
-						scope = {
-							enabled = true,
-							underline = true,
-						},
-						filter = function(buf)
-							local b = vim.b[buf]
-							local bo = vim.bo[buf]
-							local excluded_filetypes = {
-								markdown = true,
-								text = true,
-								harpoon = true,
-							}
-							return vim.g.snacks_indent ~= false
-								and b.snacks_indent ~= false
-								and bo.buftype == ""
-								and not excluded_filetypes[bo.filetype]
-						end,
-					},
-				},
+				-- input = { enabled = true },
 				picker = {
 					layout = "telescope",
 					-- layout = { preset = "top" },
@@ -1526,13 +1542,6 @@ require("lazy").setup({
 						"<cmd>Neorg return<cr>",
 						desc = "Find Neorg Files",
 					},
-					{
-						"<leader>nf",
-						function()
-							Snacks.picker.files({ dirs = { "~/notes/" } })
-						end,
-						desc = "Find Neorg Files",
-					},
 					{ "<leader>nw", "<cmd>Neorg workspace<cr>" },
 					{
 						"<leader>ne",
@@ -1638,6 +1647,14 @@ require("lazy").setup({
 		{
 			"ThePrimeagen/harpoon",
 			branch = "harpoon2",
+			keys = {
+				{ "<c-j>" },
+				{ "<c-k>" },
+				{ "<c-l>" },
+				{ "<c-p>" },
+				{ "<leader>a" },
+				{ "<c-e>" },
+			},
 			opts = {},
 			config = function(_, opts)
 				local harpoon = require("harpoon")
@@ -1682,55 +1699,109 @@ require("lazy").setup({
 					harpoon:list():select(4)
 				end)
 			end,
+		},
+
+		{
+			"tiagovla/scope.nvim",
+			event = "TabNewEntered",
+			opts = {},
+		},
+
+		{
+			"CRAG666/code_runner.nvim",
 			keys = {
-				{ "<c-j>" },
-				{ "<c-k>" },
-				{ "<c-l>" },
-				{ "<c-p>" },
-				{ "<leader>a" },
-				{ "<c-e>" },
+				{
+					"<leader>ds",
+					function()
+						require("code_runner").run_code()
+					end,
+					{ desc = "Debug Start (Run Code)" },
+				},
+			},
+			opts = {
+				filetype = {
+					ps1 = {
+						"cd $dir &&",
+						"owershell ./$fileName",
+					},
+					java = {
+						"cd $dir &&",
+						"javac $fileName &&",
+						"java $fileNameWithoutExt",
+					},
+					python = "python3 -u",
+					typescript = "deno run",
+					rust = {
+						"cd $dir &&",
+						"rustc $fileName &&",
+						"$dir/$fileNameWithoutExt",
+					},
+					cs = {
+						"cd $dir &&",
+						"dotnet run",
+					},
+					c = function(...)
+						c_base = {
+							"cd $dir &&",
+							"gcc $fileName -o",
+							"/tmp/$fileNameWithoutExt",
+						}
+						local c_exec = {
+							"&& /tmp/$fileNameWithoutExt &&",
+							"rm /tmp/$fileNameWithoutExt",
+						}
+						vim.ui.input({ prompt = "Add more args:" }, function(input)
+							c_base[4] = input
+							vim.print(vim.tbl_extend("force", c_base, c_exec))
+							require("code_runner.commands").run_from_fn(vim.list_extend(c_base, c_exec))
+						end)
+					end,
+				},
 			},
 		},
 
 		{
-			-- TODO: Make lazy
-			"lukas-reineke/indent-blankline.nvim",
-			main = "ibl",
-			config = function()
-				local highlight = {
-					"RainbowRed",
-					"RainbowYellow",
-					"RainbowBlue",
-					"RainbowOrange",
-					"RainbowGreen",
-					"RainbowViolet",
-					"RainbowCyan",
-				}
-				local hooks = require("ibl.hooks")
-				-- create the highlight groups in the highlight setup hook, so they are reset
-				-- every time the colorscheme changes
-				hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-					vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-					vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-					vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-					vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-					vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-					vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-					vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-				end)
+			"stevearc/conform.nvim",
+			dependencies = {
+				"williamboman/mason.nvim",
+			},
+			opts = {
+				format_on_save = {
+					-- These options will be passed to conform.format()
+					timeout_ms = 3000,
+					lsp_format = "fallback",
+				},
+				formatters_by_ft = {
+					ps1 = { lsp_format = "prefer" },
+					lua = { "stylua", stop_after_first = true },
+					python = { "black" },
+					rust = { "rustfmt", lsp_format = "fallback" },
+					javascript = { "prettierd", "prettier", stop_after_first = true },
+					-- toml = { "taplo" },
+					json = { "fixjson", "prettier" },
+					cs = { "csharpier" },
+					yaml = { "yamlfix" }, -- "yamlfmt",
+					-- nu = { "nufmt" }, -- Currently too alpha, broken
+					-- norg = { command = "C:/Users/lalvarez/source/repos/norg-fmt/target/release/norg-fmt.exe" },
+				},
+			},
+		},
 
-				vim.g.rainbow_delimiters = { highlight = highlight }
-				require("ibl").setup({
-					scope = { highlight = highlight },
-					indent = {
-						-- https://graphemica.com/%E2%96%8F#glyphs
-						-- char = "│",
-						char = "▏",
-					},
-				})
+		{
+			"zapling/mason-conform.nvim",
+			dependencies = "stevearc/conform.nvim",
+			event = {
+				"BufWritePre",
+			},
+			opts = {},
+		},
 
-				hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
-			end,
+		{
+			"OXY2DEV/helpview.nvim",
+			cmd = { "Helpview" },
+			-- cmd = { "Help", "Helpview" },
+			-- ft = "help",
+			-- keys = { "<leader>sh" },
 		},
 	},
 })
