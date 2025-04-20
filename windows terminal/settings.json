@@ -22,10 +22,11 @@
     {
         "defaults": 
         {
+            "bellStyle": "none",
             "colorScheme": "Custom Theme",
             "font": 
             {
-                "face": "JetBrainsMono Nerd Font",
+                "face": "JetBrainsMono Nerd Font mono",
                 "size": 16
             },
             "intenseTextStyle": "all"
@@ -115,9 +116,22 @@
                 "hidden": true,
                 "name": "Developer PowerShell for VS 2022 [Preview]",
                 "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{cf61e692-bf25-5b3c-8f0f-a048f34bf1eb}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{43d78d40-161e-51c2-90c1-0c9f7bc884a0}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
             }
         ]
     },
+    "rendering.graphicsAPI": "direct3d11",
     "schemes": 
     [
         {
@@ -167,5 +181,6 @@
             "yellow": "#91772A"
         }
     ],
+    "tabWidthMode": "equal",
     "themes": []
 }

@@ -498,7 +498,7 @@ require("lazy").setup({
 			lazy = true,
 			event = { "LazyFile", "VeryLazy" },
 			config = function()
-				require("colorizer").setup()
+				require("colorizer").setup({ "*" })
 			end,
 		},
 
