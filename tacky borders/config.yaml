@@ -12,8 +12,10 @@ global:
   # unminimize_delay: 150
   initialize_delay: 0
   unminimize_delay: 0
-  active_color: '#c3399b'
-  inactive_color: '#383a40'
+  # active_color: '#c3399b'
+  inactive_color: '#e7e4dd'
+  # active_color: '#383a40'
+  active_color: '#2c2e33'
   komorebi_colors:
     enabled: false
   animations:

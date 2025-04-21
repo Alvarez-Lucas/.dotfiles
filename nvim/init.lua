@@ -300,7 +300,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 			cmd.only()
 			vim.bo[event.buf].buflisted = true
 			vim.bo[event.buf].bt = "nowrite"
-			vim.cmd("Helpview attach")
+			vim.cmd("HelpView attach")
 		end
 	end,
 })
@@ -600,6 +600,16 @@ require("lazy").setup({
 				{ "<leader>g", "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>" },
 				-- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
 				{ "<leader>.", "<cmd>Neotree source=buffers toggle=true reveal=true position=left<cr>" },
+				{
+					"<leader>ne",
+					"<cmd>Neotree focus float dir=~/notes/<cr>",
+					desc = "Find Neorg Files",
+				},
+				{
+					"<leader>nje",
+					"<cmd>Neotree focus float dir=~/notes/journal/<cr>",
+					desc = "Find Neorg Files",
+				},
 			},
 			init = function()
 				-- Lazy load on open of directory to hijack netrw (https://www.lazyvim.org/extras/editor/neo-tree)
@@ -1111,14 +1121,27 @@ require("lazy").setup({
 			"folke/snacks.nvim",
 			ft = "help",
 			keys = {
+
 				{
 					"<leader>nf",
+					function()
+						Snacks.picker.files({ dirs = { "~/notes/" }, exclude = { "*journal*" } })
+					end,
+					desc = "Find Neorg Files",
 				},
 				{
 					"<leader>njf",
+					function()
+						Snacks.picker.files({ dirs = { "~/notes/journal/" }, sort = { fields = { "file" } } })
+					end,
+					desc = "Find Neorg Files",
 				},
 				{
 					"<leader>ng",
+					function()
+						Snacks.picker.grep({ dirs = { "~/notes/" }, need_search = false })
+					end,
+					desc = "Grep Neorg Files",
 				},
 				{
 					"<leader>m",
@@ -1538,42 +1561,11 @@ require("lazy").setup({
 					-- { "<leader>njo", "<cmd>Neorg journal toc open<cr>" }, -- TODO: after installing TOC
 					-- { "<leader>nju", "<cmd>Neorg journal toc update<cr>" }, -- TODO: after installing TOC
 					{
-						"<leader>nq",
+						"<leader>nw",
 						"<cmd>Neorg return<cr>",
 						desc = "Find Neorg Files",
 					},
-					{ "<leader>nw", "<cmd>Neorg workspace<cr>" },
-					{
-						"<leader>ne",
-						"<cmd>Neotree focus float dir=~/notes/<cr>",
-						desc = "Find Neorg Files",
-					},
-					{
-						"<leader>nje",
-						"<cmd>Neotree focus float dir=~/notes/journal/<cr>",
-						desc = "Find Neorg Files",
-					},
-					{
-						"<leader>nf",
-						function()
-							Snacks.picker.files({ dirs = { "~/notes/" }, exclude = { "*journal*" } })
-						end,
-						desc = "Find Neorg Files",
-					},
-					{
-						"<leader>njf",
-						function()
-							Snacks.picker.files({ dirs = { "~/notes/journal/" }, sort = { fields = { "file" } } })
-						end,
-						desc = "Find Neorg Files",
-					},
-					{
-						"<leader>ng",
-						function()
-							Snacks.picker.grep({ dirs = { "~/notes/" }, need_search = false })
-						end,
-						desc = "Grep Neorg Files",
-					},
+					{ "<leader>ni", "<cmd>Neorg workspace<cr>" },
 				},
 				config = function()
 					vim.api.nvim_create_autocmd("FileType", {
@@ -1798,7 +1790,7 @@ require("lazy").setup({
 
 		{
 			"OXY2DEV/helpview.nvim",
-			cmd = { "Helpview" },
+			cmd = { "HelpView" },
 			-- cmd = { "Help", "Helpview" },
 			-- ft = "help",
 			-- keys = { "<leader>sh" },
