@@ -1144,6 +1144,26 @@ require("lazy").setup({
 							require("snacks.picker").lsp_workspace_symbols()
 						end, { buffer = event.buf, desc = "Open Workspace Symbols" })
 						-- - "grn" is mapped in Normal mode to |vim.lsp.buf.rename()|
+						--
+						-- TODO: Consider
+						map("n", "gl", function()
+							vim.diagnostic.open_float()
+						end, { buffer = event.buf })
+						--
+						--diagnostic.open_float
+						-- 			vim.keymap.set("n", "K", function()
+						-- 				-- vim.diagnostic.open_float()
+						-- 				vim.lsp.buf.hover()
+						-- 			end)
+						-- 			vim.keymap.set("n", "gl", function()
+						-- 				vim.diagnostic.open_float()
+						-- 			end)
+						-- 			vim.keymap.set("n", "gK", function()
+						-- 				require("blink.cmp").show_signature()
+						-- 			end)
+						-- 			vim.keymap.set("i", "<c-k>", function()
+						-- 				require("blink.cmp").show_signature()
+						-- 			end)
 
 						-- When you move your cursor, the highlights will be cleared (the second autocommand).
 						local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -1712,6 +1732,14 @@ require("lazy").setup({
 								"<Plug>(neorg.qol.todo-items.todo.task-cycle)",
 								{ buffer = true, silent = true }
 							)
+						end,
+					})
+
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						group = vim.api.nvim_create_augroup("neorg_indents", { clear = true }),
+						pattern = { "*.norg" },
+						callback = function()
+							vim.cmd([[normal mzgg=G`z]])
 						end,
 					})
 
