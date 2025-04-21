@@ -102,6 +102,11 @@ map("n", "<Leader>xy", "<cmd>call setreg('+', getreg('@'))<CR>", defaultOpts)
 map("n", "<c-d>", "<c-d>zz", defaultOpts) -- Keep cursor line centered on page scroll
 map("n", "<c-u>", "<c-u>zz", defaultOpts)
 
+map("n", "n", "nzzzv")
+map("n", "N", "Nzzzv")
+
+map("n", "J", "mzJ`z") -- TODO: Decide if this is worth it
+
 -- better up/down TODO: Still testing
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -300,7 +305,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 			cmd.only()
 			vim.bo[event.buf].buflisted = true
 			vim.bo[event.buf].bt = "nowrite"
-			vim.cmd("HelpView attach")
+			cmd("Helpview attach")
 		end
 	end,
 })
@@ -1059,6 +1064,7 @@ require("lazy").setup({
 		},
 
 		{
+			enabled = false,
 			"folke/noice.nvim",
 			event = "VeryLazy",
 			dependencies = {
@@ -1088,18 +1094,146 @@ require("lazy").setup({
 			},
 		},
 
-		-- { "j-hui/fidget.nvim", opts = {} },
-
 		{
 			"neovim/nvim-lspconfig",
 			dependencies = {
 				"williamboman/mason-lspconfig.nvim", -- Install servers automatically
-				"saghen/blink.cmp", -- Advertise completion capabilities
-				-- "j-hui/fidget.nvim", -- Loading Progress
+				-- "saghen/blink.cmp", -- Advertise completion capabilities
+				{ "j-hui/fidget.nvim", opts = {} }, -- Loading Progress
 				"folke/noice.nvim",
 			},
 			event = "LazyFile",
 			config = function()
+				vim.api.nvim_create_autocmd("LspAttach", {
+					group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+					callback = function(event)
+						map("n", "grr", function()
+							require("snacks.picker").lsp_references()
+						end, { buffer = event.buf, desc = "[G]oto [R]eferences" })
+
+						map("n", "gra", function()
+							vim.lsp.buf.code_action()
+						end, { buffer = event.buf, desc = "[G]oto Code [A]ction" })
+
+						map("n", "grr", function()
+							require("snacks.picker").lsp_references()
+						end, { buffer = event.buf, desc = "[G]oto [R]eferences" })
+
+						map("n", "gri", function()
+							require("snacks.picker").lsp_implementations()
+						end, { buffer = event.buf, desc = "[G]oto [I]mplementation" })
+
+						map("n", "grd", function()
+							require("snacks.picker").lsp_definitions()
+						end, { buffer = event.buf, desc = "[G]oto [D]efinition" })
+
+						map("n", "grD", function()
+							require("snacks.picker").lsp_declarations()
+						end, { buffer = event.buf, desc = "[G]oto [D]eclaration" })
+
+						map("n", "grt", function()
+							require("snacks.picker").lsp_type_definitions()
+						end, { buffer = event.buf, desc = "[G]oto [T]ype Definition" })
+
+						map("n", "gO", function()
+							require("snacks.picker").lsp_symbols()
+						end, { buffer = event.buf, desc = "Open Document Symbols" })
+
+						map("n", "gW", function()
+							require("snacks.picker").lsp_workspace_symbols()
+						end, { buffer = event.buf, desc = "Open Workspace Symbols" })
+						-- - "grn" is mapped in Normal mode to |vim.lsp.buf.rename()|
+
+						-- When you move your cursor, the highlights will be cleared (the second autocommand).
+						local client = vim.lsp.get_client_by_id(event.data.client_id)
+						if
+							client
+							and client:supports_method(
+								vim.lsp.protocol.Methods.textDocument_documentHighlight,
+								event.buf
+							)
+						then
+							local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
+							vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+								buffer = event.buf,
+								group = highlight_augroup,
+								callback = vim.lsp.buf.document_highlight,
+							})
+
+							vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+								buffer = event.buf,
+								group = highlight_augroup,
+								callback = vim.lsp.buf.clear_references,
+							})
+
+							vim.api.nvim_create_autocmd("LspDetach", {
+								group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
+								callback = function(event2)
+									vim.lsp.buf.clear_references()
+									vim.api.nvim_clear_autocmds({
+										group = "lsp-highlight",
+										buffer = event2.buf,
+									})
+								end,
+							})
+						end
+
+						if
+							client
+							and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf)
+						then
+							map("n", "<leader>th", function()
+								vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
+									bufnr = event.buf,
+									desc = "[T]oggle Inlay [H]ints",
+								}))
+							end, { buffer = event.buf, desc = "Open Workspace Symbols" })
+						end
+					end,
+				})
+
+				-- https://www.lazyvim.org/plugins/lsp -- TODO: check this out for the default server options
+				local capabilities = require("blink.cmp").get_lsp_capabilities()
+				vim.lsp.config("*", {
+					capabilities = capabilities,
+					root_markers = { ".git" },
+					-- on_attach = function(client, bufnr) -- Consider converting to lsp config on_attach
+					-- 	vim.lsp.completion.enable(true, client.id, bufnr, {
+					-- 		autotrigger = true,
+					-- 		convert = function(item)
+					-- 			return { abbr = item.label:gsub("%b()", "") }
+					-- 		end,
+					-- 	})
+					-- end,
+				})
+
+				vim.diagnostic.config({
+					severity_sort = true,
+					float = { border = "rounded", source = "if_many" },
+					underline = { severity = vim.diagnostic.severity.ERROR },
+					signs = {
+						text = {
+							[vim.diagnostic.severity.ERROR] = "󰅚", -- TODO: add space if using non mono version of icons
+							[vim.diagnostic.severity.WARN] = "󰀪",
+							[vim.diagnostic.severity.INFO] = "󰋽",
+							[vim.diagnostic.severity.HINT] = "󰌶",
+						},
+					},
+					virtual_text = {
+						source = "if_many",
+						spacing = 2,
+						format = function(diagnostic)
+							local diagnostic_message = {
+								[vim.diagnostic.severity.ERROR] = diagnostic.message,
+								[vim.diagnostic.severity.WARN] = diagnostic.message,
+								[vim.diagnostic.severity.INFO] = diagnostic.message,
+								[vim.diagnostic.severity.HINT] = diagnostic.message,
+							}
+							return diagnostic_message[diagnostic.severity]
+						end,
+					},
+				})
+
 				vim.lsp.enable("jsonls")
 				vim.lsp.enable("lua_ls")
 				vim.lsp.enable("omnisharp")
@@ -1121,7 +1255,6 @@ require("lazy").setup({
 			"folke/snacks.nvim",
 			ft = "help",
 			keys = {
-
 				{
 					"<leader>nf",
 					function()
@@ -1330,20 +1463,63 @@ require("lazy").setup({
 				-- 	end,
 				-- 	desc = "Git Log File",
 				-- },
-				{
-					"<leader>sD",
-					function()
-						Snacks.picker.diagnostics()
-					end,
-					desc = "Diagnostics",
-				},
-				{
-					"<leader>sd",
-					function()
-						Snacks.picker.diagnostics_buffer()
-					end,
-					desc = "Buffer Diagnostics",
-				},
+				-- {
+				-- 	"<leader>sD",
+				-- 	function()
+				-- 		Snacks.picker.diagnostics()
+				-- 	end,
+				-- 	desc = "Diagnostics",
+				-- },
+				-- {
+				-- 	"<leader>sd",
+				-- 	function()
+				-- 		Snacks.picker.diagnostics_buffer()
+				-- 	end,
+				-- 	desc = "Buffer Diagnostics",
+				-- },
+				-- {
+				-- 	"<leader>ss",
+				-- 	function()
+				-- 		Snacks.picker.lsp_symbols()
+				-- 	end,
+				-- 	desc = "Highlights",
+				-- },
+				-- {
+				-- 	"<leader>sS",
+				-- 	function()
+				-- 		Snacks.picker.lsp_workspace_symbols()
+				-- 	end,
+				-- 	desc = "Highlights",
+				-- },
+				-- {
+				-- 	"gD",
+				-- 	function()
+				-- 		Snacks.picker.lsp_declarations()
+				-- 	end,
+				-- 	desc = "Goto Declaration",
+				-- },
+				-- {
+				-- 	"gr",
+				-- 	function()
+				-- 		Snacks.picker.lsp_references()
+				-- 	end,
+				-- 	nowait = true,
+				-- 	desc = "References",
+				-- },
+				-- {
+				-- 	"gI",
+				-- 	function()
+				-- 		Snacks.picker.lsp_implementations()
+				-- 	end,
+				-- 	desc = "Goto Implementation",
+				-- },
+				-- {
+				-- 	"gy",
+				-- 	function()
+				-- 		Snacks.picker.lsp_type_definitions()
+				-- 	end,
+				-- 	desc = "Goto T[y]pe Definition",
+				-- },
 				{
 					"<leader>sh",
 					function()
@@ -1355,20 +1531,6 @@ require("lazy").setup({
 					"<leader>sH",
 					function()
 						Snacks.picker.highlights()
-					end,
-					desc = "Highlights",
-				},
-				{
-					"<leader>ss",
-					function()
-						Snacks.picker.lsp_symbols()
-					end,
-					desc = "Highlights",
-				},
-				{
-					"<leader>sS",
-					function()
-						Snacks.picker.lsp_workspace_symbols()
 					end,
 					desc = "Highlights",
 				},
@@ -1387,7 +1549,7 @@ require("lazy").setup({
 					desc = "Location List",
 				},
 				{
-					"<leader>sR",
+					"<leader>ss",
 					function()
 						Snacks.picker.resume()
 					end,
@@ -1399,35 +1561,6 @@ require("lazy").setup({
 						Snacks.picker.qflist()
 					end,
 					desc = "Quickfix List",
-				},
-				{
-					"gD",
-					function()
-						Snacks.picker.lsp_declarations()
-					end,
-					desc = "Goto Declaration",
-				},
-				{
-					"gr",
-					function()
-						Snacks.picker.lsp_references()
-					end,
-					nowait = true,
-					desc = "References",
-				},
-				{
-					"gI",
-					function()
-						Snacks.picker.lsp_implementations()
-					end,
-					desc = "Goto Implementation",
-				},
-				{
-					"gy",
-					function()
-						Snacks.picker.lsp_type_definitions()
-					end,
-					desc = "Goto T[y]pe Definition",
 				},
 			},
 			---@module "snacks"
@@ -1790,7 +1923,7 @@ require("lazy").setup({
 
 		{
 			"OXY2DEV/helpview.nvim",
-			cmd = { "HelpView" },
+			cmd = { "Helpview" },
 			-- cmd = { "Help", "Helpview" },
 			-- ft = "help",
 			-- keys = { "<leader>sh" },
