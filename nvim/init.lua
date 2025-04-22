@@ -1758,7 +1758,7 @@ require("lazy").setup({
 							},
 							["core.integrations.treesitter"] = {},
 							["core.promo"] = {},
-							["core.esupports.metagen"] = { config = { update_date = false, type = "empty" } }, -- do not update date until https://github.com/nvim-neorg/neorg/issues/1579 fixed
+							["core.esupports.metagen"] = { config = { update_date = true, type = "auto" } }, -- do not update date until https://github.com/nvim-neorg/neorg/issues/1579 fixed
 							-- https://github.com/nvim-neorg/neorg/issues/1579
 							-- ["core.esupports.metagen"] = {
 							-- 	config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix

@@ -159,10 +159,10 @@ window_rules:
       - window_title: {equals: Search}
       - window_title: {equals: Search everywhere}
       - window_title: {equals: Find all}
-  - commands: [move --workspace d, set-floating]
+  - commands: [move --workspace d, set-floating --width 1920 --height 1060]
     match:
       - window_process: {regex: ESI-Term*}
-      - window_process: {regex: ESI Flash Utility*}
+      # - window_process: {regex: ESI Flash Utility*}
   # - commands: [move --workspace a, focus --workspace a]
   #   match:
   #     - window_process: {equals: CamBam}
