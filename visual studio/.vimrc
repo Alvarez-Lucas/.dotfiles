@@ -24,6 +24,7 @@ vnoremap gc :vsc Edit.ToggleLineComment<CR>
 nnoremap gcc :vsc Edit.ToggleLineComment<CR>
 nnoremap gco o<Esc>Vcx<Esc><c-o>:vsc Edit.CommentSelection<CR>fxa<bs> 
 nnoremap gcO O<Esc>Vcx<Esc><c-o>:vsc Edit.CommentSelection<CR>fxa<bs> 
+nmap ycc yygccp
 
 " use to make navigating forward and backward work across tabs
 nnoremap <C-o> :vsc View.NavigateBackward<CR>
