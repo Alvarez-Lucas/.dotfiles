@@ -1091,6 +1091,7 @@ require("lazy").setup({
 					"pylsp",
 					"taplo",
 					"yamlls",
+					"lemminx",
 					-- ruff = {},
 				},
 			},
@@ -1263,6 +1264,7 @@ require("lazy").setup({
 				vim.lsp.enable("pylsp")
 				vim.lsp.enable("taplo")
 				vim.lsp.enable("yamlls")
+				vim.lsp.enable("lemminx")
 				-- ruff = {},
 			end,
 		},
@@ -1936,6 +1938,7 @@ require("lazy").setup({
 					json = { "fixjson", "prettier" },
 					cs = { "csharpier" },
 					yaml = { "yamlfix" }, -- "yamlfmt",
+					xml = {},
 					-- nu = { "nufmt" }, -- Currently too alpha, broken
 					-- norg = { command = "C:/Users/lalvarez/source/repos/norg-fmt/target/release/norg-fmt.exe" },
 				},
