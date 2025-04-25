@@ -1156,6 +1156,7 @@ require("lazy").setup({
 					"taplo",
 					"yamlls",
 					"lemminx",
+					"clangd",
 					-- ruff = {},
 				},
 			},
@@ -1329,6 +1330,7 @@ require("lazy").setup({
 				vim.lsp.enable("taplo")
 				vim.lsp.enable("yamlls")
 				vim.lsp.enable("lemminx")
+				vim.lsp.enable("clangd")
 				-- ruff = {},
 			end,
 		},
@@ -1788,7 +1790,45 @@ require("lazy").setup({
 					},
 					{ "<leader>ni", "<cmd>Neorg workspace<cr>" },
 				},
-				config = function()
+				opts = {
+					load = {
+						["core.defaults"] = {},
+						["core.ui"] = {},
+						["core.concealer"] = { config = { icon_preset = "diamond" } },
+						["core.dirman"] = {
+							config = {
+								workspaces = {
+									notes = "~/notes",
+								},
+								default_workspace = "notes",
+							},
+						},
+						["core.integrations.treesitter"] = {},
+						["core.promo"] = {},
+						["core.esupports.metagen"] = { config = { update_date = true, type = "auto" } }, -- do not update date until https://github.com/nvim-neorg/neorg/issues/1579 fixed
+						-- https://github.com/nvim-neorg/neorg/issues/1579
+						-- ["core.esupports.metagen"] = {
+						-- 	config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix
+						-- },
+						["core.autocommands"] = {},
+						["core.esupports.indent"] = {},
+						["external.interim-ls"] = {},
+						["core.completion"] = {
+							config = { engine = { module_name = "external.lsp-completion" } },
+						},
+						["core.dirman.utils"] = {},
+						["core.summary"] = {},
+						["core.itero"] = {},
+						["core.looking-glass"] = {},
+						["core.journal"] = {
+							config = {
+								strategy = "flat",
+								workspace = "notes",
+							},
+						},
+					},
+				},
+				config = function(_, opts)
 					vim.api.nvim_create_autocmd("FileType", {
 						group = vim.api.nvim_create_augroup("neorg_keymaps", { clear = true }),
 						pattern = { "norg" },
@@ -1809,46 +1849,8 @@ require("lazy").setup({
 							vim.cmd([[normal mzgg=G`z]])
 						end,
 					})
-
-					require("neorg").setup({
-						load = {
-							["core.defaults"] = {},
-							["core.ui"] = {},
-							["core.concealer"] = { config = { icon_preset = "diamond" } },
-							["core.dirman"] = {
-								config = {
-									workspaces = {
-										notes = "~/notes",
-									},
-									default_workspace = "notes",
-								},
-							},
-							["core.integrations.treesitter"] = {},
-							["core.promo"] = {},
-							["core.esupports.metagen"] = { config = { update_date = true, type = "auto" } }, -- do not update date until https://github.com/nvim-neorg/neorg/issues/1579 fixed
-							-- https://github.com/nvim-neorg/neorg/issues/1579
-							-- ["core.esupports.metagen"] = {
-							-- 	config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix
-							-- },
-							["core.autocommands"] = {},
-							["core.esupports.indent"] = {},
-							["external.interim-ls"] = {},
-							["core.completion"] = {
-								config = { engine = { module_name = "external.lsp-completion" } },
-							},
-							["core.dirman.utils"] = {},
-							["core.summary"] = {},
-							["core.itero"] = {},
-							["core.looking-glass"] = {},
-							["core.journal"] = {
-								config = {
-									strategy = "flat",
-									workspace = "notes",
-								},
-							},
-						},
-					})
 					vim.wo.foldlevel = 99
+					require("neorg").setup(opts)
 				end,
 			},
 		},
@@ -1929,23 +1931,26 @@ require("lazy").setup({
 			end,
 		},
 
+		-- TODO: Pick a surround plugin
+
 		{
+			enabled = false,
 			"kylechui/nvim-surround",
 			keys = { "ys", "ds", "cs" },
 			opts = {},
 		},
 
 		{
-			enabled = false,
+			enabled = true,
 			"echasnovski/mini.surround",
 			keys = {
-				"gsa",
-				"gsd",
-				"gsf",
-				"gsF",
-				"gsh",
-				"gsr",
-				"gsn",
+				{ "gsa", mode = { "n", "v" } },
+				{ "gsd", mode = { "n", "v" } },
+				{ "gsf", mode = { "n", "v" } },
+				{ "gsF", mode = { "n", "v" } },
+				{ "gsh", mode = { "n", "v" } },
+				{ "gsr", mode = { "n", "v" } },
+				{ "gsn", mode = { "n", "v" } },
 			},
 			opts = {
 				mappings = {
