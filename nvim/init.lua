@@ -135,11 +135,11 @@ map("v", ">", ">gv")
 -- 	Snacks.toggle.inlay_hints():map("<leader>uh")
 -- end
 
-map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
-map("n", "<leader>uI", function()
-	vim.treesitter.inspect_tree()
-	vim.api.nvim_input("I")
-end, { desc = "Inspect Tree" })
+-- map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
+-- map("n", "<leader>uI", function()
+-- 	vim.treesitter.inspect_tree()
+-- 	vim.api.nvim_input("I")
+-- end, { desc = "Inspect Tree" })
 
 -- better indenting
 
@@ -528,12 +528,36 @@ require("lazy").setup({
 						vim.api.nvim_set_hl(0, "IblIndent", { fg = pallete.hilite_mid })
 						vim.api.nvim_set_hl(0, "IblScope", { fg = pallete.cyan })
 
+						vim.api.nvim_set_hl(0, "Headline1", { bg = "#f4feff" })
+						vim.api.nvim_set_hl(0, "Headline2", { bg = "#fefaff" })
+						vim.api.nvim_set_hl(0, "Headline3", { bg = "#f4feff" })
+						vim.api.nvim_set_hl(0, "Headline4", { bg = "#f7fef8" })
+						vim.api.nvim_set_hl(0, "Headline5", { bg = "#fefaff" })
+						vim.api.nvim_set_hl(0, "Headline6", { bg = "#f4feff" })
+						-- vim.api.nvim_set_hl(0, "CodeBlock", { fg = pallete.cyan })
+						vim.api.nvim_set_hl(0, "Dash", { fg = pallete.blue })
+
+						-- vim.cmd [[highlight Headline1 guibg=#1e2718]]
+						-- vim.cmd [[highlight Headline2 guibg=#21262d]]
+						-- vim.cmd [[highlight CodeBlock guibg=#1c1c1c]]
+						-- vim.cmd [[highlight Dash guibg=#D19A66 gui=bold]]
+
 						-- Harpoon
 						vim.api.nvim_create_autocmd("FileType", {
 							group = vim.api.nvim_create_augroup("harpoon_okcolors_highlight", { clear = true }),
 							pattern = { "harpoon" },
 							callback = function()
 								local ns_id = vim.api.nvim_create_namespace("harpoon_okcolors_highlight")
+								vim.api.nvim_set_hl_ns(ns_id)
+								vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+							end,
+						})
+
+						vim.api.nvim_create_autocmd("FileType", {
+							group = vim.api.nvim_create_augroup("undotree_okcolors_highlight", { clear = true }),
+							pattern = { "undotree" },
+							callback = function()
+								local ns_id = vim.api.nvim_create_namespace("undotree_okcolors_highlight")
 								vim.api.nvim_set_hl_ns(ns_id)
 								vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
 							end,
@@ -1063,6 +1087,46 @@ require("lazy").setup({
 					},
 				})
 			end,
+		},
+
+		{
+			"folke/todo-comments.nvim",
+			event = { "LazyFile" },
+			opts = {
+				-- your configuration comes here
+				-- or leave it empty to use the default settings
+				-- refer to the configuration section below
+			},
+			keys = {
+				{
+					"]t",
+					function()
+						require("todo-comments").jump_next()
+					end,
+					desc = "Next Todo Comment",
+				},
+				{
+					"[t",
+					function()
+						require("todo-comments").jump_prev()
+					end,
+					desc = "Previous Todo Comment",
+				},
+				-- {
+				-- 	"<leader>st",
+				-- 	function()
+				-- 		require("snacks").picker.todo_comments()
+				-- 	end,
+				-- 	desc = "Todo",
+				-- },
+				-- {
+				-- 	"<leader>sT",
+				-- 	function()
+				-- 		require("snacks").picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
+				-- 	end,
+				-- 	desc = "Todo/Fix/Fixme",
+				-- },
+			},
 		},
 
 		{
@@ -1787,16 +1851,23 @@ require("lazy").setup({
 			},
 		},
 
+		-- TODO: Is this even worth it?
 		{
-			"MeanderingProgrammer/render-markdown.nvim",
-			-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-			-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-			ft = { "norg" },
-			---@module 'render-markdown'
-			---@type render.md.UserConfig
+			"lukas-reineke/headlines.nvim",
 			opts = {
-				file_types = { "norg", "markdown", "quarto" },
+				norg = {
+					headline_highlights = {
+						"Headline1",
+						"Headline2",
+						"Headline3",
+						"Headline4",
+						"Headline5",
+						"Headline6",
+					},
+					fat_headlines = false,
+				},
 			},
+			ft = { "norg" },
 		},
 
 		{
@@ -1854,6 +1925,37 @@ require("lazy").setup({
 					harpoon:list():select(4)
 				end)
 			end,
+		},
+
+		{
+			"kylechui/nvim-surround",
+			keys = { "ys", "ds", "cs" },
+			opts = {},
+		},
+
+		{
+			enabled = false,
+			"echasnovski/mini.surround",
+			keys = {
+				"gsa",
+				"gsd",
+				"gsf",
+				"gsF",
+				"gsh",
+				"gsr",
+				"gsn",
+			},
+			opts = {
+				mappings = {
+					add = "gsa", -- Add surrounding in Normal and Visual modes
+					delete = "gsd", -- Delete surrounding
+					find = "gsf", -- Find surrounding (to the right)
+					find_left = "gsF", -- Find surrounding (to the left)
+					highlight = "gsh", -- Highlight surrounding
+					replace = "gsr", -- Replace surrounding
+					update_n_lines = "gsn", -- Update `n_lines`
+				},
+			},
 		},
 
 		{
@@ -1957,6 +2059,23 @@ require("lazy").setup({
 			-- cmd = { "Help", "Helpview" },
 			-- ft = "help",
 			-- keys = { "<leader>sh" },
+		},
+
+		{
+			"jiaoshijie/undotree",
+			opts = {
+				window = {
+					winblend = 0,
+				},
+			},
+			keys = {
+				{
+					"<leader>u",
+					function()
+						require("undotree").toggle()
+					end,
+				},
+			},
 		},
 	},
 })
