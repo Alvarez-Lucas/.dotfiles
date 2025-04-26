@@ -1072,57 +1072,6 @@ require("lazy").setup({
 		},
 
 		{
-			enabled = false,
-			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
-			"echasnovski/mini.starter",
-			version = false,
-			opts = {},
-		},
-
-		{
-			enabled = false,
-			"startup-nvim/startup.nvim",
-			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
-			opts = {
-				parts = {},
-				theme = "startify",
-			},
-			config = function()
-				require("startup").setup()
-			end,
-		},
-
-		{
-			enabled = false,
-			"goolord/alpha-nvim",
-			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
-			config = function()
-				local dashboard = require("alpha.themes.dashboard")
-				dashboard.section.header.val = { "", "", "", "", "", "", "", "", "" }
-				dashboard.section.buttons.val = {}
-				dashboard.section.footer.val =
-					"An idiot admires complexity, a genius admires simplicity. -- Terry A. Davis"
-				dashboard.section.footer.opts.position = "center"
-				require("alpha").setup(dashboard.config)
-			end,
-		},
-
-		{
-			"nvimdev/dashboard-nvim",
-			enabled = false,
-			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
-			opts = {
-				theme = "doom", -- theme is doom and hyper default is hyper
-				config = {
-					header = { "An idiot admires complexity,", "a genius admires simplicity.", "-- Terry A. Davis" },
-					center = {},
-					footer = {}, -- footer
-					vertical_center = true, -- Center the Dashboard on the vertical (from top to bottom)
-				},
-			},
-		},
-
-		{
 			"folke/todo-comments.nvim",
 			event = { "LazyFile" },
 			opts = {
@@ -1693,7 +1642,6 @@ require("lazy").setup({
 			opts = {
 				input = {
 					enabled = true,
-
 					win = {
 						relative = "cursor",
 						row = -3,
@@ -1707,13 +1655,29 @@ require("lazy").setup({
 					row = nil,
 					col = nil,
 					preset = {
+						-- 						header = [[
+						-- An idiot admires complexity, a genius admires simplicity.
+						-- - Terry A. Davis]],
+						-- 					},
 						header = [[
-An idiot admires complexity,
-a genius admires simplicity.
-- Terry A. Davis]],
+███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
 					},
 					sections = {
-						section = "header",
+						{ section = "header", padding = 1 },
+						{
+							text = [[
+An idiot admires complexity, a genius admires simplicity.
+- Terry A. Davis]],
+							padding = 1,
+							align = "center",
+						},
+						{ icon = " ", title = "Recent Files", section = "recent_files", padding = 1 },
+						{ section = "startup", padding = 0 },
 					},
 				},
 				picker = {
