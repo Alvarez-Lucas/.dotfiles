@@ -537,6 +537,8 @@ require("lazy").setup({
 						-- vim.api.nvim_set_hl(0, "CodeBlock", { fg = pallete.cyan })
 						vim.api.nvim_set_hl(0, "Dash", { fg = pallete.blue })
 
+						vim.api.nvim_set_hl(0, "SnacksDashboardNormal", { link = "SnacksPickerBorder" })
+
 						-- vim.cmd [[highlight Headline1 guibg=#1e2718]]
 						-- vim.cmd [[highlight Headline2 guibg=#21262d]]
 						-- vim.cmd [[highlight CodeBlock guibg=#1c1c1c]]
@@ -668,7 +670,7 @@ require("lazy").setup({
 					"buffers",
 					"git_status",
 				},
-				use_popups_for_input = true,
+				use_popups_for_input = false,
 				-- enable_normal_mode_for_inputs = true, -- TODO: Find alternative
 				retain_hidden_root_indent = true,
 				popup_border_style = "rounded",
@@ -683,18 +685,21 @@ require("lazy").setup({
 							)
 						end,
 						["e"] = function()
+							vim.api.nvim_exec2("Neotree action=close", { output = true })
 							vim.api.nvim_exec2(
 								"Neotree action=focus source=filesystem position=left",
 								{ output = true }
 							)
 						end,
 						["b"] = function()
+							vim.api.nvim_exec2("Neotree action=close", { output = true })
 							vim.api.nvim_exec2(
 								"Neotree action=focus source=buffers position=left reveal=true",
 								{ output = true }
 							)
 						end,
 						["gs"] = function()
+							vim.api.nvim_exec2("Neotree action=close", { output = true })
 							vim.api.nvim_exec2(
 								"Neotree action=focus source=git_status position=left",
 								{ output = true }
@@ -1055,38 +1060,66 @@ require("lazy").setup({
 			event = { "VeryLazy", "LazyFile" },
 			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
 			main = "ibl",
-			config = function()
-				-- local highlight = {
-				-- 	"RainbowRed",
-				-- 	"RainbowYellow",
-				-- 	"RainbowBlue",
-				-- 	"RainbowOrange",
-				-- 	"RainbowGreen",
-				-- 	"RainbowViolet",
-				-- 	"RainbowCyan",
-				-- }
-				-- local hooks = require("ibl.hooks")
-				-- create the highlight groups in the highlight setup hook, so they are reset
-				-- every time the colorscheme changes
-				-- hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-				-- 	vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-				-- 	vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-				-- 	vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-				-- 	vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-				-- 	vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-				-- 	vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-				-- 	vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-				-- end)
+			opts = {
+				scope = { enabled = true },
+				indent = {
+					-- https://graphemica.com/%E2%96%8F#glyphs
+					-- char = "│",
+					char = "▏",
+				},
+				exclude = { filetypes = { "dashboard" } },
+			},
+		},
 
-				require("ibl").setup({
-					scope = { enabled = true },
-					indent = {
-						-- https://graphemica.com/%E2%96%8F#glyphs
-						-- char = "│",
-						char = "▏",
-					},
-				})
+		{
+			enabled = false,
+			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
+			"echasnovski/mini.starter",
+			version = false,
+			opts = {},
+		},
+
+		{
+			enabled = false,
+			"startup-nvim/startup.nvim",
+			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
+			opts = {
+				parts = {},
+				theme = "startify",
+			},
+			config = function()
+				require("startup").setup()
 			end,
+		},
+
+		{
+			enabled = false,
+			"goolord/alpha-nvim",
+			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
+			config = function()
+				local dashboard = require("alpha.themes.dashboard")
+				dashboard.section.header.val = { "", "", "", "", "", "", "", "", "" }
+				dashboard.section.buttons.val = {}
+				dashboard.section.footer.val =
+					"An idiot admires complexity, a genius admires simplicity. -- Terry A. Davis"
+				dashboard.section.footer.opts.position = "center"
+				require("alpha").setup(dashboard.config)
+			end,
+		},
+
+		{
+			"nvimdev/dashboard-nvim",
+			enabled = false,
+			lazy = vim.fn.argc(-1) ~= 0, -- load early when opening a file from the cmdline
+			opts = {
+				theme = "doom", -- theme is doom and hyper default is hyper
+				config = {
+					header = { "An idiot admires complexity,", "a genius admires simplicity.", "-- Terry A. Davis" },
+					center = {},
+					footer = {}, -- footer
+					vertical_center = true, -- Center the Dashboard on the vertical (from top to bottom)
+				},
+			},
 		},
 
 		{
@@ -1344,6 +1377,8 @@ require("lazy").setup({
 		{
 			"folke/snacks.nvim",
 			ft = "help",
+			lazy = vim.fn.argc(-1) ~= 0,
+			event = "VeryLazy",
 			keys = {
 				{
 					"<leader>nf",
@@ -1656,7 +1691,31 @@ require("lazy").setup({
 			---@module "snacks"
 			---@type snacks.Config
 			opts = {
-				-- input = { enabled = true },
+				input = {
+					enabled = true,
+
+					win = {
+						relative = "cursor",
+						row = -3,
+						col = 0,
+						b = {
+							completion = true,
+						},
+					},
+				},
+				dashboard = {
+					row = nil,
+					col = nil,
+					preset = {
+						header = [[
+An idiot admires complexity,
+a genius admires simplicity.
+- Terry A. Davis]],
+					},
+					sections = {
+						section = "header",
+					},
+				},
 				picker = {
 					layout = "telescope",
 					-- layout = { preset = "top" },
@@ -1881,7 +1940,7 @@ require("lazy").setup({
 				{ "<c-j>" },
 				{ "<c-k>" },
 				{ "<c-l>" },
-				{ "<c-p>" },
+				{ "<c-;>" },
 				{ "<leader>a" },
 				{ "<c-e>" },
 			},
