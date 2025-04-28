@@ -176,14 +176,23 @@ map("n", "L", "<cmd>bnext<cr>", defaultOpts)
 map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
 
 -- Tabs
+-- map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
+-- map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
+-- map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab", noremap = true, silent = true })
+-- map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab", noremap = true, silent = true })
+-- map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
+-- map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
+-- map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
+-- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
 map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
-map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+-- map("n", "<leader>t<leader>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
+map("n", "<leader><bs>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
 map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
--- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 
 -- map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
 -- map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
@@ -600,7 +609,10 @@ require("lazy").setup({
 			---@module 'blink.cmp'
 			---@type blink.cmp.Config
 			opts = {
-				keymap = { preset = "super-tab" },
+				keymap = {
+					preset = "super-tab",
+					["<C-space>"] = {},
+				},
 				cmdline = {
 					keymap = { preset = "inherit" },
 					completion = { menu = { auto_show = true } },
@@ -1151,7 +1163,39 @@ require("lazy").setup({
 				-- "saghen/blink.cmp", -- Advertise completion capabilities
 				{ "j-hui/fidget.nvim", opts = {} }, -- Loading Progress
 				"folke/noice.nvim",
+				{
+					"rachartier/tiny-inline-diagnostic.nvim",
+					opts = {
+						-- "modern", "classic", "minimal", "powerline",
+						-- "ghost", "simple", "nonerdfont", "amongus"
+						preset = "simple",
+						hi = {
+							background = "#fefcf4",
+						},
+						-- blend = {
+						-- 	factor = 1.0,
+						-- },
+						options = {
+							show_source = true,
+							throttle = 0,
+							show_all_diags_on_cursorline = true,
+							multilines = {
+								enabled = true,
+								always_show = false,
+							},
+							break_line = {
+								enabled = true,
+								after = 40,
+							},
+						},
+					},
+				},
+				{
+					"nvimdev/lspsaga.nvim",
+					opts = {},
+				},
 			},
+
 			event = "LazyFile",
 			config = function()
 				vim.api.nvim_create_autocmd("LspAttach", {
@@ -1289,19 +1333,20 @@ require("lazy").setup({
 							[vim.diagnostic.severity.HINT] = "󰌶",
 						},
 					},
-					virtual_text = {
-						source = "if_many",
-						spacing = 2,
-						format = function(diagnostic)
-							local diagnostic_message = {
-								[vim.diagnostic.severity.ERROR] = diagnostic.message,
-								[vim.diagnostic.severity.WARN] = diagnostic.message,
-								[vim.diagnostic.severity.INFO] = diagnostic.message,
-								[vim.diagnostic.severity.HINT] = diagnostic.message,
-							}
-							return diagnostic_message[diagnostic.severity]
-						end,
-					},
+					virtual_text = false,
+					-- virtual_text = {
+					-- 	source = "if_many",
+					-- 	spacing = 2,
+					-- 	format = function(diagnostic)
+					-- 		local diagnostic_message = {
+					-- 			[vim.diagnostic.severity.ERROR] = diagnostic.message,
+					-- 			[vim.diagnostic.severity.WARN] = diagnostic.message,
+					-- 			[vim.diagnostic.severity.INFO] = diagnostic.message,
+					-- 			[vim.diagnostic.severity.HINT] = diagnostic.message,
+					-- 		}
+					-- 		return diagnostic_message[diagnostic.severity]
+					-- 	end,
+					-- },
 				})
 
 				vim.lsp.enable("jsonls")

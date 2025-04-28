@@ -8,8 +8,16 @@
     "keybindings": 
     [
         {
+            "id": null,
+            "keys": "ctrl+shift+space"
+        },
+        {
             "id": "Terminal.DuplicatePaneAuto",
             "keys": "alt+shift+d"
+        },
+        {
+            "id": null,
+            "keys": "alt+space"
         }
     ],
     "newTabMenu": 
@@ -26,7 +34,7 @@
             "colorScheme": "Custom Theme",
             "font": 
             {
-                "face": "Iosevka Nerd Font",
+                "face": "JetBrainsMono Nerd Font",
                 "size": 16
             },
             "intenseTextStyle": "all"
