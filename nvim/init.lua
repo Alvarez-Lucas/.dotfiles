@@ -175,20 +175,22 @@ map("n", "L", "<cmd>bnext<cr>", defaultOpts)
 
 map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
 
+-- map("n", "\033[]", "<c-i>", { noremap = true })
 -- Tabs
 -- map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
 -- map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
--- map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab", noremap = true, silent = true })
--- map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab", noremap = true, silent = true })
 -- map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 -- map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 -- map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
 -- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
 map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
+map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab", noremap = true, silent = true })
+map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab", noremap = true, silent = true })
+
 map("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
--- map("n", "<leader>t<leader>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
+map("n", "<leader>t<leader>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
 map("n", "<leader><bs>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
 map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
@@ -506,6 +508,9 @@ require("lazy").setup({
 							purple = "#896aa9",
 							magenta = "#c3399b",
 						}
+
+						-- Strikethrough
+						vim.api.nvim_set_hl(0, "strikethrough", { fg = pallete.tx, strikethrough = true })
 
 						-- Borders
 						vim.api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })

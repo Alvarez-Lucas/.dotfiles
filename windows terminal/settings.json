@@ -1,12 +1,26 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema-preview",
-    "actions": [],
+    "actions": 
+    [
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\\033[105;5u"
+            },
+            "id": "User.sendInput.65CAA263"
+        }
+    ],
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{47302f9c-1ac4-566c-aa3e-8cf29889d6ab}",
     "keybindings": 
     [
+        {
+            "id": "User.sendInput.65CAA263",
+            "keys": "ctrl+i"
+        },
         {
             "id": null,
             "keys": "ctrl+shift+space"

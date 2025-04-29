@@ -1,5 +1,11 @@
 ---
-links:
-  komorebi.json: ~/komorebi.json
-  komorebi.bar.json: ~/komorebi.bar.json
-  whkdrc: ~/.config/whkdrc
+windows[whoami.username="lucas"]:
+  links:
+    komorebi.json: ~/komorebi.json
+    komorebi.bar.json: ~/komorebi.bar.json
+    whkdrc: ~/.config/whkdrc
+windows[whoami.username="LAlvarez"]:
+  links:
+    work.komorebi.json: ~/komorebi.json
+    work.komorebi.bar.json: ~/komorebi.bar.json
+    work.whkdrc: ~/.config/whkdrc
