@@ -988,6 +988,7 @@ require("lazy").setup({
 				---@diagnostic disable-next-line: missing-fields
 				configs.setup({
 					ensure_installed = {
+						"c",
 						"c_sharp",
 						"csv",
 						"diff",
@@ -1012,6 +1013,7 @@ require("lazy").setup({
 						"luadoc",
 						"luap",
 						"luau",
+						"make",
 						"markdown",
 						"markdown_inline",
 						"mermaid",
@@ -1156,6 +1158,7 @@ require("lazy").setup({
 					"yamlls",
 					"lemminx",
 					"clangd",
+					"neocmake",
 					-- ruff = {},
 				},
 			},
@@ -1363,6 +1366,7 @@ require("lazy").setup({
 				vim.lsp.enable("yamlls")
 				vim.lsp.enable("lemminx")
 				vim.lsp.enable("clangd")
+				vim.lsp.enable("cmake")
 				-- ruff = {},
 			end,
 		},

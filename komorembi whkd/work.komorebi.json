@@ -38,6 +38,48 @@
       },
       "workspaces": [
         {
+          "name": "Browser",
+          "layout": "BSP",
+          "apply_window_based_work_area_offset": true,
+          "initial_workspace_rules": [
+            {
+              "kind": "Exe",
+              "id": "thorium.exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "Code",
+          "layout": "BSP",
+          "apply_window_based_work_area_offset": true,
+          "initial_workspace_rules": [
+            {
+              "kind": "Exe",
+              "id": "devenv.exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "Windows Terminal",
+          "layout": "BSP",
+          "apply_window_based_work_area_offset": true,
+          "initial_workspace_rules": [
+            {
+              "kind": "Exe",
+              "id": "WindowsTerminal.exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "AutoCAD",
+          "layout": "BSP",
+          "apply_window_based_work_area_offset": true,
+          "initial_workspace_rules": []
+        },
+        {
           "name": "I",
           "layout": "BSP",
           "apply_window_based_work_area_offset": true
@@ -98,18 +140,6 @@
           ]
         },
         {
-          "name": "Demo",
-          "layout": "BSP",
-          "apply_window_based_work_area_offset": true,
-          "initial_workspace_rules": [
-            {
-              "kind": "Title",
-              "id": "ESI AutoMation",
-              "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
           "name": "Social",
           "layout": "BSP",
           "apply_window_based_work_area_offset": true,
@@ -122,42 +152,6 @@
             {
               "kind": "Exe",
               "id": "olk.exe",
-              "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
-          "name": "Windows Terminal",
-          "layout": "BSP",
-          "apply_window_based_work_area_offset": true,
-          "initial_workspace_rules": [
-            {
-              "kind": "Exe",
-              "id": "WindowsTerminal.exe",
-              "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
-          "name": "Browser",
-          "layout": "BSP",
-          "apply_window_based_work_area_offset": true,
-          "initial_workspace_rules": [
-            {
-              "kind": "Exe",
-              "id": "thorium.exe",
-              "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
-          "name": "Code",
-          "layout": "BSP",
-          "apply_window_based_work_area_offset": true,
-          "initial_workspace_rules": [
-            {
-              "kind": "Exe",
-              "id": "devenv.exe",
               "matching_strategy": "Equals"
             }
           ]
