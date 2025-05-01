@@ -159,9 +159,15 @@ window_rules:
       - window_title: {equals: Search}
       - window_title: {equals: Search everywhere}
       - window_title: {equals: Find all}
+
+  # ESI Terminals
+  # - commands: [set-floating]
+  #   match:
+  #     - window_process: {regex: ESI-Term*}
   - commands: [move --workspace d, set-floating --width 1920 --height 1060]
     match:
-      - window_process: {regex: ESI-Term*}
+      - window_title: {equals: ESI AutoMation}
+
       # - window_process: {regex: ESI Flash Utility*}
   # - commands: [move --workspace a, focus --workspace a]
   #   match:

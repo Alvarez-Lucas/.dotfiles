@@ -1075,7 +1075,19 @@ require("lazy").setup({
 		},
 
 		{
+			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+			event = { "VeryLazy", "LazyFile" },
+			"shellRaining/hlchunk.nvim",
+			opts = {
+				indent = {
+					enable = true,
+				},
+			},
+		},
+
+		{
 			"lukas-reineke/indent-blankline.nvim",
+			enabled = false,
 			event = { "VeryLazy", "LazyFile" },
 			lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
 			main = "ibl",
@@ -1200,6 +1212,7 @@ require("lazy").setup({
 				},
 				{
 					"nvimdev/lspsaga.nvim",
+					enabled = false,
 					opts = {},
 				},
 			},
