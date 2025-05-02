@@ -13,6 +13,11 @@
       "kind": "Title",
       "id": "ESI AutoMation",
       "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "neovide.exe",
+      "matching_strategy": "Equals"
     }
   ],
   "floating_applications": [

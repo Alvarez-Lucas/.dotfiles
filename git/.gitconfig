@@ -3,13 +3,14 @@
   ; pager = bat
 	fsmonitor = true
 	untrackedcache = true
-	commitgraph = true
+	commitGraph = true
 	autocrlf = true
 	preloadindex = true
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 
 [gc]
   auto = 8000
+	writeCommitGraph = true
 
 [pack]
   threads = 0
