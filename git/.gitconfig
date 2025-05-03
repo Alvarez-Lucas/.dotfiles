@@ -7,6 +7,16 @@
 	autocrlf = true
 	preloadindex = true
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+	whitespace = error
+
+[status]
+	branch = true
+	showStash = true
+	showUntrackedFiles = all
+	sort = -committerdate
+
+[tag]
+	sort = -taggerdate
 
 [gc]
   auto = 8000
@@ -33,14 +43,43 @@
 
 [push]
 	autoSetupRemote = true
+	default = current
+	followTags = true
+
+[pull]
+	default = current
+	rebase = true
+
+[rebase]
+	autoStash = true
+	missingCommitsCheck = warn
 
 [log]
   date = relative
+	abbrevCommit = true
+	graphColors = blue,yellow,cyan,magenta,green,red
+
+[color "decorate"]
+	HEAD = red
+	branch = blue
+	tag = yellow
+	remoteBranch = magenta
+
+[color "branch"]
+	current = magenta
+	local = default
+	remote = yellow
+	upstream = green
+	plain = blue
+
+
 
 [format]
-  pretty = format:%h %Cblue%ad%Creset %ae %Cgreen%s%Creset
+	pretty = format:%C(yellow)%h %C(blue) %an %C(magenta)%ar %D%n%s%n
+	; pretty = format:%C(magenta)%h %C(blue) %an %ar%C(green) %D%n%s%n
+  ; pretty = format:%h %Cblue%ad%Creset %ae %Cgreen%s%Creset
   ; pretty = format:%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(12,trunc)%ad %C(auto,green)%<(7,trunc)%aN%C(auto,reset)%s%C(auto,red)% gD% D
-  ; pretty = format:"%C(yellow)%h %ar %C(auto)%d %Creset %s , %Cblue%cn" --graph --all'
+  ; pretty = format:%C(yellow)%h %ar %C(auto)%d %Creset %s , %Cblue%cn
 
 [include]
 	path = ~/.gitconfig.local
@@ -58,9 +97,15 @@
 [diff]
   colorMoved = default
 	algorithm = histogram
+	interHunkContext = 10
 
 [core]
   pager = delta
+
+[pager]
+	branch = false
+	tag = false
+
 
 [merge]
   conflictstyle = zdiff3

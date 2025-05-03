@@ -1387,6 +1387,8 @@ require("lazy").setup({
                -- end,
             })
 
+            vim.lsp.config("taplo", { root_dir = require("lspconfig.util").root_pattern("*.toml", ".git") })
+
             vim.diagnostic.config({
                severity_sort = true,
                float = { border = "rounded", source = "if_many" },
