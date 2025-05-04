@@ -297,19 +297,20 @@ local function lazy_file()
 end
 lazy_file()
 
-vim.api.nvim_create_autocmd("BufWinEnter", {
-   group = vim.api.nvim_create_augroup("help_files_buffer", {}),
-   desc = "Open Help files in new buffer",
-   pattern = "*",
-   callback = function(event)
-      if vim.bo[event.buf].filetype == "help" then
-         cmd.only()
-         vim.bo[event.buf].buflisted = true
-         vim.bo[event.buf].bt = "nowrite"
-         cmd("Helpview attach")
-      end
-   end,
-})
+-- vim.api.nvim_create_autocmd("BufWinEnter", {
+--    group = vim.api.nvim_create_augroup("help_files_buffer", {}),
+--    desc = "Open Help files in new buffer",
+--    pattern = "*",
+--    callback = function(event)
+--       if vim.bo[event.buf].filetype == "help" then
+--          cmd.only()
+--          vim.bo[event.buf].buflisted = true
+--          vim.bo[event.buf].bt = "nowrite"
+--          cmd("Helpview attach")
+--       end
+--    end,
+-- })
+
 --     function()
 -- vim.cmd([[nohlsearch \| lua Snacks.bufdelete()]])
 -- vim.api.nvim_create_autocmd("FileType", {
@@ -1439,7 +1440,6 @@ require("lazy").setup({
 
       {
          "folke/snacks.nvim",
-         ft = "help",
          lazy = vim.fn.argc(-1) ~= 0,
          event = "VeryLazy",
          keys = {
@@ -1761,18 +1761,25 @@ An idiot admires complexity, a genius admires simplicity.
                },
             },
             picker = {
-               layout = "telescope",
-               -- layout = { preset = "top" },
-               -- layout = { preset = "vertical", preview = nil },
-               -- layout = { preset = "select" },
-               -- layout = { preset = "ivy", layout = { position = "bottom" } },
-               -- layout = { preset = "ivy" },
-               -- layout = { preset = "ivy_split" },
-               -- layout = { preset = "default" },
-               -- layout = { preset = "vscode" },
-               -- layout = { preset = "dropdown" },
-               -- layout = { preset = "bottom" },
-               -- layout = { preset = "telescope" },
+               -- layout = "telescope",
+               layout = {
+                  cycle = true,
+                  preset = function() return vim.o.columns >= 120 and "default" or "vertical" end,
+                  -- hidden = { "input", "preview" },
+                  fuzzy = true,
+                  smartcase = true,
+                  ignorecase = true,
+                  -- sort_empty = true,
+                  filename_bonus = true,
+                  file_pos = true,
+                  frecency = true,
+               },
+               formatters = {
+                  selected = {
+                     always_show = true,
+                     unselected = true,
+                  },
+               },
                win = {
                   input = {
                      keys = {
@@ -1783,6 +1790,23 @@ An idiot admires complexity, a genius admires simplicity.
                sources = {
                   git_status = {
                      layout = { preset = "default" },
+                  },
+                  files = {
+                     hidden = true,
+                  },
+                  help = {
+                     confirm = function(picker, item)
+                        picker:close()
+                        if item then vim.schedule(function() vim.cmd("Help " .. item.text) end) end
+                     end,
+                  },
+                  projects = {
+                     recent = true,
+                     matcher = {
+                        frecency = true, -- use frecency boosting
+                        sort_empty = true, -- sort even when the filter is empty
+                        cwd_bonus = false,
+                     },
                   },
                },
             },
@@ -2178,7 +2202,8 @@ An idiot admires complexity, a genius admires simplicity.
 
       {
          "OXY2DEV/helpview.nvim",
-         cmd = { "Helpview" },
+         cmd = { "Helpview", "Help", "H" },
+         ft = "help",
          -- cmd = { "Help", "Helpview" },
          -- ft = "help",
          -- keys = { "<leader>sh" },
