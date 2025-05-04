@@ -1365,14 +1365,9 @@ require("lazy").setup({
                capabilities = capabilities,
                root_markers = { ".git" },
                -- on_attach = function(client, bufnr) -- Consider converting to lsp config on_attach
-               -- 	vim.lsp.completion.enable(true, client.id, bufnr, {
-               -- 		autotrigger = true,
-               -- 		convert = function(item)
-               -- 			return { abbr = item.label:gsub("%b()", "") }
-               -- 		end,
-               -- 	})
-               -- end,
             })
+
+            vim.lsp.config("taplo", { root_dir = require("lspconfig.util").root_pattern("*.toml", ".git") })
 
             vim.diagnostic.config({
                severity_sort = true,
