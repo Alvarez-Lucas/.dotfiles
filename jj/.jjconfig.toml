@@ -1,0 +1,58 @@
+
+user.name = "Lucas Alvarez"
+user.email = "lucasalvarez@pm.me"
+
+ui.default-command = ["log"]
+ui.editor = "nvim"
+ui.pager = "delta"
+ui.diff.format = "git"
+ui.color = "always"
+
+revset-aliases.'immutable_heads()' = "builtin_immutable_heads() | remote_bookmarks()"
+
+[aliases]
+c = ["commit"]
+ci = ["commit", "--interactive"]
+e = ["edit"]
+i = ["git", "init"]
+nb = ["bookmark", "create", "-r @-"] # "new bookmark"
+pull = ["git", "fetch"]
+push = ["git", "push", "--allow-new"]
+r = ["rebase"]
+s = ["squash"]
+si = ["squash", "--interactive"]
+
+# Light mode theme configuration for jj without black boxes
+# Add this to your .jjconfig.toml file
+
+
+[colors]
+# Base colors - explicit foreground only with standard background
+"working_copy commit_id" = { fg = "#616161", bg = "#fefcf4", reverse = false }  
+"change_id" = { fg = "#616161", bg = "#fefcf4", reverse = false }  
+"commit_id" = { fg = "#616161", bg = "#fefcf4", reverse = false }  # Dark gray for commit hashes
+"description" = { fg = "#333333", bg = "#fefcf4", reverse = false } # Dark text for descriptions
+"author" = { fg = "#1976D2", bg = "#fefcf4", reverse = false }     # Blue for author names
+"date" = { fg = "#7B1FA2", bg = "#fefcf4", reverse = false }       # Purple for dates
+
+# Status indicators - foreground colors only with standard background
+"added_line" = { fg = "#388E3C", bg = "#fefcf4", reverse = false }   # Green for added content
+"removed_line" = { fg = "#D32F2F", bg = "#fefcf4", reverse = false } # Red for removed content
+"modified" = { fg = "#1976D2", bg = "#fefcf4", reverse = false }     # Blue for modified content
+
+# Branch and reference colors - foreground only with standard background
+"local_branch" = { fg = "#FB8C00", bg = "#fefcf4", reverse = false }  # Orange for local branches
+"remote_branch" = { fg = "#7B1FA2", bg = "#fefcf4", reverse = false } # Purple for remote branches
+"tag" = { fg = "#00796B", bg = "#fefcf4", reverse = false }           # Teal for tags
+"working_copy" = { fg = "#2E7D32", bg = "#fefcf4", reverse = false }  # Dark green for working copy
+
+# UI elements - foreground only with standard background
+"error" = { fg = "#C62828", bg = "#fefcf4", reverse = false }      # Dark red for errors
+"warning" = { fg = "#FFA000", bg = "#fefcf4", reverse = false }    # Amber for warnings
+"hint" = { fg = "#0288D1", bg = "#fefcf4", reverse = false }       # Light blue for hints
+"success" = { fg = "#2E7D32", bg = "#fefcf4", reverse = false }    # Dark green for success messages
+
+# Diff colors - using standard background
+"diff_add" = { fg = "#388E3C", bg = "#fefcf4", reverse = false }     # Green for additions with standard background
+"diff_remove" = { fg = "#D32F2F", bg = "#fefcf4", reverse = false }  # Red for removals with standard background
+"diff_change" = { fg = "#1976D2", bg = "#fefcf4", reverse = false }  # Blue for changes with standard background
