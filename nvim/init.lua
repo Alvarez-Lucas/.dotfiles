@@ -219,7 +219,7 @@ map("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
 map("t", "<Esc>", "<C-\\><C-N>", defaultOpts)
 map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
-map("n", "<leader>l", "<cmd>Lazy<cr>", defaultOpts)
+map("n", "<leader>la", "<cmd>Lazy<cr>", defaultOpts)
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -582,6 +582,8 @@ require("lazy").setup({
          opts = {
             keymap = {
                preset = "super-tab",
+               -- preset = "default",
+               -- preset = "enter",
                ["<C-space>"] = {},
             },
             cmdline = {
@@ -1065,12 +1067,14 @@ require("lazy").setup({
                   "#028a9b",
                   "#d7314b",
                },
+               exclude_filetypes = { "norg" },
             },
             -- line_num = {
             -- 	enable = true,
             -- 	style = "#c3399b",
             -- },
             indent = {
+               exclude_filetypes = { norg = false },
                enable = true,
                chars = {
                   -- "￨",
@@ -1725,8 +1729,8 @@ require("lazy").setup({
                   { section = "header", padding = 1 },
                   {
                      text = [[
-An idiot admires complexity, a genius admires simplicity.
-- Terry A. Davis]],
+-- TODO: Clever motd.
+]],
                      padding = 1,
                      align = "center",
                   },
@@ -1833,11 +1837,11 @@ An idiot admires complexity, a genius admires simplicity.
                map("n", "<leader>hS", gitsigns.stage_buffer)
                map("n", "<leader>hR", gitsigns.reset_buffer)
                map("n", "<leader>hp", gitsigns.preview_hunk)
-               map("n", "<leader>hi", gitsigns.preview_hunk_inline)
+               -- map("n", "<leader>hi", gitsigns.preview_hunk_inline)
 
                map("n", "<leader>hb", function() gitsigns.blame_line({ full = true }) end)
 
-               map("n", "<leader>hd", gitsigns.diffthis)
+               -- map("n", "<leader>hd", gitsigns.diffthis)
 
                map("n", "<leader>hD", function() gitsigns.diffthis("~") end)
 
@@ -1866,7 +1870,6 @@ An idiot admires complexity, a genius admires simplicity.
                "benlubas/neorg-interim-ls",
             },
             ft = "norg",
-            lazy = true,
             version = "*",
             cmd = { "Neorg" },
             keys = {
@@ -2188,6 +2191,63 @@ An idiot admires complexity, a genius admires simplicity.
          -- keys = { "<leader>sh" },
       },
 
+      -- {
+      --    "maskudo/devdocs.nvim",
+      --    cmd = { "DevDocs" },
+      --    keys = {
+      --       {
+      --          "<leader>ho",
+      --          mode = "n",
+      --          "<cmd>DevDocs get<cr>",
+      --          desc = "Get Devdocs",
+      --       },
+      --       {
+      --          "<leader>hi",
+      --          mode = "n",
+      --          "<cmd>DevDocs install<cr>",
+      --          desc = "Install Devdocs",
+      --       },
+      --       {
+      --          "<leader>hv",
+      --          mode = "n",
+      --          function()
+      --             local devdocs = require("devdocs")
+      --             local installedDocs = devdocs.GetInstalledDocs()
+      --             vim.ui.select(installedDocs, {}, function(selected)
+      --                if not selected then return end
+      --                local docDir = devdocs.GetDocDir(selected)
+      --                -- prettify the filename as you wish
+      --                Snacks.picker.files({ cwd = docDir })
+      --             end)
+      --          end,
+      --          desc = "Get Devdocs",
+      --       },
+      --       {
+      --          "<leader>hd",
+      --          mode = "n",
+      --          "<cmd>DevDocs delete<cr>",
+      --          desc = "Delete Devdoc",
+      --       },
+      --    },
+      --    opts = {
+      --       ensure_installed = {
+      --          "c",
+      --          "cpp",
+      --          -- "go",
+      --          "html",
+      --          -- "dom",
+      --          "http",
+      --          -- "css",
+      --          -- "javascript",
+      --          -- "rust",
+      --          -- some docs such as lua require version number along with the language name
+      --          -- check `DevDocs install` to view the actual names of the docs
+      --          "lua~5.1",
+      --          -- "openjdk~21"
+      --       },
+      --    },
+      -- },
+
       {
          "jiaoshijie/undotree",
          opts = {
@@ -2201,6 +2261,51 @@ An idiot admires complexity, a genius admires simplicity.
                function() require("undotree").toggle() end,
             },
          },
+      },
+
+      {
+         cmd = "Leet",
+         lazy = "le" ~= vim.fn.argv(0, -1),
+         "kawre/leetcode.nvim",
+         build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
+         dependencies = {
+            -- "nvim-telescope/telescope.nvim",
+            "ibhagwan/fzf-lua",
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+         },
+         ---@module 'leetcode.config'
+         opts = {
+            -- configuration goes here
+            lang = "python3",
+            arg = "le",
+            injector = { ["python3"] = { before = true } },
+         },
+         -- keys = {
+         -- { "<leader>lf" },
+         -- {
+         --    "<leader>lf",
+         --    function() vim.cmd("Leet") end,
+         -- },
+         -- { "<leader>ldr", "<cmd>Leet run<cr>" },
+         -- { "<leader>lds", "<cmd>Leet submit<cr>" },
+         -- { "<leader>le", "<cmd>Leet console<cr>" },
+         -- },
+         config = function(_, opts)
+            require("leetcode").setup(opts)
+            -- vim.cmd([[Leet list]])
+            map("n", "<leader>ldt", "<cmd>Leet run<cr>")
+            map("n", "<leader>lds", "<cmd>Leet submit<cr>")
+
+            map("n", "<leader>lf", "<cmd>Leet list<cr>")
+            map("n", "<leader>li", "<cmd>Leet desc<cr><C-w><C-h>")
+            map("n", "<leader>lc", "<cmd>Leet console<cr>")
+            map("n", "<leader>lr", "<cmd>Leet reset<cr>")
+            map("n", "<leader>lR", "<cmd>Leet restore<cr>")
+            map("n", "<leader>lI", "<cmd>Leet info<cr>")
+            map("n", "<leader>lt", "<cmd>Leet tabs<cr>")
+            map("n", "<leader>lo", "<cmd>Leet open<cr>")
+         end,
       },
    },
 })
