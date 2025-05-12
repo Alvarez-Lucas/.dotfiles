@@ -2011,25 +2011,6 @@ require("lazy").setup({
          },
       },
 
-      -- TODO: Is this even worth it?
-      {
-         "lukas-reineke/headlines.nvim",
-         opts = {
-            norg = {
-               headline_highlights = {
-                  "Headline1",
-                  "Headline2",
-                  "Headline3",
-                  "Headline4",
-                  "Headline5",
-                  "Headline6",
-               },
-               fat_headlines = false,
-            },
-         },
-         ft = { "norg" },
-      },
-
       {
          "ThePrimeagen/harpoon",
          branch = "harpoon2",
