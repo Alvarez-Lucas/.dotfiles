@@ -69,3 +69,11 @@ background = "#c3399b"
 text = "#2c2e33"
 background = "#d0cec7"
 
+
+# \x1b[105;4u -> ctrl-i
+[keyboard]
+bindings = [
+  { key = "i", mods = "Control", chars = "\\x1b[105;4u"}
+]
+
+
