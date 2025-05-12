@@ -1922,6 +1922,7 @@ require("lazy").setup({
                "pysan3/pathlib.nvim",
                "nvim-neotest/nvim-nio",
                "benlubas/neorg-interim-ls",
+               "neovim/nvim-lspconfig",
             },
             ft = "norg",
             version = "*",
