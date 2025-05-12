@@ -1232,6 +1232,8 @@ require("lazy").setup({
             vim.api.nvim_create_autocmd("LspAttach", {
                group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
                callback = function(event)
+                  -- TODO: Check what server is attaching, don't use keybinds for Rust, add Rust keybinds in rust plugin
+
                   map(
                      "n",
                      "grr",
@@ -1433,6 +1435,11 @@ require("lazy").setup({
             vim.lsp.enable("cmake")
             -- ruff = {},
          end,
+      },
+      {
+         "mrcjkb/rustaceanvim",
+         version = "^6", -- Recommended
+         ft = "rust",
       },
 
       {
