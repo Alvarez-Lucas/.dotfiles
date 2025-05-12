@@ -1,0 +1,74 @@
+[general]
+working_directory = "C:/Users/lucas/"
+
+[window]
+padding = { x = 8, y = 8 }
+decorations = "Full" # Or "Full", "None"
+
+[terminal]
+shell = "C:/Users/lucas/AppData/Local/Programs/nu/bin/nu.exe"
+
+[font]
+size = 16
+normal = { family = "JetBrainsMono Nerd Font" }
+offset = { x = 0, y = 4}
+
+# TODO: Add keybind for tab vs ctrl-i in neovim
+
+# TODO: Add keybind for spawning new window
+
+[colors.normal]
+black = "#202127"
+red = "#d7314b"
+green = "#4b8b5a"
+yellow = "#91772a"
+blue = "#6377b6"
+magenta = "#c3399b"
+cyan = "#028a9b"
+white = "#c0bdb7"
+
+[colors.bright]
+black = "#202127"
+red = "#d7314b"
+green = "#4b8b5a"
+yellow = "#91772a"
+blue = "#6377b6"
+magenta = "#c3399b"
+cyan = "#028a9b"
+white = "#c0bdb7"
+
+[colors.primary]
+foreground = "#2c2e33"
+background = "#fefcf4"
+
+[colors.cursor]
+text = "#fefcf4"
+cursor = "#2c2e33"
+
+[colors.vi_mode_cursor]
+text = "#fefcf4"
+cursor = "#2c2e33"
+
+[colors.search.matches]
+foreground = "#c3399b"
+background = "#e7e4dd"
+
+[colors.search.focused_match]
+foreground = "#fefcf4"
+background = "#c3399b"
+
+[colors.footer_bar]
+foreground = "#2c2e33"
+background = "#fefcf4"
+
+[colors.hints.start]
+foreground = "#fefcf4"
+background = "#c3399b"
+[colors.hints.end]
+foreground = "#fefcf4"
+background = "#c3399b"
+
+[colors.selection]
+text = "#2c2e33"
+background = "#d0cec7"
+
