@@ -1,12 +1,9 @@
-[general]
-working_directory = "C:/Users/lucas/"
-
 [window]
 padding = { x = 8, y = 8 }
 decorations = "Full" # Or "Full", "None"
 
 [terminal]
-shell = "C:/Users/lucas/AppData/Local/Programs/nu/bin/nu.exe"
+shell = { program = "nu", args = ['-e "cd ~"']}
 
 [font]
 size = 16
