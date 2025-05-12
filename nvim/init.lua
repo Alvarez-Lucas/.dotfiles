@@ -618,10 +618,10 @@ require("lazy").setup({
                "<leader>E",
                "<cmd>Neotree source=filesystem action=focus toggle=true reveal=true position=left<cr>",
             },
-            {
-               "<leader>g",
-               "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>",
-            },
+            -- {
+            --    "<leader>g",
+            --    "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>",
+            -- },
             -- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
             {
                "<leader>.",
@@ -1173,6 +1173,7 @@ require("lazy").setup({
                "jsonls",
                "lua_ls",
                "omnisharp",
+               -- "csharp_ls",
                "powershell_es",
                "pylsp",
                "taplo",
@@ -1403,7 +1404,26 @@ require("lazy").setup({
 
             vim.lsp.enable("jsonls")
             vim.lsp.enable("lua_ls")
-            vim.lsp.enable("omnisharp")
+            -- vim.lsp.enable("omnisharp")
+            require("lspconfig").omnisharp.setup({
+               cmd = { "dotnet", "C:/Users/lucas/Downloads/omnisharp-win-x64-net6.0/OmniSharp.dll" },
+               settings = {
+                  RoslynExtensionsOptions = {
+                     EnableAnalyzersSupport = true,
+                     -- Enables support for showing unimported types and unimported extension
+                     -- methods in completion lists. When committed, the appropriate using
+                     -- directive will be added at the top of the current file. This option can
+                     -- have a negative impact on initial completion responsiveness,
+                     -- particularly for the first few completion sessions after opening a
+                     -- solution.
+                     EnableImportCompletion = true,
+                     -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
+                     -- true
+                     AnalyzeOpenDocumentsOnly = nil,
+                  },
+               },
+            })
+            -- vim.lsp.enable("csharp_ls")
             vim.lsp.enable("powershell_es")
             vim.lsp.enable("pylsp")
             vim.lsp.enable("taplo")
@@ -1861,6 +1881,33 @@ require("lazy").setup({
       },
 
       {
+         "NeogitOrg/neogit",
+         dependencies = {
+            "sindrets/diffview.nvim",
+            "folke/snacks.nvim", -- optional
+         },
+         keys = {
+            { "<leader>gg", "<cmd>Neogit<cr>" },
+            { "<leader>gd", "<cmd>DiffviewOpen<cr>" },
+            { "<leader>gl", "<cmd>Neogit log<cr>" },
+            { "<leader>gP", "<cmd>Neogit push<cr>" },
+         },
+         opts = {},
+         config = function(_, opts)
+            local neogit = require("neogit")
+            neogit.setup(opts)
+         end,
+      },
+
+      -- TODO:
+      -- <leader>gg - neogit
+      -- <leader>gd - dit diff
+      -- <leader>gD - git diff picker, or main
+      -- <leader>gl - log
+      -- <leader>gp - pull
+      -- <leader>gP - push
+
+      {
          {
             "nvim-neorg/neorg",
             dependencies = {
@@ -2277,9 +2324,17 @@ require("lazy").setup({
          ---@module 'leetcode.config'
          opts = {
             -- configuration goes here
-            lang = "python3",
+            lang = "csharp",
             arg = "le",
-            injector = { ["python3"] = { before = true } },
+            injector = {
+               ["python3"] = { before = true },
+               ["csharp"] = {
+                  before = {
+                     "using System.Linq;",
+                     "using static System.Linq.Enumerable;",
+                  },
+               },
+            },
          },
          -- keys = {
          -- { "<leader>lf" },
@@ -2309,3 +2364,11 @@ require("lazy").setup({
       },
    },
 })
+
+-- TODO:
+-- <leader>gg - neogit
+-- <leader>gd - dit diff
+-- <leader>gD - git diff picker, or main
+-- <leader>gl - log
+-- <leader>gp - pull
+-- <leader>gP - push
