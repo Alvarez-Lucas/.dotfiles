@@ -165,7 +165,14 @@ map("n", "L", "<cmd>bnext<cr>", defaultOpts)
 
 map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
 
--- map("n", "\033[]", "<c-i>", { noremap = true })
+-- map("n", "<C-I>", "<C-I>", { noremap = true })
+map("n", "<tab>", "<tab>", { noremap = true })
+-- map("n", "<C-I>", "<C-I>", { noremap = true })
+-- map("n", "<C-I>", "<C-I>", { noremap = true })
+-- HACK: This fixes the c-i mapping to tab or some shit
+-- the escape sequence is the actual
+map("n", "\\x1b[105;4u", "<c-i>", { noremap = true })
+
 -- Tabs
 -- map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
 -- map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
@@ -735,9 +742,9 @@ require("lazy").setup({
                   hide_dotfiles = false,
                },
                hijack_netrw_behavior = "open_current",
-               use_libuv_file_watcher = true,
+               use_libuv_file_watcher = false,
                async_directory_scan = "always",
-               group_empty_dirs = true,
+               group_empty_dirs = false,
                find_by_full_path_words = true,
                window = {
                   mappings = {
@@ -1440,6 +1447,7 @@ require("lazy").setup({
          "mrcjkb/rustaceanvim",
          version = "^6", -- Recommended
          ft = "rust",
+         dependencies = { "neovim/nvim-lspconfig" },
       },
 
       {
@@ -2198,7 +2206,7 @@ require("lazy").setup({
                python = { "black" },
                rust = { "rustfmt", lsp_format = "fallback" },
                javascript = { "prettierd", "prettier", stop_after_first = true },
-               -- toml = { "taplo" },
+               toml = { "taplo" },
                json = { "fixjson", "prettier" },
                cs = { "csharpier" },
                yaml = { "yamlfix" }, -- "yamlfmt",
