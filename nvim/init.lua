@@ -542,6 +542,18 @@ require("lazy").setup({
                      end,
                   })
 
+                  vim.api.nvim_create_autocmd("BufEnter", {
+                     group = vim.api.nvim_create_augroup("buftype_okcolors_highlight", { clear = true }),
+                     callback = function()
+                        local buftype = vim.bo.buftype
+                        if buftype == "prompt" then
+                           local ns_id = vim.api.nvim_create_namespace("buftype_okcolors_highlight")
+                           vim.api.nvim_set_hl_ns(ns_id)
+                           vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+                        end
+                     end,
+                  })
+
                   vim.api.nvim_create_autocmd("FileType", {
                      group = vim.api.nvim_create_augroup("undotree_okcolors_highlight", { clear = true }),
                      pattern = { "undotree" },
@@ -1748,34 +1760,10 @@ require("lazy").setup({
                row = nil,
                col = nil,
                preset = {
-                  -- 						header = [[
-                  -- An idiot admires complexity, a genius admires simplicity.
-                  -- - Terry A. Davis]],
-                  -- 					},
-                  header = [[
-███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
-████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
-██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
-██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
-██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
-╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+                  header = [[]],
                },
                sections = {
-                  { section = "header", padding = 1 },
-                  {
-                     text = [[
--- TODO: Clever motd.
-]],
-                     padding = 1,
-                     align = "center",
-                  },
-                  {
-                     icon = " ",
-                     title = "Recent Files",
-                     section = "recent_files",
-                     padding = 1,
-                  },
-                  { section = "startup", padding = 0 },
+                  { section = "header" },
                },
             },
             picker = {
