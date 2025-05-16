@@ -1423,35 +1423,35 @@ require("lazy").setup({
                -- },
             })
 
-            vim.lsp.enable("jsonls")
-            vim.lsp.enable("lua_ls")
+            -- vim.lsp.enable("jsonls")
+            -- vim.lsp.enable("lua_ls")
             -- vim.lsp.enable("omnisharp")
-            require("lspconfig").omnisharp.setup({
-               cmd = { "dotnet", "C:/Users/lucas/Downloads/omnisharp-win-x64-net6.0/OmniSharp.dll" },
-               settings = {
-                  RoslynExtensionsOptions = {
-                     EnableAnalyzersSupport = true,
-                     -- Enables support for showing unimported types and unimported extension
-                     -- methods in completion lists. When committed, the appropriate using
-                     -- directive will be added at the top of the current file. This option can
-                     -- have a negative impact on initial completion responsiveness,
-                     -- particularly for the first few completion sessions after opening a
-                     -- solution.
-                     EnableImportCompletion = true,
-                     -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
-                     -- true
-                     AnalyzeOpenDocumentsOnly = nil,
-                  },
-               },
-            })
-            -- vim.lsp.enable("csharp_ls")
-            vim.lsp.enable("powershell_es")
-            vim.lsp.enable("pylsp")
-            vim.lsp.enable("taplo")
-            vim.lsp.enable("yamlls")
-            vim.lsp.enable("lemminx")
-            vim.lsp.enable("clangd")
-            vim.lsp.enable("cmake")
+            -- require("lspconfig").omnisharp.setup({
+            --    cmd = { "dotnet", "C:/Users/lucas/Downloads/omnisharp-win-x64-net6.0/OmniSharp.dll" },
+            --    settings = {
+            --       RoslynExtensionsOptions = {
+            --          EnableAnalyzersSupport = true,
+            --          -- Enables support for showing unimported types and unimported extension
+            --          -- methods in completion lists. When committed, the appropriate using
+            --          -- directive will be added at the top of the current file. This option can
+            --          -- have a negative impact on initial completion responsiveness,
+            --          -- particularly for the first few completion sessions after opening a
+            --          -- solution.
+            --          EnableImportCompletion = true,
+            --          -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
+            --          -- true
+            --          AnalyzeOpenDocumentsOnly = nil,
+            --       },
+            --    },
+            -- })
+            -- -- vim.lsp.enable("csharp_ls")
+            -- vim.lsp.enable("powershell_es")
+            -- vim.lsp.enable("pylsp")
+            -- vim.lsp.enable("taplo")
+            -- vim.lsp.enable("yamlls")
+            -- vim.lsp.enable("lemminx")
+            -- vim.lsp.enable("clangd")
+            -- vim.lsp.enable("cmake")
             -- ruff = {},
          end,
       },
