@@ -79,19 +79,32 @@
 	path = ~/.gitconfig.local
 
 [merge]
-    tool = nvimdiff
+	tool = meld
 
 [mergetool]
-    prompt = true
+  prompt = false
+	keepBackup = false
+
+[mergetool "meld"]
+	path = C://Program Files/Meld/Meld.exe
+	cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
 
 [mergetool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
+
+[difftool]
+	prompt = false
+
+[difftool "meld"]
+	path = C://Program Files/Meld/Meld.exe
+	cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
 
 ; Delta
 [diff]
   colorMoved = default
 	algorithm = histogram
 	interHunkContext = 10
+	tool = meld
 
 [core]
   pager = delta
@@ -146,6 +159,5 @@
 
     zero-style = syntax
     whitespace-error-style = "#aaaaaa"
-[user]
-	name = Lucas Alvarez
-	email = lucasalvarez@pm.me
+
+

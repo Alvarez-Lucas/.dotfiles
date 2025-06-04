@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.36/schema.bar.json",
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.37/schema.bar.json",
   "monitor": 0,
   "font_family": "JetBrains Mono",
   "theme": {
@@ -37,17 +37,17 @@
     },
     {
       "Storage": {
-        "enable": true
+        "enable": false
       }
     },
     {
       "Memory": {
-        "enable": true
+        "enable": false
       }
     },
     {
       "Network": {
-        "enable": true,
+        "enable": false,
         "show_total_data_transmitted": true,
         "show_network_activity": true
       }
@@ -61,12 +61,12 @@
     {
       "Time": {
         "enable": true,
-        "format": "TwentyFourHour"
+        "format": "TwelveHour"
       }
     },
     {
       "Battery": {
-        "enable": true
+        "enable": false
       }
     }
   ]

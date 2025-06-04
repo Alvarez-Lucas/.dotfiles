@@ -122,6 +122,11 @@ window_rules:
     match:
       - window_process: {equals: ShareX}
 
+        # Excel Find and Replace
+  - commands: [set-floating]
+    match:
+      - window_title: {equals: Find and Replace}
+
   # LINQPad
   - commands: [move --workspace v, focus --workspace v]
     match:

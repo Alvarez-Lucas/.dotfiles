@@ -1,14 +1,14 @@
 [window]
 padding = { x = 8, y = 8 }
-decorations = "Full" # Or "Full", "None"
+decorations = "Full"       # Or "Full", "None"
 
 [terminal]
-shell = { program = "nu", args = ['-e "cd ~"']}
+shell = { program = "nu", args = ['-e "cd ~"'] }
 
 [font]
 size = 16
-normal = { family = "JetBrainsMono Nerd Font" }
-offset = { x = 0, y = 4}
+normal = { family = "FiraCode Nerd Font" }
+offset = { x = 0, y = 4 }
 
 # TODO: Add keybind for tab vs ctrl-i in neovim
 
@@ -72,8 +72,4 @@ background = "#d0cec7"
 
 # \x1b[105;4u -> ctrl-i
 [keyboard]
-bindings = [
-  { key = "i", mods = "Control", chars = "\\x1b[105;4u"}
-]
-
-
+bindings = [{ key = "i", mods = "Control", chars = "\\x1b[105;4u" }]

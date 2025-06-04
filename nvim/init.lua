@@ -1093,7 +1093,7 @@ require("lazy").setup({
             -- 	style = "#c3399b",
             -- },
             indent = {
-               exclude_filetypes = { norg = false },
+               exclude_filetypes = { norg = true },
                enable = true,
                chars = {
                   -- "￨",
