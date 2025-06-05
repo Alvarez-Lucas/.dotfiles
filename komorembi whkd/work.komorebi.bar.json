@@ -4,8 +4,7 @@
   "font_family": "JetBrains Mono",
   "theme": {
     "palette": "Base16",
-    "name": "Ashes",
-    "accent": "Base0D"
+    "name": "Github"
   },
   "left_widgets": [
     {

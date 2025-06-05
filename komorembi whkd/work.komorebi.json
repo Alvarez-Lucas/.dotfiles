@@ -27,12 +27,27 @@
       "kind": "Exe",
       "id": "Meld.exe",
       "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "MicrosoftWhiteboard.exe",
+      "matching_strategy": "Equals"
     }
   ],
   "floating_applications": [
     {
       "kind": "Title",
       "id": "ESI AutoMation",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "CalculatorApp.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "Taskmgr.exe",
       "matching_strategy": "Equals"
     }
   ],
@@ -81,6 +96,11 @@
             {
               "kind": "Exe",
               "id": "WindowsTerminal.exe",
+              "matching_strategy": "Equals"
+            },
+            {
+              "kind": "Exe",
+              "id": "alacritty.exe",
               "matching_strategy": "Equals"
             }
           ]
@@ -148,6 +168,10 @@
             {
               "kind": "Exe",
               "id": "GitButler"
+            },
+            {
+              "kind": "Exe",
+              "id": "sublime_merge.exe"
             }
           ]
         },
