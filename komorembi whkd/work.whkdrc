@@ -58,7 +58,8 @@ alt + x                 : komorebic toggle-monocle
 alt + shift + x         : komorebic toggle-window-based-work-area-offset
 # alt + shift + oem_1     : komorebic toggle-workspace-layer # ;
 alt + space             : komorebic toggle-workspace-layer
-alt + shift + space     : komorebic toggle-lock
+alt + shift + space     : komorebic promote-focus
+# alt + shift + space     : komorebic toggle-lock
 alt + OEM_3             : komorebic manage # `
 alt + shift + OEM_3     : komorebic unmanage # `
 
