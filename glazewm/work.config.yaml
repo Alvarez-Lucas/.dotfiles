@@ -11,9 +11,18 @@ gaps:
   inner_gap: 8px
   outer_gap:
     top: 44px
-    right: 4px
+    right: 3%
     bottom: 4px
-    left: 4px
+    left: 3%
+  single_window_outer_gap:
+    # top: 44px
+    # right: 15%
+    # bottom: 4px
+    # left: 15%
+    top: 44px
+    right: 10%
+    bottom: 4px
+    left: 10%
 window_effects:
   focused_window:
     border:
@@ -111,6 +120,7 @@ window_rules:
       - window_process: {equals: Lively}
         window_class: {regex: HwndWrapper*}
       - window_process: {equals: ueli}
+      - window_process: {equals: Hourglass}
 
   # Autocad
   - commands: [move --workspace a]
@@ -210,6 +220,7 @@ window_rules:
   - commands: [move --workspace w, focus --workspace w]
     match:
       - window_process: {equals: WindowsTerminal}
+      - window_process: {equals: alacritty}
 
   # Obsidian
   - commands: [move --workspace n, focus --workspace n]
@@ -266,13 +277,13 @@ keybindings:
 
   # Resize focused window by a percentage or pixel amount.
   - commands: [resize --width -2%]
-    bindings: [alt+u]
+    bindings: [alt+shift+u]
   - commands: [resize --width +2%]
-    bindings: [alt+p]
+    bindings: [alt+shift+p]
   - commands: [resize --height +2%]
-    bindings: [alt+o]
+    bindings: [alt+shift+o]
   - commands: [resize --height -2%]
-    bindings: [alt+i]
+    bindings: [alt+shift+i]
 
   # As an alternative to the resize keybindings above, resize mode enables
   # resizing via arrow keys or HJKL. The binding mode is defined above with
@@ -282,7 +293,7 @@ keybindings:
 
   # Disables all keybindings until alt+shift+p is pressed again.
   - commands: [wm-enable-binding-mode --name pause]
-    bindings: [alt+shift+p]
+    bindings: [alt+p]
 
   # Change tiling direction. This determines where new tiling windows will
   # be inserted.

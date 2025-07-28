@@ -1,7 +1,7 @@
 [core]
 	editor = nvim
   ; pager = bat
-	fsmonitor = true
+	fsmonitor = false
 	untrackedcache = true
 	commitGraph = true
 	autocrlf = true
@@ -34,10 +34,6 @@
 
 [commit]
 	verbose = true
-
-[credential]
-	helper = cache
-
 [show]
 	UntrackedFiles = true
 
@@ -79,10 +75,10 @@
 	path = ~/.gitconfig.local
 
 [merge]
-	tool = meld
+	tool = vsdiffmerge
 
 [mergetool]
-  prompt = false
+	prompt = true
 	keepBackup = false
 
 [mergetool "meld"]
@@ -93,7 +89,7 @@
   cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
 
 [difftool]
-	prompt = false
+	prompt = true
 
 [difftool "meld"]
 	path = C://Program Files/Meld/Meld.exe
@@ -104,7 +100,7 @@
   colorMoved = default
 	algorithm = histogram
 	interHunkContext = 10
-	tool = meld
+	tool = vsdiffmerge
 
 [core]
   pager = delta
@@ -161,3 +157,20 @@
     whitespace-error-style = "#aaaaaa"
 
 
+[user]
+	name = Lucas Alvarez
+	email = LAlvarez@elevatorsystems.com
+[credential "https://dev.azure.com"]
+	usehttppath = true
+[difftool "vsdiffmerge"]
+	cmd = \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\vsdiffmerge.exe\" \"$LOCAL\" \"$REMOTE\" //t
+	keepBackup = false
+[mergetool "vsdiffmerge"]
+	cmd = \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\vsdiffmerge.exe\" \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\" //m
+	keepBackup = false
+	trustExitCode = true
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process

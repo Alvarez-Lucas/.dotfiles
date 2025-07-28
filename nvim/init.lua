@@ -185,8 +185,8 @@ map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
 map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab", noremap = true, silent = true })
 map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab", noremap = true, silent = true })
 
-map("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+-- map("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+-- map("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 map("n", "<leader>t<leader>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
 map("n", "<leader><bs>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
 map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
@@ -1025,6 +1025,7 @@ require("lazy").setup({
                   "xml",
                   "xresources",
                   "yaml",
+                  "slint",
                },
                sync_install = false,
                highlight = { enable = true },
@@ -1200,6 +1201,7 @@ require("lazy").setup({
                "lemminx",
                "clangd",
                "neocmake",
+               "slint_lsp",
                -- ruff = {},
             },
          },
@@ -2199,6 +2201,8 @@ require("lazy").setup({
                cs = { "csharpier" },
                yaml = { "yamlfix" }, -- "yamlfmt",
                xml = {},
+               -- cpp = { lsp_format = "prefer" },
+               -- cpp = {"clang-format"}
                -- nu = { "nufmt" }, -- Currently too alpha, broken
                -- norg = { command = "C:/Users/lalvarez/source/repos/norg-fmt/target/release/norg-fmt.exe" },
             },

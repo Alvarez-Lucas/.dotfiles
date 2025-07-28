@@ -37,6 +37,21 @@
       "kind": "Exe",
       "id": "Taskmgr.exe",
       "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "TouchGFXDesigner",
+      "matching_strategy": "StartsWith"
+    },
+    {
+      "kind": "Exe",
+      "id": "IarIdepm.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "CamBam.exe",
+      "matching_strategy": "Equals"
     }
   ],
   "floating_applications": [

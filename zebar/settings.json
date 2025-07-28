@@ -1,9 +1,10 @@
 {
-	"$schema": "https://github.com/glzr-io/zebar/raw/v2.4.0/resources/settings-schema.json",
-	"startupConfigs": [
-		{
-			"path": "okcolors/okcolors.zebar.json",
-			"preset": "default"
-		}
-	]
+  "$schema": "https://github.com/glzr-io/zebar/raw/v3.1.0/resources/settings-schema.json",
+  "startupConfigs": [
+    {
+      "pack": "okcolors",
+      "widget": "okcolors",
+      "preset": "default"
+    }
+  ]
 }
