@@ -4,7 +4,7 @@ windows[whoami.username="lucas"]:
     komorebi.json: ~/komorebi.json
     komorebi.bar.json: ~/komorebi.bar.json
     whkdrc: ~/.config/whkdrc
-windows[whoami.username="LAlvarez"]:
+windows[whoami.username!="lucas"]:
   links:
     work.komorebi.json: ~/komorebi.json
     work.komorebi.bar.json: ~/komorebi.bar.json

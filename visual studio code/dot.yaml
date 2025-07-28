@@ -1,6 +1,5 @@
 ---
-windows[whoami.username="LAlvarez"]:
-  links:
-    keybindings.json: ~\AppData\Roaming\Code\User\keybindings.json
-    settings.json: ~\AppData\Roaming\Code\User\settings.json
-    init.lua: ~\AppData\Roaming\Code\User\init.lua
+links:
+  keybindings.json: ~\AppData\Roaming\Code\User\keybindings.json
+  settings.json: ~\AppData\Roaming\Code\User\settings.json
+  init.lua: ~\AppData\Roaming\Code\User\init.lua
