@@ -1,0 +1,10 @@
+-- local norg_group = vim.api.nvim_create_augroup("FormatNeorgOnSave", { clear = true })
+-- TODO: Format neorg
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	group = norg_group,
+-- 	buffer = 0,
+-- 	callback = function(args)
+-- 		print("Testing")
+-- 		-- require("conform").format({ bufnr = args.buf })
+-- 	end,
+-- })
