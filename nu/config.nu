@@ -405,7 +405,7 @@ export alias gamscp = git am --show-current-patch
 
 let multiple_completer = {|spans|
   # if the current command is an alias, get it's expansion
-  let expanded_alias = (scope aliases | where name == $spans.0 | get -i 0 | get -i expansion)
+  let expanded_alias = (scope aliases | where name == $spans.0 | get -o 0 | get -o expansion)
 
   # overwrite
   let spans = (if $expanded_alias != null  {

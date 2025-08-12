@@ -18,16 +18,12 @@
     "keybindings": 
     [
         {
-            "id": "User.sendInput.65CAA263",
-            "keys": "ctrl+i"
+            "id": "Terminal.DuplicatePaneAuto",
+            "keys": "alt+shift+d"
         },
         {
             "id": null,
             "keys": "ctrl+shift+space"
-        },
-        {
-            "id": "Terminal.DuplicatePaneAuto",
-            "keys": "alt+shift+d"
         },
         {
             "id": null,
@@ -177,6 +173,18 @@
                 "guid": "{453bbf7c-f6ee-5921-abb6-70d898f97348}",
                 "hidden": false,
                 "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{a492e3e9-7022-509b-a744-02f894f18826}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022 (2)",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{214e3ca2-44f0-5619-9f56-14dda96fdbfa}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022 (2)",
                 "source": "Windows.Terminal.VisualStudio"
             }
         ]

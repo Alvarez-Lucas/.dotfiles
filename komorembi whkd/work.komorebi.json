@@ -1,14 +1,17 @@
 {
-  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.37/schema.json",
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/b4e61b079cb60f04b8fcf0d7203419ad083528f4/schema.json",
   "app_specific_configuration_path": "$Env:USERPROFILE/applications.json",
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
   "default_workspace_padding": 3,
   "default_container_padding": 1,
-  "border": true,
-  "border_width": 5,
-  "border_offset": -1,
   "float_rule_placement": "Center",
+  "animation": {
+    "enabled": true,
+    "duration": 120,
+    "fps": 60,
+    "style": "EaseInOutCubic"
+  },
   "stackbar": {
     "mode": "OnStack"
   },
@@ -85,9 +88,14 @@
       }
     ]
   ],
+  "border": true,
+  "border_width": 5,
+  "border_offset": -1,
   "theme": {
     "palette": "Base16",
-    "name": "Github"
+    "name": "Ashes",
+    "unfocused_border": "Base03",
+    "bar_accent": "Base0D"
   },
   "monitors": [
     {
@@ -100,31 +108,36 @@
       "workspaces": [
         {
           "name": "Browser",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true,
           "initial_workspace_rules": [
             {
               "kind": "Exe",
-              "id": "thorium.exe",
+              "id": "brave.exe",
               "matching_strategy": "Equals"
             }
           ]
         },
         {
           "name": "Code",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true,
           "initial_workspace_rules": [
             {
               "kind": "Exe",
               "id": "devenv.exe",
               "matching_strategy": "Equals"
+            },
+            {
+              "kind": "Exe",
+              "id": "Code.exe",
+              "matching_strategy": "Equals"
             }
           ]
         },
         {
           "name": "Windows Terminal",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true,
           "initial_workspace_rules": [
             {
@@ -141,58 +154,58 @@
         },
         {
           "name": "AutoCAD",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true,
           "initial_workspace_rules": []
         },
         {
           "name": "I",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "II",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "III",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "IV",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "V",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "VI",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "VII",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "VIII",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "IX",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true
         },
         {
           "name": "Git",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true,
           "initial_workspace_rules": [
             {
@@ -201,7 +214,7 @@
             },
             {
               "kind": "Exe",
-              "id": "GitButler"
+              "id": "gitbutler-tauri.exe"
             },
             {
               "kind": "Exe",
@@ -211,7 +224,7 @@
         },
         {
           "name": "Social",
-          "layout": "BSP",
+          "layout": "Scrolling",
           "apply_window_based_work_area_offset": true,
           "initial_workspace_rules": [
             {

@@ -165,13 +165,14 @@ map("n", "L", "<cmd>bnext<cr>", defaultOpts)
 
 map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
 
+-- map("n", "<tab>", "<tab>", { noremap = true })
+
 -- map("n", "<C-I>", "<C-I>", { noremap = true })
-map("n", "<tab>", "<tab>", { noremap = true })
 -- map("n", "<C-I>", "<C-I>", { noremap = true })
 -- map("n", "<C-I>", "<C-I>", { noremap = true })
 -- HACK: This fixes the c-i mapping to tab or some shit
 -- the escape sequence is the actual
-map("n", "\\x1b[105;4u", "<c-i>", { noremap = true })
+-- map("n", "\\x1b[105;4u", "<c-i>", { noremap = true })
 
 -- Tabs
 -- map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
@@ -182,26 +183,26 @@ map("n", "\\x1b[105;4u", "<c-i>", { noremap = true })
 -- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
 map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
-map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab", noremap = true, silent = true })
-map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab", noremap = true, silent = true })
+-- map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab", noremap = true, silent = true })
+-- map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab", noremap = true, silent = true })
 
--- map("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
--- map("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-map("n", "<leader>t<leader>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
-map("n", "<leader><bs>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
+map("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+-- map("n", "<leader>t<leader>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
+-- map("n", "<leader><bs>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
 map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
 
--- map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
--- map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
--- map("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
--- map("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
+map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
+map("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
+map("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
 --
--- map("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
--- map("n", "<C-j>", "<C-w><C-j>", defaultOpts)
--- map("n", "<C-k>", "<C-w><C-k>", defaultOpts)
--- map("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+map("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
+map("n", "<C-j>", "<C-w><C-j>", defaultOpts)
+map("n", "<C-k>", "<C-w><C-k>", defaultOpts)
+map("n", "<C-l>", "<C-w><C-l>", defaultOpts)
 
 map("t", "<left>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
 map("t", "<down>", "<C-\\><C-N><C-w>j", defaultOpts)
@@ -444,6 +445,25 @@ require("lazy").setup({
    -- Plugin Specs
    ---@type LazySpec
    spec = {
+
+      {
+         "dmtrKovalenko/fff.nvim",
+         build = "cargo build --release",
+         -- or if you are using nixos
+         -- build = "nix run .#release",
+         opts = {
+            -- pass here all the options
+         },
+         keys = {
+            {
+               "ff", -- try it if you didn't it is a banger keybinding for a picker
+               function()
+                  require("fff").find_files() -- or find_in_git_root() if you only want git files
+               end,
+               desc = "Open file picker",
+            },
+         },
+      },
 
       {
          "e-q/okcolors.nvim",
@@ -2013,10 +2033,15 @@ require("lazy").setup({
          "ThePrimeagen/harpoon",
          branch = "harpoon2",
          keys = {
-            { "<c-j>" },
-            { "<c-k>" },
-            { "<c-l>" },
-            { "<c-;>" },
+            { "<leader>1" },
+            { "<leader>2" },
+            { "<leader>3" },
+            { "<leader>4" },
+            { "<leader>5" },
+            { "<leader>6" },
+            { "<leader>7" },
+            { "<leader>8" },
+            { "<leader>9" },
             { "<leader>a" },
             { "<c-e>" },
          },
@@ -2041,16 +2066,16 @@ require("lazy").setup({
             --
 
             map("n", "<leader>a", function() harpoon:list():add() end)
-
             map("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-
-            map("n", "<C-j>", function() harpoon:list():select(1) end)
-
-            map("n", "<C-k>", function() harpoon:list():select(2) end)
-
-            map("n", "<C-l>", function() harpoon:list():select(3) end)
-
-            map("n", "<C-;>", function() harpoon:list():select(4) end)
+            map("n", "<leader>1", function() harpoon:list():select(1) end)
+            map("n", "<leader>2", function() harpoon:list():select(2) end)
+            map("n", "<leader>3", function() harpoon:list():select(3) end)
+            map("n", "<leader>4", function() harpoon:list():select(4) end)
+            map("n", "<leader>5", function() harpoon:list():select(5) end)
+            map("n", "<leader>6", function() harpoon:list():select(6) end)
+            map("n", "<leader>7", function() harpoon:list():select(7) end)
+            map("n", "<leader>8", function() harpoon:list():select(8) end)
+            map("n", "<leader>9", function() harpoon:list():select(9) end)
          end,
       },
 
@@ -2297,59 +2322,6 @@ require("lazy").setup({
                function() require("undotree").toggle() end,
             },
          },
-      },
-
-      {
-         cmd = "Leet",
-         lazy = "le" ~= vim.fn.argv(0, -1),
-         "kawre/leetcode.nvim",
-         build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
-         dependencies = {
-            -- "nvim-telescope/telescope.nvim",
-            "ibhagwan/fzf-lua",
-            "nvim-lua/plenary.nvim",
-            "MunifTanjim/nui.nvim",
-         },
-         ---@module 'leetcode.config'
-         opts = {
-            -- configuration goes here
-            lang = "csharp",
-            arg = "le",
-            injector = {
-               ["python3"] = { before = true },
-               ["csharp"] = {
-                  before = {
-                     "using System.Linq;",
-                     "using static System.Linq.Enumerable;",
-                  },
-               },
-            },
-         },
-         -- keys = {
-         -- { "<leader>lf" },
-         -- {
-         --    "<leader>lf",
-         --    function() vim.cmd("Leet") end,
-         -- },
-         -- { "<leader>ldr", "<cmd>Leet run<cr>" },
-         -- { "<leader>lds", "<cmd>Leet submit<cr>" },
-         -- { "<leader>le", "<cmd>Leet console<cr>" },
-         -- },
-         config = function(_, opts)
-            require("leetcode").setup(opts)
-            -- vim.cmd([[Leet list]])
-            map("n", "<leader>ldt", "<cmd>Leet run<cr>")
-            map("n", "<leader>lds", "<cmd>Leet submit<cr>")
-
-            map("n", "<leader>lf", "<cmd>Leet list<cr>")
-            map("n", "<leader>li", "<cmd>Leet desc<cr><C-w><C-h>")
-            map("n", "<leader>lc", "<cmd>Leet console<cr>")
-            map("n", "<leader>lr", "<cmd>Leet reset<cr>")
-            map("n", "<leader>lR", "<cmd>Leet restore<cr>")
-            map("n", "<leader>lI", "<cmd>Leet info<cr>")
-            map("n", "<leader>lt", "<cmd>Leet tabs<cr>")
-            map("n", "<leader>lo", "<cmd>Leet open<cr>")
-         end,
       },
    },
 })

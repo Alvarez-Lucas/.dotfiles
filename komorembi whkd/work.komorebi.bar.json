@@ -4,14 +4,15 @@
   "font_family": "JetBrains Mono",
   "theme": {
     "palette": "Base16",
-    "name": "Github"
+    "name": "Ashes",
+    "accent": "Base0D"
   },
   "left_widgets": [
     {
       "Komorebi": {
         "workspaces": {
           "enable": true,
-          "hide_empty_workspaces": true
+          "hide_empty_workspaces": false
         },
         "layout": {
           "enable": true
@@ -36,17 +37,17 @@
     },
     {
       "Storage": {
-        "enable": false
+        "enable": true
       }
     },
     {
       "Memory": {
-        "enable": false
+        "enable": true
       }
     },
     {
       "Network": {
-        "enable": false,
+        "enable": true,
         "show_total_data_transmitted": true,
         "show_network_activity": true
       }
@@ -60,12 +61,12 @@
     {
       "Time": {
         "enable": true,
-        "format": "TwelveHour"
+        "format": "TwentyFourHour"
       }
     },
     {
       "Battery": {
-        "enable": false
+        "enable": true
       }
     }
   ]

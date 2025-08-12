@@ -46,23 +46,7 @@ vim.keymap.set("v", ">", ">gv")
 -- vim.keymap.set({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 -- vim.keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 -- vim.keymap.set({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-
-vim.keymap.set("n", "gra", function()
-	vscode.action("editor.action.quickFix")
-end, defaultOpts)
-
-vim.keymap.set("n", "grf", function()
-	vscode.action("editor.action.formatDocument")
-end, defaultOpts)
-
-vim.keymap.set("n", "grf", function()
-	vscode.action("editor.action.formatDocument")
-end, defaultOpts)
-
-vim.keymap.set("n", "<bs>", "<c-^>", defaultOpts)
-vim.keymap.set("n", "<bs>", function()
-	vscode.action("workbench.action.navigateLast")
-end, defaultOpts)
+-- p
 
 vim.keymap.set("n", "<leader>a", function()
 	vscode.action("vscode-harpoon.addEditor")
@@ -114,34 +98,73 @@ vim.keymap.set("n", "<leader>9", function()
 	vscode.action("vscode-harpoon.gotoEditor9")
 end, defaultOpts)
 
+vim.keymap.set("n", "<leader>b", function()
+	vscode.action("workbench.action.showAllEditors")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader><bs>", function()
+	vscode.action("vscode-harpoon.gotoPreviousHarpoonEditor")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>w", function()
+	vscode.action("workbench.action.closeActiveEditor")
+end, defaultOpts)
+
+vim.keymap.set("n", "<bs>", function()
+	vscode.action("workbench.action.navigateLast")
+end, defaultOpts)
+
+vim.keymap.set("n", "gra", function()
+	vscode.action("editor.action.quickFix")
+end, defaultOpts)
+
+vim.keymap.set("n", "grn", function()
+	vscode.action("editor.action.quickFix")
+end, defaultOpts)
+
+vim.keymap.set("n", "grf", function()
+	vscode.action("editor.action.formatDocument")
+end, defaultOpts)
+
+vim.keymap.set("n", "grd", function()
+	vscode.action("editor.action.peekDefinition")
+	-- "editor.action.revealDefinition"
+	-- "editor.action.peekDefinition"
+end, defaultOpts)
+
+vim.keymap.set("n", "grD", function()
+	vscode.action("editor.action.peekDeclaration")
+	-- "editor.action.goToDeclaration"
+	-- "editor.action.peekDeclaration"
+	-- "editor.action.revealDeclaration"
+	-- "editor.action.previewDeclaration"
+end, defaultOpts)
+
+vim.keymap.set("n", "grt", function()
+	vscode.action("editor.action.peekTypeDefinition")
+	-- "editor.action.peekTypeDefinition"
+	-- "editor.action.goToTypeDefinition"
+end, defaultOpts)
+
+vim.keymap.set("n", "gri", function()
+	vscode.action("editor.action.peekImplementation")
+	-- "editor.action.goToImplementation"
+	-- "editor.action.peekImplementation"
+	-- "references-view.findImplementations"
+end, defaultOpts)
+
 vim.keymap.set("n", "grr", function()
 	vscode.action("editor.action.goToReferences")
-end, { desc = "[G]oto [R]eferences" })
+	-- "references-view.findReferences"
+	-- "editor.action.goToReferences"
+	-- "editor.action.findReferences"
+	-- "editor.action.showReferences"
+end, defaultOpts)
 
--- vim.keymap.set("n", "gra", function()
--- 	vim.lsp.buf.code_action()
--- end, { buffer = event.buf, desc = "[G]oto Code [A]ction" })
---
--- vim.keymap.set("n", "grr", function()
--- 	require("snacks.picker").lsp_references()
--- end, { buffer = event.buf, desc = "[G]oto [R]eferences" })
---
--- vim.keymap.set("n", "gri", function()
--- 	require("snacks.picker").lsp_implementations()
--- end, { buffer = event.buf, desc = "[G]oto [I]mplementation" })
---
--- vim.keymap.set("n", "grd", function()
--- 	require("snacks.picker").lsp_definitions()
--- end, { buffer = event.buf, desc = "[G]oto [D]efinition" })
---
--- vim.keymap.set("n", "grD", function()
--- 	require("snacks.picker").lsp_declarations()
--- end, { buffer = event.buf, desc = "[G]oto [D]eclaration" })
---
--- vim.keymap.set("n", "grt", function()
--- 	require("snacks.picker").lsp_type_definitions()
--- end, { buffer = event.buf, desc = "[G]oto [T]ype Definition" })
---
+vim.keymap.set("i", "<c-s>", function()
+	vscode.action("editor.action.triggerParameterHints")
+end, defaultOpts)
+
 vim.keymap.set("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 vim.keymap.set("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 vim.keymap.set("n", "ycc", "yygccp", { remap = true, desc = "Copy And Comment" })
@@ -161,8 +184,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	end
 end
 vim.opt.rtp:prepend(lazypath)
-
-local lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
 require("lazy").setup({
 

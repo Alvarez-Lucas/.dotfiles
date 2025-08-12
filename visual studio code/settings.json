@@ -1,202 +1,41 @@
 {
-    "autolispext.debug.AttachProcess": "acad.exe",
-    "autolispext.debug.LaunchProgram": "C:\\Program Files\\Autodesk\\AutoCAD 2020\\acad.exe",
-    "autolispext.format.LongListFormatStyle": "Single column",
-    "autolispext.format.MaxLineChars": 100,
-    "autolispext.help.TargetYear": "2020",
     "git.openRepositoryInParentFolders": "always",
-    "workbench.colorTheme": "Visual Studio Light - C++",
-    "iar-build.buildOutputLogLevel": "All",
-    "mermaid-editor.generate.quality": 100,
-    "mermaid-editor.generate.scale": 1,
-    "mermaid-editor.generate.type": "webp",
-    "mermaid-editor.generate.outputPath": "",
-    "em2f.outputType": "png",
-    "print.sourcecode.lineNumbers": "on",
-    "print.browser": {},
-    "editor.fontFamily": "JetBrains mono",
-    "workbench.tree.indent": 20,
-    "workbench.tree.renderIndentGuides": "always",
-    "iar.enabled": true,
+    "git.blame.editorDecoration.enabled": false,
+    "zenMode.fullScreen": false,
+    "zenMode.hideLineNumbers": false,
+    "files.autoSave": "onWindowChange",
+    "workbench.colorTheme": "Default Light+",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.commandPalette.experimental.suggestCommands": true,
+    "workbench.statusBar.visible": false,
+    "workbench.activityBar.location": "hidden",
+    "workbench.editor.highlightModifiedTabs": true,
+    "editor.fontFamily": "JetBrainsMono Nerd Font",
+    "editor.fontLigatures": true,
+    "editor.minimap.showSlider": "always",
+    "editor.lineNumbers": "relative",
+    "editor.cursorSurroundingLines": 8,
+    "editor.mouseWheelZoom": true,
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "eitor.guides.bracketPairs": "active",
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "terminal.integrated.mouseWheelZoom": true,
+    "[python]": {
+        "editor.formatOnSave": true
+    },
+    "C_Cpp.inlayHints.parameterNames.enabled": true,
     "C_Cpp.autocompleteAddParentheses": true,
     "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
     "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
     "C_Cpp.inlayHints.referenceOperator.enabled": true,
     "C_Cpp.intelliSenseUpdateDelay": 500,
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
-    "workbench.iconTheme": "vscode-icons",
-    "vim.foldfix": true,
-    "vim.showMarksInGutter": true,
-    "vim.visualstar": true,
-    "vim.statusBarColorControl": false,
-    "editor.minimap.showSlider": "always",
-    "C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": false,
-    "extensions.experimental.affinity": {
-        "vscodevim.vim": 1,
-        "asvetliakov.vscode-neovim": 1
-    },
-    "vim.visualModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "p",
-            ],
-            "after": [
-                "p",
-                "g",
-                "v",
-                "y"
-            ]
-        }
-    ],
-    "vim.leader": " ",
-    "vim.normalModeKeyBindings": [
-        {
-            "before": [
-                "<bs>"
-            ],
-            "after": [
-                "<c-^>"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "a"
-            ],
-            "commands": [
-                "vscode-harpoon.addEditor"
-            ]
-        },
-        {
-            "before": [
-                "<c-e>",
-            ],
-            "commands": [
-                "vscode-harpoon.editEditors"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "h",
-            ],
-            "commands": [
-                "vscode-harpoon.editorQuickPick"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "1"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor1"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "2"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor2"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "3"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor3"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "4"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor4"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "5"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor5"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "6"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor6"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "7"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor7"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "8"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor8"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "9"
-            ],
-            "commands": [
-                "vscode-harpoon.gotoEditor9"
-            ]
-        }
-    ],
-    "editor.lineNumbers": "relative",
-    "editor.cursorSurroundingLines": 8,
-    "vim.highlightedyank.enable": true,
-    "vim.highlightedyank.color": "#a9dc7660",
-    "vim.useCtrlKeys": true,
-    "vim.incsearch": true,
-    "vim.hlsearch": true,
-    "vim.sneak": true,
-    "clangd.path": "c:\\Users\\lalvarez\\AppData\\Roaming\\Code\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\19.1.2\\clangd_19.1.2\\bin\\clangd.exe",
     "C_Cpp.dimInactiveRegions": true,
-    "editor.mouseWheelZoom": true,
-    "terminal.integrated.mouseWheelZoom": true,
-    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-    "editor.guides.bracketPairs": "active",
-    "dotnet.inlayHints.enableInlayHintsForParameters": true,
-    "csharp.inlayHints.enableInlayHintsForTypes": true,
-    "C_Cpp.inlayHints.parameterNames.enabled": true,
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.completeFunctionParens": true,
-    "[python]": {
-        "editor.formatOnSave": true
-    },
-    "git.blame.editorDecoration.enabled": false,
     "C_Cpp.default.cStandard": "c17",
     "C_Cpp.default.cppStandard": "c++17",
-    "C_Cpp.codeAnalysis.runAutomatically": true,
-    "iar-build.extraBuildArguments": [
-        "-parallel",
-        "8"
-    ],
-    "iar-build.colorizeBuildOutput": true,
     "C_Cpp.codeAnalysis.clangTidy.checks.enabled": [
         "bugprone-*",
         "cppcoreguidelines-*",
@@ -205,6 +44,27 @@
         "readability-*",
         "performance-*",
         "misc-*"
+    ],
+    "iar.enabled": true,
+    "iar-build.buildOutputLogLevel": "All",
+    "iar-build.extraBuildArguments": [
+        "-parallel",
+        "8"
+    ],
+    "iar-build.colorizeBuildOutput": true,
+    "cSpell.userWords": [
+        "BOTTOMFLOORTEXTBUFFER",
+        "colortype",
+        "MODALDESCRIPTION",
+        "MODALOPTION",
+        "MODALTITLE",
+        "NAVITEMBUTTON",
+        "nvused",
+        "paraset",
+        "POSITIONTEXT",
+        "PRIMARYBUTTON",
+        "SECONDARYBUTTON",
+        "touchgfx"
     ],
     "errorLens.enabledDiagnosticLevels": [
         "error",
@@ -216,22 +76,13 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "biomejs.biome"
     },
-    "cSpell.userWords": [
-        "BOTTOMFLOORTEXTBUFFER",
-        "MODALDESCRIPTION",
-        "MODALOPTION",
-        "MODALTITLE",
-        "nvused",
-        "paraset",
-        "POSITIONTEXT",
-        "PRIMARYBUTTON",
-        "SECONDARYBUTTON",
-        "touchgfx"
-    ],
-    "vscode-neovim.neovimInitVimPaths.win32": "C:\\Users\\lalvarez\\.dotfiles\\visual studio\\vscode-neovim\\init.lua",
+    "extensions.experimental.affinity": {
+        "vscodevim.vim": 1,
+        "asvetliakov.vscode-neovim": 1
+    },
+    "vscode-neovim.neovimInitVimPaths.win32": "C:\\Users\\lalvarez\\.dotfiles\\visual studio code\\init.lua",
     "vscode-neovim.ctrlKeysForNormalMode": [
         "a",
-        "b",
         "c",
         "d",
         "f",
@@ -259,11 +110,60 @@
         "backspace",
         "delete"
     ],
-    "workbench.statusBar.visible": false,
-    "print.sourcecode.lineSpacing": 1.5,
-    "workbench.editor.enablePreviewFromCodeNavigation": true,
-    "workbench.editor.enablePreviewFromQuickOpen": true,
-    "zenMode.showTabs": "single",
-    "zenMode.fullScreen": false,
-    "zenMode.hideLineNumbers": false
+    "workbench.editor.enablePreview": false,
+    "files.simpleDialog.enable": true,
+    "editor.minimap.enabled": false,
+    "editor.scrollbar.vertical": "visible",
+    "workbench.editor.wrapTabs": true,
+    "workbench.editor.tabSizing": "shrink",
+    "window.density.editorTabHeight": "compact",
+    "window.menuBarVisibility": "toggle",
+    "workbench.reduceMotion": "on",
+    "breadcrumbs.symbolPath": "off",
+    "workbench.editor.openPositioning": "last",
+    "workbench.editor.revealIfOpen": true,
+    "workbench.editor.sharedViewState": true,
+    "workbench.editor.decorations.colors": false,
+    "vscode-neovim.ctrlKeysForInsertMode": [
+        "a",
+        "c",
+        "d",
+        "h",
+        "j",
+        "m",
+        "o",
+        "r",
+        "t",
+        "u",
+        "w",
+        "s"
+    ],
+    "terminal.integrated.profiles.windows": {
+        "Nu": {
+            "path": "C:\\Users\\lalvarez\\AppData\\Local\\Programs\\nu\\bin\\nu.exe",
+        }
+    },
+    // "terminal.integrated.defaultProfile.windows": "Nu",
+    "C_Cpp.inactiveRegionOpacity": 0.8,
+    "C_Cpp.workspaceSymbols": "All",
+    "C_Cpp.clang_format_sortIncludes": true,
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.simplifyStructuredComments": false,
+    "C_Cpp.codeAnalysis.updateDelay": 200,
+    "C_Cpp.intelliSenseCacheSize": 10240,
+    "C_Cpp.intelliSenseMemoryLimit": 16384,
+    "C_Cpp.experimentalFeatures": "enabled",
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "PERF",
+        "NOTE",
+        "WARNING",
+        "REVIEW"
+    ],
 }
