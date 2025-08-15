@@ -5,10 +5,10 @@
     "zenMode.hideLineNumbers": false,
     "files.autoSave": "onWindowChange",
     "workbench.colorTheme": "Default Light+",
-    "workbench.iconTheme": "vscode-icons",
+    "workbench.iconTheme": "material-icon-theme",
     "workbench.commandPalette.experimental.suggestCommands": true,
     "workbench.statusBar.visible": false,
-    "workbench.activityBar.location": "hidden",
+    "workbench.activityBar.location": "top",
     "workbench.editor.highlightModifiedTabs": true,
     "editor.fontFamily": "JetBrainsMono Nerd Font",
     "editor.fontLigatures": true,
@@ -46,7 +46,6 @@
         "misc-*"
     ],
     "iar.enabled": true,
-    "iar-build.buildOutputLogLevel": "All",
     "iar-build.extraBuildArguments": [
         "-parallel",
         "8"
@@ -110,14 +109,12 @@
         "backspace",
         "delete"
     ],
-    "workbench.editor.enablePreview": false,
     "files.simpleDialog.enable": true,
     "editor.minimap.enabled": false,
     "editor.scrollbar.vertical": "visible",
     "workbench.editor.wrapTabs": true,
     "workbench.editor.tabSizing": "shrink",
     "window.density.editorTabHeight": "compact",
-    "window.menuBarVisibility": "toggle",
     "workbench.reduceMotion": "on",
     "breadcrumbs.symbolPath": "off",
     "workbench.editor.openPositioning": "last",
@@ -166,4 +163,12 @@
         "WARNING",
         "REVIEW"
     ],
+    "editor.guides.highlightActiveIndentation": "always",
+    "editor.guides.bracketPairs": true,
+    "iar-debug.fitContentToViewWidth": false,
+    "workbench.editor.editorActionsLocation": "titleBar",
+    "iar-debug.buildBeforeDebugging": "AbortOnFailure",
+    "terminal.integrated.fontSize": 12,
+    "workbench.editor.enablePreview": false,
+    "errorLens.enabled": false,
 }

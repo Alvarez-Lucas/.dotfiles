@@ -176,13 +176,13 @@ window_rules:
       - window_title: {equals: Find all}
 
   # ESI Terminals
-  - commands: [move --workspace d]
+  - commands: [move --workspace d, focus --workspace d]
     match:
       - window_title: {regex: ESI AutoMation}
-  - commands: [set-floating --centered]
-    match:
-      - window_process: {equals: ESI-Term-Dev}
-      - window_process: {equals: ESI-Term}
+  # - commands: [set-floating --centered]
+  #   match:
+  #     - window_process: {equals: ESI-Term-Dev}
+  #     - window_process: {equals: ESI-Term}
 
   # Git
   - commands: [move --workspace gitbutler, focus --workspace gitbutler]

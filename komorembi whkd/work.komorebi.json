@@ -8,9 +8,9 @@
   "float_rule_placement": "Center",
   "animation": {
     "enabled": true,
-    "duration": 120,
+    "duration": 140,
     "fps": 60,
-    "style": "EaseInOutCubic"
+    "style": "EaseInOutQuad"
   },
   "stackbar": {
     "mode": "OnStack"
@@ -24,6 +24,11 @@
     {
       "kind": "Exe",
       "id": "neovide.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "FSViewer.exe",
       "matching_strategy": "Equals"
     },
     {
@@ -60,17 +65,24 @@
   "floating_applications": [
     {
       "kind": "Exe",
-      "id": "ESI-Term-Dev.exe",
-      "matching_strategy": "Equals"
-    },
-    {
-      "kind": "Exe",
       "id": "CalculatorApp.exe",
       "matching_strategy": "Equals"
     },
     {
       "kind": "Exe",
       "id": "Taskmgr.exe",
+      "matching_strategy": "Equals"
+    }
+  ],
+  "tray_and_multi_window_applications": [
+    {
+      "kind": "Exe",
+      "id": "ESI-Term-Dev.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Class",
+      "id": "SDL_app",
       "matching_strategy": "Equals"
     }
   ],
@@ -101,8 +113,14 @@
     {
       "window_based_work_area_offset": {
         "top": 0,
-        "left": 600,
-        "right": 1200,
+        "left": 480,
+        "right": 960,
+        "bottom": 0
+      },
+      "work_area_offset": {
+        "top": 0,
+        "left": 192,
+        "right": 384,
         "bottom": 0
       },
       "workspaces": [

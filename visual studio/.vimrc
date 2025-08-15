@@ -87,6 +87,9 @@ nmap [e :vsc View.PreviousError<cr>
 nmap ]t :vsc View.PreviousTask<cr>
 nmap [t :vsc View.NextTask<cr>
 
+nmap ]c :vsc GitDiffMargin.NextChange<cr>
+nmap [c :vsc GitDiffMargin.PreviousChange<cr>
+
 nnoremap <bs> <c-^>
 
 nnoremap <leader>gg :vsc View.GitRepositoryWindow<cr>
@@ -181,6 +184,8 @@ nnoremap Q @n
 vnoremap J :move '>+1<CR>gv-gv<CR>gv=gv
 vnoremap K :move '<-2<CR>gv-gv<CR>gv=gv
 
+vnoremap gsa :vsc Edit.SurroundWith<cr>
+
 nnoremap <c-e> :vsc View.HarpoonToolWindow<cr>
 nnoremap <leader>a :vsc Harpoon.AppendTab<cr>
 nnoremap <leader>hc :vsc Harpoon.ClearAll<cr>
@@ -198,3 +203,48 @@ nnoremap <leader>hd :vsc Harpoon.DeleteTab<cr>
 "nnoremap <leader>hl :vsc Harpoon.SwapRight<cr>
 "nnoremap <c-h> :vsc Harpoon.PreviousTab<cr>
 "nnoremap <c-l> :vsc Harpoon.NextTab<cr>
+
+" Surround simulating bindings
+nnoremap gsaiw) ciw(<C-r>")<Esc>
+nnoremap gsaaw) caw(<C-r>")<Esc>
+
+nnoremap gsaiw" ciw"<C-r>""<Esc>
+nnoremap gsaaw" caw"<C-r>""<Esc>
+
+"nnoremap s] ciw[<C-r>"]<Esc>
+"
+"nnoremap s} ciw{<C-r>"}<Esc>
+"
+"nnoremap s> ciw<lt><C-r>"><Esc>
+"
+"nnoremap s' ciw'<C-r>"'<Esc>
+"nnoremap sw) ciW(<C-r>")<Esc>
+"nnoremap sw] ciW[<C-r>"]<Esc>
+"nnoremap sw} ciW{<C-r>"}<Esc>
+"nnoremap sw> ciW<lt><C-r>"><Esc>
+"nnoremap sw" ciW"<C-r>""<Esc>
+"nnoremap sw' ciW'<C-r>"'<Esc>
+"
+"" Surround delete bindings
+"nnoremap ds) vi(dvhp
+"nnoremap ds] vi[dvhp
+"nnoremap ds} vi{dvhp
+"nnoremap ds> vi<dvhp
+"nnoremap ds" vi"dvhp
+"nnoremap ds' vi'dvhp
+"
+"" Surround change bindings
+"nnoremap cs"' vi"oh<Esc>msvi"l<Esc>cl'<Esc>`scl'<Esc>
+"nnoremap cs'" vi'oh<Esc>msvi'l<Esc>cl"<Esc>`scl"<Esc>
+
+" Surround visual selected text
+vnoremap gsa" c"<C-r>""<Esc>
+vnoremap gsa' c"<C-r>"'<Esc>
+vnoremap gsa) c(<C-r>")<Esc>
+vnoremap gsa] c[<C-r>"]<Esc>
+vnoremap gsa} c{<C-r>"}<Esc>
+vnoremap gsa> c<lt><C-r>"><Esc>
+vnoremap gsa* c/*<C-r>"*/<Esc>
+"vnoremap St c<lt>div><CR><C-r>"<Esc>
+" Surround in div tag and edit tag
+vnoremap gsat c<lt>div><CR><C-r>"<Esc>`<lt>lcw
