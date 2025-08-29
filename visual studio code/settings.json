@@ -7,7 +7,6 @@
     "workbench.colorTheme": "Default Light+",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.commandPalette.experimental.suggestCommands": true,
-    "workbench.statusBar.visible": false,
     "workbench.activityBar.location": "top",
     "workbench.editor.highlightModifiedTabs": true,
     "editor.fontFamily": "JetBrainsMono Nerd Font",
@@ -163,12 +162,19 @@
         "WARNING",
         "REVIEW"
     ],
+    "debug.inlineValues": "on",
     "editor.guides.highlightActiveIndentation": "always",
     "editor.guides.bracketPairs": true,
     "iar-debug.fitContentToViewWidth": false,
     "workbench.editor.editorActionsLocation": "titleBar",
     "iar-debug.buildBeforeDebugging": "AbortOnFailure",
     "terminal.integrated.fontSize": 12,
-    "workbench.editor.enablePreview": false,
     "errorLens.enabled": false,
+    "vsCodeGitWorktrees.add.autoPush": false,
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "workbench.editor.enablePreview": false,
+    "git.enableSmartCommit": true,
+    "workbench.statusBar.visible": false
 }

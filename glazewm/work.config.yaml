@@ -136,6 +136,7 @@ window_rules:
   - commands: [set-floating]
     match:
       - window_title: {equals: Find and Replace}
+      - window_title: {regex: J-Link.*}
 
   # LINQPad
   - commands: [move --workspace v, focus --workspace v]
@@ -292,8 +293,8 @@ keybindings:
   #  bindings: ['alt+r']
 
   # Disables all keybindings until alt+shift+p is pressed again.
-  - commands: [wm-enable-binding-mode --name pause]
-    bindings: [alt+p]
+  # - commands: [wm-enable-binding-mode --name pause]
+  #   bindings: [alt+shift+p]
 
   # Change tiling direction. This determines where new tiling windows will
   # be inserted.

@@ -161,6 +161,14 @@ vim.keymap.set("n", "grr", function()
 	-- "editor.action.showReferences"
 end, defaultOpts)
 
+vim.keymap.set("n", "grr", function()
+	vscode.action("editor.action.goToReferences")
+	-- "references-view.findReferences"
+	-- "editor.action.goToReferences"
+	-- "editor.action.findReferences"
+	-- "editor.action.showReferences"
+end, defaultOpts)
+
 vim.keymap.set("i", "<c-s>", function()
 	vscode.action("editor.action.triggerParameterHints")
 end, defaultOpts)
@@ -629,6 +637,62 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
+
+-- In vscode keybinds
+-- vim.keymap.set("n", "<c-Left>", function()
+-- 	vscode.action("workbench.action.debug.stepOut")
+-- end, defaultOpts)
+--
+-- vim.keymap.set("n", "<c-Right>", function()
+-- 	vscode.action("workbench.action.debug.stepInto")
+-- end, defaultOpts)
+--
+-- vim.keymap.set("n", "<c-Down>", function()
+-- 	vscode.action("workbench.action.debug.stepOver")
+-- end, defaultOpts)
+--
+-- vim.keymap.set("n", "<c-Up>", function()
+-- 	vscode.action("workbench.action.debug.continue")
+-- end, defaultOpts)
+
+vim.keymap.set("n", "<leader>ds", function()
+	vscode.call("workbench.action.debug.stop")
+	vscode.call("workbench.action.debug.start")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>dx", function()
+	vscode.action("workbench.action.debug.stop")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>di", function()
+	vscode.action("workbench.debug.action.showDebugHover")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>db", function()
+	vscode.action("editor.debug.action.toggleBreakpoint")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>dl", function()
+	vscode.action("editor.debug.action.addLogPoint")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>dB", function()
+	vscode.action("editor.debug.action.conditionalBreakpoint")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>dd", function()
+	vscode.action("editor.debug.action.runToCursor")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>dw", function()
+	vscode.action("editor.debug.action.runToCursor")
+end, defaultOpts)
+
+vim.keymap.set("n", "<cr>", function()
+	vscode.action("workbench.action.keepEditor")
+end, defaultOpts)
+
+-- debug evaluate
 
 -- vim.api.nvim_create_autocmd("BufReadPost", {
 -- 	group = vim.api.nvim_create_augroup("last_loc", { clear = true }),
