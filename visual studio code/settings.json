@@ -30,7 +30,6 @@
     "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
     "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
     "C_Cpp.inlayHints.referenceOperator.enabled": true,
-    "C_Cpp.intelliSenseUpdateDelay": 500,
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.dimInactiveRegions": true,
     "C_Cpp.default.cStandard": "c17",
@@ -63,12 +62,6 @@
         "PRIMARYBUTTON",
         "SECONDARYBUTTON",
         "touchgfx"
-    ],
-    "errorLens.enabledDiagnosticLevels": [
-        "error",
-        "info",
-        "hint",
-        "warning"
     ],
     "[json]": {
         "editor.formatOnSave": true,
@@ -140,14 +133,11 @@
         }
     },
     // "terminal.integrated.defaultProfile.windows": "Nu",
-    "C_Cpp.inactiveRegionOpacity": 0.8,
-    "C_Cpp.workspaceSymbols": "All",
+    "C_Cpp.inactiveRegionOpacity": 0.7,
     "C_Cpp.clang_format_sortIncludes": true,
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.simplifyStructuredComments": false,
-    "C_Cpp.codeAnalysis.updateDelay": 200,
-    "C_Cpp.intelliSenseCacheSize": 10240,
-    "C_Cpp.intelliSenseMemoryLimit": 16384,
+    "C_Cpp.intelliSenseCacheSize": 0,
     "C_Cpp.experimentalFeatures": "enabled",
     "todo-tree.general.tags": [
         "BUG",
@@ -157,7 +147,7 @@
         "XXX",
         "[ ]",
         "[x]",
-        "PERF",
+        "PERF" ,
         "NOTE",
         "WARNING",
         "REVIEW"
@@ -169,12 +159,30 @@
     "workbench.editor.editorActionsLocation": "titleBar",
     "iar-debug.buildBeforeDebugging": "AbortOnFailure",
     "terminal.integrated.fontSize": 12,
-    "errorLens.enabled": false,
     "vsCodeGitWorktrees.add.autoPush": false,
     "[cpp]": {
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
     "workbench.editor.enablePreview": false,
     "git.enableSmartCommit": true,
-    "workbench.statusBar.visible": false
+    "bracketLens.maxBracketHeaderLength": 120,
+    "bracketLens.minBracketScopeLines": 12,
+    "bracketLens.color": "#af00db",
+    "C_Cpp.refactoring.includeHeader": "never",
+    "errorLens.enabledDiagnosticLevels": [
+        "error",
+        "warning",
+        "info",
+        "hint"
+    ],
+    "C_Cpp.codeAnalysis.exclude": {
+        "C:/Program Files/IAR Systems/Embedded Workbench 9.2/arm/inc/cpp/*.h": true,
+        "C:/Program Files/IAR Systems/Embedded Workbench 9.2/arm/inc/c/*.h": true,
+        "C:/Program Files/IAR Systems/Embedded Workbench 9.2/arm/inc/c/aarch64/*.h": true,
+        "C:/Program Files/IAR Systems/Embedded Workbench 9.2/arm/inc/c/dlib5/*.h": true
+    },
+    "C_Cpp.intelliSenseUpdateDelay": 500,
+    "path-intellisense.autoTriggerNextSuggestion": true,
+    "path-intellisense.autoSlashAfterDirectory": true,
+    "path-intellisense.showHiddenFiles": true
 }

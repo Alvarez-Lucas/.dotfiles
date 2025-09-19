@@ -105,7 +105,7 @@
 	whitespace-error-style = "#aaaaaa"
 [user]
 	name = Lucas Alvarez
-	email = LAlvarez@elevatorsystems.com
+	email = lalvarez@elevatorsystems.com
 [credential "https://dev.azure.com"]
 	usehttppath = true
 [difftool "vsdiffmerge"]
@@ -121,3 +121,9 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[difftool "sourcetree"]
+	cmd = "'' "
+[mergetool "sourcetree"]
+	cmd = "'' "
+	trustExitCode = false
+	keepBackup = false

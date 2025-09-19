@@ -976,6 +976,7 @@ require("lazy").setup({
       {
          "nvim-treesitter/nvim-treesitter", --nvim-treesitter/nvim-treesitter-context, HiPhish/rainbow-delimiters.nvim, windwp/nvim-autopairs
          event = { "LazyFile", "VeryLazy" },
+         branch = "master",
          lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          init = function(plugin)
             -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
@@ -995,6 +996,7 @@ require("lazy").setup({
             configs.setup({
                ensure_installed = {
                   "c",
+                  "cmake",
                   "c_sharp",
                   "csv",
                   "diff",
@@ -1214,6 +1216,7 @@ require("lazy").setup({
                "lua_ls",
                "omnisharp",
                -- "csharp_ls",
+               "neocmake",
                "powershell_es",
                "pylsp",
                "taplo",
@@ -1917,7 +1920,9 @@ require("lazy").setup({
             { "<leader>gl", "<cmd>Neogit log<cr>" },
             { "<leader>gP", "<cmd>Neogit push<cr>" },
          },
-         opts = {},
+         opts = {
+            graph_style = "kitty",
+         },
          config = function(_, opts)
             local neogit = require("neogit")
             neogit.setup(opts)
@@ -2116,6 +2121,8 @@ require("lazy").setup({
       {
          "kevinhwang91/nvim-hlslens",
          keys = {
+            { "?" },
+            { "/" },
             { "n" },
             { "N" },
             { "#" },
@@ -2201,7 +2208,8 @@ require("lazy").setup({
                   "javac $fileName &&",
                   "java $fileNameWithoutExt",
                },
-               python = "python3 -u",
+               -- python = "python3 -u",
+               python = "uv run $fileName",
                typescript = "deno run",
                rust = {
                   "cd $dir &&",

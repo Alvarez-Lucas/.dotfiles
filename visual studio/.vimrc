@@ -59,7 +59,7 @@ nnoremap gi `i
 " Code runner
 "nnoremap <leader>r :vsc Debug.Start<CR>
 "nnoremap <leader>r :vsc Debug.Restart<CR>:vsc Debug.Start<CR>
-nnoremap <leader>t :vsc Debug.StopDebugging<CR>
+nnoremap <leader>dx :vsc Debug.StopDebugging<CR>
 " remap to yank to end of line
 
 "let @p='oDebug.Print("")<Left><Left>'
@@ -199,6 +199,7 @@ nnoremap <leader>7 :vsc Harpoon.SwitchToTab6<cr>
 nnoremap <leader>8 :vsc Harpoon.SwitchToTab7<cr>
 nnoremap <leader>9 :vsc Harpoon.SwitchToTab8<cr>
 nnoremap <leader>hd :vsc Harpoon.DeleteTab<cr>
+nnoremap <leader>hh :vsc Harpoon.ScoochIndexes<cr>
 "nnoremap <leader>hh :vsc Harpoon.SwapLeft<cr>
 "nnoremap <leader>hl :vsc Harpoon.SwapRight<cr>
 "nnoremap <c-h> :vsc Harpoon.PreviousTab<cr>

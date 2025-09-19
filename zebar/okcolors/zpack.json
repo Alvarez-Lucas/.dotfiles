@@ -1,5 +1,5 @@
 {
-  "$schema": "https://github.com/glzr-io/zebar/raw/v3.1.0/resources/zpack-schema.json",
+  "$schema": "https://github.com/glzr-io/zebar/raw/v3.1.1/resources/zpack-schema.json",
   "name": "okcolors",
   "version": "0.0.0",
   "description": "",
@@ -15,9 +15,7 @@
       "focused": false,
       "resizable": false,
       "transparent": false,
-      "includeFiles": [
-        "**/**"
-      ],
+      "includeFiles": ["**/**"],
       "caching": {
         "defaultDuration": 604800,
         "rules": []
@@ -37,8 +35,8 @@
             "type": "all"
           },
           "dockToEdge": {
-            "enabled": false,
-            "edge": null,
+            "enabled": true,
+            "edge": "top",
             "windowMargin": "0px"
           }
         }

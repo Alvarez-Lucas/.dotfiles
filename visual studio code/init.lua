@@ -119,7 +119,7 @@ vim.keymap.set("n", "gra", function()
 end, defaultOpts)
 
 vim.keymap.set("n", "grn", function()
-	vscode.action("editor.action.quickFix")
+	vscode.action("editor.action.rename")
 end, defaultOpts)
 
 vim.keymap.set("n", "grf", function()
@@ -244,6 +244,8 @@ require("lazy").setup({
 		{
 			"kevinhwang91/nvim-hlslens",
 			keys = {
+				{ "?" },
+				{ "/" },
 				{ "n" },
 				{ "N" },
 				{ "#" },
@@ -252,6 +254,14 @@ require("lazy").setup({
 			},
 			config = function()
 				require("hlslens").setup()
+
+				vim.cmd([[
+				highlight HlSearchLens guifg='#ffffff' guibg='#af00db' 
+				highlight HlSearchLensNear guifg='#ffffff' guibg='#af00db' gui=underline
+								]])
+				-- hi default link HlSearchNear CurSearch
+				-- hi default link HlSearchLens WildMenu
+				-- hi default link HlSearchLensNear CurSearch
 
 				local kopts = { noremap = true, silent = true }
 
@@ -608,15 +618,15 @@ require("lazy").setup({
 -- -- vim.keymap.set({ 'n' }, "<leader>vr", vscode.moveSideBarRight)
 --
 -- --folding
--- -- vim.keymap.set({ 'n' }, "<leader>zr", fold.openAll)
--- -- vim.keymap.set({ 'n' }, "<leader>zO", fold.openRecursive)
--- -- vim.keymap.set({ 'n' }, "<leader>zo", fold.open)
--- -- vim.keymap.set({ 'n' }, "<leader>zm", fold.all)
--- -- vim.keymap.set({ 'n' }, "<leader>zb", fold.blockComment)
--- -- vim.keymap.set({ 'n' }, "<leader>zc", fold.close)
--- -- vim.keymap.set({ 'n' }, "<leader>zg", fold.allMarkerRegion)
--- -- vim.keymap.set({ 'n' }, "<leader>zG", fold.openAllMarkerRegion)
--- -- vim.keymap.set({ 'n' }, "<leader>za", fold.toggle)
+-- vim.keymap.set({ "n" }, "<leader>zr", fold.openAll)
+-- vim.keymap.set({ "n" }, "<leader>zO", fold.openRecursive)
+-- vim.keymap.set({ "n" }, "<leader>zo", fold.open)
+-- vim.keymap.set({ "n" }, "<leader>zm", fold.all)
+-- vim.keymap.set({ "n" }, "<leader>zb", fold.blockComment)
+-- vim.keymap.set({ "n" }, "<leader>zc", fold.close)
+-- vim.keymap.set({ "n" }, "<leader>zg", fold.allMarkerRegion)
+-- vim.keymap.set({ "n" }, "<leader>zG", fold.openAllMarkerRegion)
+-- vim.keymap.set({ "n" }, "<leader>za", fold.toggle)
 --
 -- -- vim.keymap.set({ 'n' }, "zr", fold.openAll)
 -- -- vim.keymap.set({ 'n' }, "zO", fold.openRecursive)
@@ -691,6 +701,20 @@ end, defaultOpts)
 vim.keymap.set("n", "<cr>", function()
 	vscode.action("workbench.action.keepEditor")
 end, defaultOpts)
+
+vim.keymap.set("n", "H", function()
+	vscode.action("workbench.action.previousEditorInGroup")
+end, defaultOpts)
+
+vim.keymap.set("n", "L", function()
+	vscode.action("workbench.action.nextEditorInGroup")
+end, defaultOpts)
+
+vim.keymap.set("n", "<leader>;", function()
+	local cursor = vim.api.nvim_win_get_cursor(0)
+	vim.cmd("norm A;")
+	vim.api.nvim_win_set_cursor(0, cursor)
+end, { noremap = true, silent = true })
 
 -- debug evaluate
 
