@@ -127,3 +127,9 @@
 	cmd = "'' "
 	trustExitCode = false
 	keepBackup = false
+[gui]
+	editor = gvim
+	historybrowser = C:/Users/lalvarez/AppData/Local/Programs/git-cola/Python/pythonw.exe C:/Users/lalvarez/AppData/Local/Programs/git-cola/git-cola.launch.pyw dag
+[cola]
+	blameviewer = git gui blame
+	statusshowtotals = true

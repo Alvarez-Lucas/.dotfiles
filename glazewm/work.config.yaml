@@ -3,7 +3,7 @@ general:
   startup_commands: [shell-exec zebar]
   focus_follows_cursor: false
   toggle_workspace_on_refocus: false
-  show_all_in_taskbar: false
+  show_all_in_taskbar: true
   cursor_jump:
     enabled: true
     trigger: window_focus
@@ -43,7 +43,7 @@ window_behavior:
       centered: true
       shown_on_top: false
     fullscreen:
-      maximized: true
+      maximized: false
       shown_on_top: false
 workspaces:
   - name: browser
@@ -143,9 +143,9 @@ window_rules:
       - window_title: {regex: J-Link.*}
 
   # LINQPad
-  - commands: [move --workspace v, focus --workspace v]
-    match:
-      - window_title: {regex: LINQPad \d}
+  # - commands: [move --workspace v, focus --workspace v]
+  #   match:
+  #     - window_title: {regex: LINQPad \d}
 
   # Visual Studio
   - commands: [set-floating]

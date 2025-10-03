@@ -98,10 +98,11 @@ nnoremap <leader>gc :vsc View.GitWindow<cr>
 nnoremap <leader>q :vsc View.ErrorList<cr>
 
 " Snacks Picker Keymaps
-nnoremap <leader>f :vsc Edit.GoToFile<cr>
-nnoremap <leader>g :vsc Edit.GoToText<cr>
+nnoremap <leader>sf :vsc Edit.GoToFile<cr>
+nnoremap <leader>sg :vsc Edit.GoToText<cr>
+nnoremap <leader>so :vsc Edit.GoToSymbol<cr>
+nnoremap <leader>sm :vsc Edit.GoToMember<cr>
 "nnoremap <leader>F :vsc Edit.GoToRecentFile<cr>
-"nnoremap :vsc Edit.GoToSymbol<cr>
 "nnoremap :vsc Edit.GoToMember<cr>
 " :vsc Edit.QuickFindSymbol requires argument
 
@@ -123,8 +124,8 @@ nnoremap <leader>db :vsc Debug.ToggleBreakpoint<cr>
 "nnoremap <leader>dl :vsc Debug.StepOver<cr>
 "nnoremap <leader>dl :vsc Debug.StepInto<cr>
 "nnoremap <leader>dk :vsc Debug.Stepout<cr>
-nnoremap <leader>de :vsc Debug.StopDebugging<cr>
-nnoremap <leader>dE :vsc Debug.StopDebugging<Cr>:vsc Debug.DeleteAllBreakpoints<cr>
+nnoremap <leader>dx :vsc Debug.StopDebugging<cr>
+nnoremap <leader>dX :vsc Debug.StopDebugging<Cr>:vsc Debug.DeleteAllBreakpoints<cr>
 
 vnoremap <Leader>y "+y
 vnoremap <Leader>p "+p
@@ -139,10 +140,10 @@ nnoremap N Nzz
 "Doesn't work, need to find star search
 "vnoremap * "zy/\V<C-r>=escape(@z, '\/')<CR><CR>
 
-nnoremap [[ :vsc Edit.NextMethod<cr>
-nnoremap [m :vsc Edit.NextMethod<cr>
-nnoremap ]] :vsc Edit.PreviousMethod<cr>
-nnoremap ]m :vsc Edit.PreviousMethod<cr>
+nnoremap ]] :vsc Edit.NextMethod<cr>
+nnoremap [[ :vsc Edit.PreviousMethod<cr>
+nnoremap ]m :vsc Edit.NextMethod<cr>
+nnoremap [m :vsc Edit.PreviousMethod<cr>
 
 " LSP Keymaps
 nnoremap grn :vsc Refactor.Rename<cr>
@@ -150,8 +151,11 @@ nnoremap gra :vsc View.QuickActions<cr>
 nnoremap grr :vsc Edit.FindAllReferences<cr>
 nnoremap grd :vsc Edit.GoToDefinition<cr>
 nnoremap grt :vsc Edit.GoToType<cr>
-"nnoremap grt :vsc Edit.GoToTypeDefinition<cr>
-nnoremap gO :vsc View.DocumentOutline<cr>
+nnoremap grT :vsc Edit.GoToTypeDefinition<cr>
+"nnoremap gO :vsc View.DocumentOutline<cr>
+nnoremap gO :vsc Edit.GoToSymbol<cr>
+"nnoremap gO :vsc Edit.QuickFindSymbol<cr>
+"nnoremap gO :vsc Edit.ResourceSymbols<cr>
 " TODO
 nnoremap K :vsc Edit.QuickInfo<cr>
 inoremap <c-s> <c-o>:vsc Edit.ParameterInfo<cr>
@@ -186,20 +190,20 @@ vnoremap K :move '<-2<CR>gv-gv<CR>gv=gv
 
 vnoremap gsa :vsc Edit.SurroundWith<cr>
 
-nnoremap <c-e> :vsc View.HarpoonToolWindow<cr>
-nnoremap <leader>a :vsc Harpoon.AppendTab<cr>
-nnoremap <leader>hc :vsc Harpoon.ClearAll<cr>
-nnoremap <leader>1 :vsc Harpoon.SwitchToTab0<cr>
-nnoremap <leader>2 :vsc Harpoon.SwitchToTab1<cr>
-nnoremap <leader>3 :vsc Harpoon.SwitchToTab2<cr>
-nnoremap <leader>4 :vsc Harpoon.SwitchToTab3<cr>
-nnoremap <leader>5 :vsc Harpoon.SwitchToTab4<cr>
-nnoremap <leader>6 :vsc Harpoon.SwitchToTab5<cr>
-nnoremap <leader>7 :vsc Harpoon.SwitchToTab6<cr>
-nnoremap <leader>8 :vsc Harpoon.SwitchToTab7<cr>
-nnoremap <leader>9 :vsc Harpoon.SwitchToTab8<cr>
-nnoremap <leader>hd :vsc Harpoon.DeleteTab<cr>
-nnoremap <leader>hh :vsc Harpoon.ScoochIndexes<cr>
+"nnoremap <c-e> :vsc View.HarpoonToolWindow<cr>
+"nnoremap <leader>a :vsc Harpoon.AppendTab<cr>
+"nnoremap <leader>hc :vsc Harpoon.ClearAll<cr>
+"nnoremap <leader>1 :vsc Harpoon.SwitchToTab0<cr>
+"nnoremap <leader>2 :vsc Harpoon.SwitchToTab1<cr>
+"nnoremap <leader>3 :vsc Harpoon.SwitchToTab2<cr>
+"nnoremap <leader>4 :vsc Harpoon.SwitchToTab3<cr>
+"nnoremap <leader>5 :vsc Harpoon.SwitchToTab4<cr>
+"nnoremap <leader>6 :vsc Harpoon.SwitchToTab5<cr>
+"nnoremap <leader>7 :vsc Harpoon.SwitchToTab6<cr>
+"nnoremap <leader>8 :vsc Harpoon.SwitchToTab7<cr>
+"nnoremap <leader>9 :vsc Harpoon.SwitchToTab8<cr>
+"nnoremap <leader>hd :vsc Harpoon.DeleteTab<cr>
+"nnoremap <leader>hh :vsc Harpoon.ScoochIndexes<cr>
 "nnoremap <leader>hh :vsc Harpoon.SwapLeft<cr>
 "nnoremap <leader>hl :vsc Harpoon.SwapRight<cr>
 "nnoremap <c-h> :vsc Harpoon.PreviousTab<cr>

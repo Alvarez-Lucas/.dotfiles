@@ -184,5 +184,7 @@
     "C_Cpp.intelliSenseUpdateDelay": 500,
     "path-intellisense.autoTriggerNextSuggestion": true,
     "path-intellisense.autoSlashAfterDirectory": true,
-    "path-intellisense.showHiddenFiles": true
+    "path-intellisense.showHiddenFiles": true,
+    "workbench.editor.showTabIndex": true,
+    "security.workspace.trust.untrustedFiles": "open"
 }
