@@ -976,7 +976,6 @@ require("lazy").setup({
       {
          "nvim-treesitter/nvim-treesitter", --nvim-treesitter/nvim-treesitter-context, HiPhish/rainbow-delimiters.nvim, windwp/nvim-autopairs
          event = { "LazyFile", "VeryLazy" },
-         branch = "master",
          lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          init = function(plugin)
             -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
@@ -997,6 +996,7 @@ require("lazy").setup({
                ensure_installed = {
                   "c",
                   "cmake",
+                  "cpp",
                   "c_sharp",
                   "csv",
                   "diff",
@@ -2367,6 +2367,59 @@ require("lazy").setup({
                function() require("undotree").toggle() end,
             },
          },
+      },
+
+      {
+         cmd = "Leet",
+         lazy = "le" ~= vim.fn.argv(0, -1),
+         "kawre/leetcode.nvim",
+         build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
+         dependencies = {
+            -- "nvim-telescope/telescope.nvim",
+            "ibhagwan/fzf-lua",
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+         },
+         ---@module 'leetcode.config'
+         opts = {
+            -- configuration goes here
+            lang = "csharp",
+            arg = "le",
+            injector = {
+               ["python3"] = { before = true },
+               ["csharp"] = {
+                  before = {
+                     "using System.Linq;",
+                     "using static System.Linq.Enumerable;",
+                  },
+               },
+            },
+         },
+         -- keys = {
+         -- { "<leader>lf" },
+         -- {
+         --    "<leader>lf",
+         --    function() vim.cmd("Leet") end,
+         -- },
+         -- { "<leader>ldr", "<cmd>Leet run<cr>" },
+         -- { "<leader>lds", "<cmd>Leet submit<cr>" },
+         -- { "<leader>le", "<cmd>Leet console<cr>" },
+         -- },
+         config = function(_, opts)
+            require("leetcode").setup(opts)
+            -- vim.cmd([[Leet list]])
+            map("n", "<leader>ldt", "<cmd>Leet run<cr>")
+            map("n", "<leader>lds", "<cmd>Leet submit<cr>")
+
+            map("n", "<leader>lf", "<cmd>Leet list<cr>")
+            map("n", "<leader>li", "<cmd>Leet desc<cr><C-w><C-h>")
+            map("n", "<leader>lc", "<cmd>Leet console<cr>")
+            map("n", "<leader>lr", "<cmd>Leet reset<cr>")
+            map("n", "<leader>lR", "<cmd>Leet restore<cr>")
+            map("n", "<leader>lI", "<cmd>Leet info<cr>")
+            map("n", "<leader>lt", "<cmd>Leet tabs<cr>")
+            map("n", "<leader>lo", "<cmd>Leet open<cr>")
+         end,
       },
    },
 })
