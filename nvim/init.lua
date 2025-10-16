@@ -645,6 +645,7 @@ require("lazy").setup({
       },
 
       {
+         enabled = false,
          "nvim-neo-tree/neo-tree.nvim",
          branch = "v3.x",
          cmd = "Neotree",
@@ -827,6 +828,29 @@ require("lazy").setup({
                },
             },
          },
+      },
+
+      {
+         "Eutrius/Otree.nvim",
+         lazy = false,
+         keys = {
+            {
+               "<leader>e",
+               "<cmd>Otree<cr>",
+            },
+            {
+               "<leader>",
+               "<cmd>OtreeFocus<cr>",
+            },
+         },
+         dependencies = {
+            -- Optional: Enhanced file operations
+            "stevearc/oil.nvim",
+            -- Optional: Icon support
+            -- { "echasnovski/mini.icons", opts = {} },
+            "nvim-tree/nvim-web-devicons",
+         },
+         config = function() require("Otree").setup() end,
       },
 
       {
@@ -1595,7 +1619,7 @@ require("lazy").setup({
                            vim.cmd.tcd(Snacks.picker.util.dir(item))
                            picker:close()
                            -- Snacks.picker.files()
-                           vim.cmd("Neotree action=focus source=filesystem position=current")
+                           -- vim.cmd("Neotree action=focus source=filesystem position=current")
                         else
                            picker:close()
                         end
