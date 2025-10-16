@@ -418,6 +418,10 @@ require("lazy").setup({
       version = false,
       lazy = true,
    },
+   rocks = {
+      enabled = true,
+      hererocks = true,
+   },
    change_detection = {
       notify = false,
    },
