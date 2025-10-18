@@ -1,6 +1,9 @@
 ---
 general:
   startup_commands: [shell-exec zebar]
+  shutdown_commands: [shell-exec taskkill /IM zebar.exe /F]
+  config_reload_commands:
+    - shell-exec --hide-window powershell -command "taskkill /IM zebar.exe /F; zebar"
   focus_follows_cursor: false
   toggle_workspace_on_refocus: false
   show_all_in_taskbar: false
@@ -8,6 +11,7 @@ general:
     enabled: true
     trigger: window_focus
 gaps:
+  scale_with_dpi: true
   inner_gap: 4px
   outer_gap:
     top: 4px
@@ -32,10 +36,16 @@ window_effects:
     border:
       enabled: true
       color: '#8dbcff'
+    corner_style:
+      enabled: true
+      style: square   # Options: 'square', 'rounded', 'small_rounded'
   other_windows:
     border:
       enabled: true
       color: '#a1a1a1'
+    corner_style:
+      enabled: true
+      style: square   # Options: 'square', 'rounded', 'small_rounded'
 window_behavior:
   initial_state: tiling
   state_defaults:

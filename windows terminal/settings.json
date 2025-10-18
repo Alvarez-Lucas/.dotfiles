@@ -216,6 +216,12 @@
                 "hidden": false,
                 "name": "Developer PowerShell for VS 18 [Preview]",
                 "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{4bd07ebb-97a6-517b-878d-6dd0d9de62c0}",
+                "hidden": false,
+                "name": "archlinux",
+                "source": "Microsoft.WSL"
             }
         ]
     },

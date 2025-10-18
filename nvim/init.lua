@@ -224,7 +224,7 @@ map("n", "<C-Down>", "<cmd>resize +5<CR>", defaultOpts)
 map("n", "<C-Left>", "<cmd>vertical resize -5<CR>", defaultOpts)
 map("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
 
-map("t", "<Esc>", "<C-\\><C-N>", defaultOpts)
+-- map("t", "<Esc>", "<C-\\><C-N>", defaultOpts)
 map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 map("n", "<leader>la", "<cmd>Lazy<cr>", defaultOpts)
@@ -449,26 +449,6 @@ require("lazy").setup({
    -- Plugin Specs
    ---@type LazySpec
    spec = {
-
-      {
-         "dmtrKovalenko/fff.nvim",
-         build = "cargo build --release",
-         -- or if you are using nixos
-         -- build = "nix run .#release",
-         opts = {
-            -- pass here all the options
-         },
-         keys = {
-            {
-               "ff", -- try it if you didn't it is a banger keybinding for a picker
-               function()
-                  require("fff").find_files() -- or find_in_git_root() if you only want git files
-               end,
-               desc = "Open file picker",
-            },
-         },
-      },
-
       {
          "e-q/okcolors.nvim",
          name = "okcolors",
@@ -561,6 +541,16 @@ require("lazy").setup({
                      pattern = { "harpoon" },
                      callback = function()
                         local ns_id = vim.api.nvim_create_namespace("harpoon_okcolors_highlight")
+                        vim.api.nvim_set_hl_ns(ns_id)
+                        vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+                     end,
+                  })
+
+                  vim.api.nvim_create_autocmd("FileType", {
+                     group = vim.api.nvim_create_augroup("harpoon_okcolors_highlight", { clear = true }),
+                     pattern = { "oil" },
+                     callback = function()
+                        local ns_id = vim.api.nvim_create_namespace("oil_okcolors_highlight")
                         vim.api.nvim_set_hl_ns(ns_id)
                         vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
                      end,
@@ -827,7 +817,7 @@ require("lazy").setup({
                   event = "file_opened",
                   handler = function(_)
                      -- do something, the value of arg varies by event.
-                     vim.cmd("Neotree close")
+                     -- vim.cmd("Neotree close")
                   end,
                },
             },
@@ -835,26 +825,172 @@ require("lazy").setup({
       },
 
       {
-         "Eutrius/Otree.nvim",
-         lazy = false,
+         -- "alvarez-lucas/Otree.nvim",
+         dir = "~/repos/Otree.nvim/",
          keys = {
             {
                "<leader>e",
                "<cmd>Otree<cr>",
             },
             {
-               "<leader>",
+               "<leader>E",
                "<cmd>OtreeFocus<cr>",
             },
          },
+         branch = "feature/tab-scoped-directories",
+         init = function()
+            -- Lazy load on open of directory to hijack netrw (https://www.lazyvim.org/extras/editor/neo-tree)
+            vim.api.nvim_create_autocmd("BufEnter", {
+               group = vim.api.nvim_create_augroup("Otree_start_directory", { clear = true }),
+               desc = "Start Otree with directory",
+               once = true,
+               callback = function()
+                  if package.loaded["Otree"] then
+                     return
+                  else
+                     local stats = vim.uv.fs_stat(vim.fn.argv(0))
+                     if stats and stats.type == "directory" then require("Otree") end
+                  end
+               end,
+            })
+         end,
          dependencies = {
-            -- Optional: Enhanced file operations
             "stevearc/oil.nvim",
-            -- Optional: Icon support
-            -- { "echasnovski/mini.icons", opts = {} },
             "nvim-tree/nvim-web-devicons",
          },
-         config = function() require("Otree").setup() end,
+         opts = {
+            win_size = 30,
+            open_on_startup = false,
+            hijack_netrw = true,
+            show_hidden = false,
+            show_ignore = false,
+            cursorline = true,
+            focus_on_enter = true,
+            open_on_left = true,
+            git_signs = false,
+            lsp_signs = false,
+            oil = "float",
+            ignore_patterns = {},
+
+            use_default_keymaps = false,
+            keymaps = {
+               ["l"] = "actions.select_then_close",
+               ["h"] = "actions.close_dir",
+               ["<Esc>"] = "actions.close_win",
+               ["<bs>"] = "actions.goto_parent",
+               ["<CR>"] = "actions.goto_dir",
+               ["<R>"] = "actions.goto_home_dir_tab",
+               ["cd"] = "actions.change_home_dir_tab",
+               ["L"] = "actions.open_dirs",
+               ["H"] = "actions.close_dirs",
+               ["o"] = "actions.oil_dir",
+               ["O"] = "actions.oil_into_dir",
+               ["t"] = "actions.open_tab",
+               ["v"] = "actions.open_vsplit",
+               ["s"] = "actions.open_split",
+               ["."] = "actions.toggle_hidden",
+               ["i"] = "actions.toggle_ignore",
+               ["r"] = "actions.refresh",
+               ["f"] = "actions.focus_file",
+               ["?"] = "actions.open_help",
+            },
+            -- tree = {
+            --    space_after_icon = " ",
+            --    space_after_connector = " ",
+            --    connector_space = " ",
+            --    -- connector_last = "─",
+            --    connector_last = "└",
+            --    connector_middle = "│",
+            --    -- connector_middle = "├",
+            --    vertical_line = "│",
+            -- },
+            tree = {
+               space_after_icon = " ",
+               space_after_connector = " ",
+               connector_space = " ",
+               -- connector_last = "─",
+               connector_last = " ",
+               connector_middle = " ",
+               -- connector_middle = " ",
+               vertical_line = " ",
+            },
+            icons = {
+               title = " ",
+               default_file = " ",
+               default_directory = " ",
+               empty_dir = " ",
+               trash = " ",
+               keymap = "⌨ ",
+               oil = " ",
+            },
+
+            highlights = {
+               directory = "Directory",
+               file = "Normal",
+               tree = "Comment",
+               title = "Title",
+               float_normal = "NormalFloat",
+               float_border = "FloatBorder",
+               link_path = "Comment",
+               git_ignored = "NonText",
+               git_untracked = "DiagnosticInfo",
+               git_modified = "DiagnosticWarn",
+               git_added = "DiagnosticHint",
+               git_deleted = "DiagnosticError",
+               git_conflict = "DiagnosticError",
+               git_renamed = "DiagnosticHint",
+               git_copied = "DiagnosticHint",
+               lsp_warn = "DiagnosticWarn",
+               lsp_info = "DiagnosticInfo",
+               lsp_hint = "DiagnosticHint",
+               lsp_error = "DiagnosticError",
+            },
+
+            float = {
+               center = true,
+               width_ratio = 0.4,
+               height_ratio = 0.7,
+               padding = 2,
+               cursorline = true,
+               border = "rounded",
+            },
+         },
+         config = function(_, opts)
+            require("Otree").setup(opts)
+
+            -- Trigger only on global directory change (:cd)
+            vim.api.nvim_create_autocmd("DirChanged", {
+               pattern = "global",
+               callback = function()
+                  print("Global directory changed")
+                  vim.cmd("tcd " .. vim.fn.getcwd())
+               end,
+            })
+
+            vim.api.nvim_create_autocmd("DirChanged", {
+               pattern = "*",
+               callback = function()
+                  pcall(function() require("Otree.actions").goto_home_dir() end)
+               end,
+            })
+            -- Trigger only on window-local directory change (:lcd)
+            vim.api.nvim_create_autocmd("DirChanged", {
+               pattern = "window",
+               callback = function() print("Window directory changed") end,
+            })
+
+            -- Trigger only on tab-local directory change (:tcd)
+            vim.api.nvim_create_autocmd("DirChanged", {
+               pattern = "tabpage",
+               callback = function() print("Tab directory changed") end,
+            })
+
+            -- Trigger only on autochdir changes
+            vim.api.nvim_create_autocmd("DirChanged", {
+               pattern = "auto",
+               callback = function() print("Auto directory changed") end,
+            })
+         end,
       },
 
       {
@@ -1877,6 +2013,24 @@ require("lazy").setup({
       },
 
       {
+         "dmtrKovalenko/fff.nvim",
+         build = function() require("fff.download").download_or_build_binary() end,
+         opts = { -- (optional)
+            debug = {
+               enabled = true, -- we expect your collaboration at least during the beta
+               show_scores = true, -- to help us optimize the scoring system, feel free to share your scores!
+            },
+         },
+         keys = {
+            {
+               "ff", -- try it if you didn't it is a banger keybinding for a picker
+               function() require("fff").find_files() end,
+               desc = "FFFind files",
+            },
+         },
+      },
+
+      {
          "lewis6991/gitsigns.nvim",
          event = { "LazyFile" },
          opts = {
@@ -2448,6 +2602,16 @@ require("lazy").setup({
             map("n", "<leader>lt", "<cmd>Leet tabs<cr>")
             map("n", "<leader>lo", "<cmd>Leet open<cr>")
          end,
+      },
+
+      {
+         "nvim-tree/nvim-tree.lua",
+         version = "*",
+         lazy = false,
+         dependencies = {
+            "nvim-tree/nvim-web-devicons",
+         },
+         config = function() require("nvim-tree").setup({}) end,
       },
    },
 })
