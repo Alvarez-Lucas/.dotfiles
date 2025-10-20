@@ -6,7 +6,7 @@ general:
     - shell-exec --hide-window powershell -command "taskkill /IM zebar.exe /F; zebar"
   focus_follows_cursor: false
   toggle_workspace_on_refocus: false
-  show_all_in_taskbar: false
+  show_all_in_taskbar: true
   cursor_jump:
     enabled: true
     trigger: window_focus   # Options: 'monitor_focus', 'window_focus'
@@ -100,9 +100,9 @@ workspaces:
   - name: '9'
     display_name: '9'
     bind_to_monitor: 1
-  # - name: "0"
-  #   display_name: "0"
-  #   bind_to_monitor: 1
+  - name: '0'
+    display_name: '0'
+    bind_to_monitor: 1
   - name: s
     display_name: Social
     bind_to_monitor: 1
@@ -132,6 +132,10 @@ window_rules:
   - commands: [set-floating --shown-on-top]
     match:
       - window_process: {equals: ShareX}
+  - commands: [ignore]
+    match:
+      - window_title: {equals: Command Palette}
+        window_class: {equals: WinUIDesktopWin32WindowClass}
 
         # Excel Find and Replace
   - commands: [set-floating]
@@ -467,14 +471,20 @@ keybindings:
     bindings: [alt+7]
   - commands: [move --workspace 7, focus --workspace 7]
     bindings: [alt+shift+7]
+
+    #
   - commands: [focus --workspace 8]
     bindings: [alt+8]
   - commands: [move --workspace 8, focus --workspace 8]
     bindings: [alt+shift+8]
+
+   #
   - commands: [focus --workspace 9]
     bindings: [alt+9]
   - commands: [move --workspace 9, focus --workspace 9]
     bindings: [alt+shift+9]
+
+  #
   - commands: [focus --workspace 0]
     bindings: [alt+0]
   - commands: [move --workspace 0, focus --workspace 0]

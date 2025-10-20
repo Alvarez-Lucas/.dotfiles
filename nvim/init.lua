@@ -837,7 +837,7 @@ require("lazy").setup({
                "<cmd>OtreeFocus<cr>",
             },
          },
-         branch = "feature/tab-scoped-directories",
+         -- branch = "feature/tab-scoped-directories",
          init = function()
             -- Lazy load on open of directory to hijack netrw (https://www.lazyvim.org/extras/editor/neo-tree)
             vim.api.nvim_create_autocmd("BufEnter", {
@@ -859,7 +859,7 @@ require("lazy").setup({
             "nvim-tree/nvim-web-devicons",
          },
          opts = {
-            win_size = 30,
+            win_size = 34,
             open_on_startup = false,
             hijack_netrw = true,
             show_hidden = false,
@@ -867,7 +867,7 @@ require("lazy").setup({
             cursorline = true,
             focus_on_enter = true,
             open_on_left = true,
-            git_signs = false,
+            git_signs = true,
             lsp_signs = false,
             oil = "float",
             ignore_patterns = {},
@@ -948,9 +948,9 @@ require("lazy").setup({
 
             float = {
                center = true,
-               width_ratio = 0.4,
+               width_ratio = 0.7,
                height_ratio = 0.7,
-               padding = 2,
+               padding = 0,
                cursorline = true,
                border = "rounded",
             },
@@ -1949,16 +1949,16 @@ require("lazy").setup({
                   },
                },
             },
-            dashboard = {
-               row = nil,
-               col = nil,
-               preset = {
-                  header = [[]],
-               },
-               sections = {
-                  { section = "header" },
-               },
-            },
+            -- dashboard = {
+            --    row = nil,
+            --    col = nil,
+            --    preset = {
+            --       header = [[]],
+            --    },
+            --    sections = {
+            --       { section = "header" },
+            --    },
+            -- },
             picker = {
                layout = {
                   cycle = true,
