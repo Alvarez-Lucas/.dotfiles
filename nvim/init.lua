@@ -639,7 +639,7 @@ require("lazy").setup({
       },
 
       {
-         enabled = false,
+         enabled = true,
          "nvim-neo-tree/neo-tree.nvim",
          branch = "v3.x",
          cmd = "Neotree",
@@ -826,6 +826,7 @@ require("lazy").setup({
 
       {
          -- "alvarez-lucas/Otree.nvim",
+         enabled = false,
          dir = "~/repos/Otree.nvim/",
          keys = {
             {
@@ -1648,11 +1649,11 @@ require("lazy").setup({
             -- ruff = {},
          end,
       },
+
       {
          "mrcjkb/rustaceanvim",
-         version = "^6", -- Recommended
-         ft = "rust",
          dependencies = { "neovim/nvim-lspconfig" },
+         lazy = false,
       },
 
       {
@@ -2605,6 +2606,7 @@ require("lazy").setup({
       },
 
       {
+         enabled = false,
          "nvim-tree/nvim-tree.lua",
          version = "*",
          lazy = false,
@@ -2612,6 +2614,15 @@ require("lazy").setup({
             "nvim-tree/nvim-web-devicons",
          },
          config = function() require("nvim-tree").setup({}) end,
+      },
+
+      {
+         "mrcjkb/rustaceanvim",
+         version = "^6", -- Recommended
+         lazy = false, -- This plugin is already lazy
+         filetype = {
+            "rust",
+         },
       },
    },
 })
