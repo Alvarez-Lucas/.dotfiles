@@ -426,10 +426,15 @@ require("lazy").setup({
       notify = false,
    },
    checker = { enabled = true },
+   rocks = {
+      enabled = true,
+      hererocks = true,
+   },
    ui = {
       border = "rounded",
       title = " Lazy Nvim ",
    },
+
    -- profiling = { require = true },
    performance = {
       rtp = {
