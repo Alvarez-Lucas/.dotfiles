@@ -2,7 +2,9 @@ vim.loader.enable(true)
 local g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
-local map = vim.keymap.set
+local fn = vim.fn
+local keymap = vim.keymap.set
+local api = vim.api
 
 -- local HEIGHT_RATIO = 0.8 -- Nvimtree
 -- local WIDTH_RATIO = 0.5
@@ -79,42 +81,42 @@ if g.neovide then
    g.neovide_padding_right = 8
    g.neovide_padding_left = 8
    local change_scale_factor = function(delta) g.neovide_scale_factor = g.neovide_scale_factor * delta end
-   map("n", "<C-=>", function() change_scale_factor(1.25) end)
-   map("n", "<C-->", function() change_scale_factor(1 / 1.25) end)
+   keymap("n", "<C-=>", function() change_scale_factor(1.25) end)
+   keymap("n", "<C-->", function() change_scale_factor(1 / 1.25) end)
 end
 
 -- System clipboard
-map({ "n", "v" }, "<leader>y", '"+y', defaultOpts) -- yank motion
-map({ "n", "v" }, "<leader>Y", '"+Y', defaultOpts) -- yank line
-map({ "n", "v" }, "<leader>d", '"+d', defaultOpts) -- delete motion
-map({ "n", "v" }, "<leader>D", '"+D', defaultOpts) -- delete line
-map("n", "<leader>p", '"+p', defaultOpts) -- paste after cursor
-map("n", "<leader>P", '"+P', defaultOpts) -- paste before cursor
-map("v", "<leader>p", '"+p', defaultOpts)
-map("n", "<Leader>xy", "<cmd>call setreg('+', getreg('@'))<CR>", defaultOpts)
+keymap({ "n", "v" }, "<leader>y", '"+y', defaultOpts) -- yank motion
+keymap({ "n", "v" }, "<leader>Y", '"+Y', defaultOpts) -- yank line
+keymap({ "n", "v" }, "<leader>d", '"+d', defaultOpts) -- delete motion
+keymap({ "n", "v" }, "<leader>D", '"+D', defaultOpts) -- delete line
+keymap("n", "<leader>p", '"+p', defaultOpts) -- paste after cursor
+keymap("n", "<leader>P", '"+P', defaultOpts) -- paste before cursor
+keymap("v", "<leader>p", '"+p', defaultOpts)
+keymap("n", "<Leader>xy", "<cmd>call setreg('+', getreg('@'))<CR>", defaultOpts)
 
-map("n", "<c-d>", "<c-d>zz", defaultOpts) -- Keep cursor line centered on page scroll
-map("n", "<c-u>", "<c-u>zz", defaultOpts)
+keymap("n", "<c-d>", "<c-d>zz", defaultOpts) -- Keep cursor line centered on page scroll
+keymap("n", "<c-u>", "<c-u>zz", defaultOpts)
 
-map("n", "n", "nzzzv")
-map("n", "N", "Nzzzv")
+keymap("n", "n", "nzzzv")
+keymap("n", "N", "Nzzzv")
 
-map("n", "J", "mzJ`z") -- TODO: Decide if this is worth it
+keymap("n", "J", "mzJ`z") -- TODO: Decide if this is worth it
 
 -- better up/down TODO: Still testing
-map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+keymap({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+keymap({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
-map("n", "<Esc>", "<cmd>nohlsearch<cr>", defaultOpts)
+keymap("n", "<Esc>", "<cmd>nohlsearch<cr>", defaultOpts)
 
-map("v", "p", '"_dP', defaultOpts) -- Keep register after paste
+keymap("v", "p", '"_dP', defaultOpts) -- Keep register after paste
 
-map("v", "Y", "y$", defaultOpts) -- Yank to end of line
+keymap("v", "Y", "y$", defaultOpts) -- Yank to end of line
 
-map("v", "<", "<gv")
-map("v", ">", ">gv")
+keymap("v", "<", "<gv")
+keymap("v", ">", ">gv")
 
 -- TODO: Add todo plugin and snack binding for todos and jumps for todos
 
@@ -129,41 +131,44 @@ map("v", ">", ">gv")
 -- 	Snacks.toggle.inlay_hints():map("<leader>uh")
 -- end
 
-map("n", "<leader>Ui", vim.show_pos, { desc = "Inspect Pos" })
-map("n", "<leader>UI", function()
+keymap("n", "<leader>Ui", vim.show_pos, { desc = "Inspect Pos" })
+keymap("n", "<leader>UI", function()
    vim.treesitter.inspect_tree()
    vim.api.nvim_input("I")
 end, { desc = "Inspect Tree" })
 
 -- better indenting
 
-map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
-map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
-map("n", "ycc", "yygccp", { remap = true, desc = "Copy And Comment" })
+keymap("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
+keymap("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
+keymap("n", "ycc", "yygccp", { remap = true, desc = "Copy And Comment" })
 
-map("n", "<leader>xl", function()
+keymap("n", "<leader>xl", function()
    local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
    if not success and err then vim.notify(err, vim.log.levels.ERROR) end
 end, { desc = "Location List" })
 
 -- -- quickfix list
-map("n", "<leader>xq", function()
+keymap("n", "<leader>xq", function()
    local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
    if not success and err then vim.notify(err, vim.log.levels.ERROR) end
 end, { desc = "Quickfix List" })
 
-map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
-map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
+keymap("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
+keymap("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
-map("v", "J", ":m '>+1<cr>gv=gv") -- Move Text
-map("v", "K", ":m '<-2<cr>gv=gv")
+keymap("v", "J", ":m '>+1<cr>gv=gv") -- Move Text
+keymap("v", "K", ":m '<-2<cr>gv=gv")
 
-map("n", "<bs>", "<C-^>", defaultOpts) -- Quick switch to previous buffer
+keymap("n", "<bs>", "<C-^>", defaultOpts) -- Quick switch to previous buffer
 
-map("n", "H", "<cmd>bprevious<cr>", defaultOpts) -- Navidate buffers
-map("n", "L", "<cmd>bnext<cr>", defaultOpts)
+keymap("n", "H", "<cmd>bprevious<cr>", defaultOpts) -- Navidate buffers
+keymap("n", "L", "<cmd>bnext<cr>", defaultOpts)
 
-map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
+keymap("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
+
+keymap("n", "<Leader>;", "m`A;<Esc>``", { noremap = true, silent = true })
+keymap("n", "<Leader>,", "m`A,<Esc>``", { noremap = true, silent = true })
 
 -- map("n", "<tab>", "<tab>", { noremap = true })
 
@@ -181,66 +186,77 @@ map("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
 -- map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 -- map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
 -- map("n", "<leader><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
-map("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
-map("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
+keymap("n", "<leader>th", "<cmd>tabfirst<cr>", { desc = "First Tab" })
+keymap("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
 -- map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab", noremap = true, silent = true })
 -- map("n", "<S-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab", noremap = true, silent = true })
 
-map("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+keymap("n", "<leader><tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+keymap("n", "<leader><s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 -- map("n", "<leader>t<leader>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
 -- map("n", "<leader><bs>", "<cmd>tabnext #<cr>", { desc = "Next Tab" })
-map("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
-map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
-map("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
+keymap("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
+keymap("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
+keymap("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
 
-map("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
-map("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
-map("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
-map("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
+keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
+keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
+keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
 --
-map("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
-map("n", "<C-j>", "<C-w><C-j>", defaultOpts)
-map("n", "<C-k>", "<C-w><C-k>", defaultOpts)
-map("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+keymap("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
+keymap("n", "<C-j>", "<C-w><C-j>", defaultOpts)
+keymap("n", "<C-k>", "<C-w><C-k>", defaultOpts)
+keymap("n", "<C-l>", "<C-w><C-l>", defaultOpts)
 
-map("t", "<left>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
-map("t", "<down>", "<C-\\><C-N><C-w>j", defaultOpts)
-map("t", "<up>", "<C-\\><C-N><C-w>k", defaultOpts)
-map("t", "<right>", "<C-\\><C-N><C-w>l", defaultOpts)
+keymap("t", "<left>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
+keymap("t", "<down>", "<C-\\><C-N><C-w>j", defaultOpts)
+keymap("t", "<up>", "<C-\\><C-N><C-w>k", defaultOpts)
+keymap("t", "<right>", "<C-\\><C-N><C-w>l", defaultOpts)
 
-map("n", "<left>", "<C-w><C-h>", defaultOpts) -- Navigate split
-map("n", "<down>", "<C-w><C-j>", defaultOpts)
-map("n", "<up>", "<C-w><C-k>", defaultOpts)
-map("n", "<right>", "<C-w><C-l>", defaultOpts)
+keymap("n", "<left>", "<C-w><C-h>", defaultOpts) -- Navigate split
+keymap("n", "<down>", "<C-w><C-j>", defaultOpts)
+keymap("n", "<up>", "<C-w><C-k>", defaultOpts)
+keymap("n", "<right>", "<C-w><C-l>", defaultOpts)
 
-map("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts) -- Create veritcal and horizontal split
-map("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>", defaultOpts)
-map("n", "<leader>oK", "<cmd>set nosplitright<cr><cmd>split<cr><C-w><c-k>", defaultOpts)
-map("n", "<leader>oH", "<cmd>set nosplitbelow<cr><cmd>vsplit<cr><C-w><c-h>", defaultOpts)
+keymap("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts) -- Create veritcal and horizontal split
+keymap("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>", defaultOpts)
+keymap("n", "<leader>oK", "<cmd>set nosplitright<cr><cmd>split<cr><C-w><c-k>", defaultOpts)
+keymap("n", "<leader>oH", "<cmd>set nosplitbelow<cr><cmd>vsplit<cr><C-w><c-h>", defaultOpts)
 
-map("n", "<C-Up>", "<cmd>resize -5<CR>", defaultOpts) -- Resize split
-map("n", "<C-Down>", "<cmd>resize +5<CR>", defaultOpts)
-map("n", "<C-Left>", "<cmd>vertical resize -5<CR>", defaultOpts)
-map("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
+keymap("n", "<C-Up>", "<cmd>resize -5<CR>", defaultOpts) -- Resize split
+keymap("n", "<C-Down>", "<cmd>resize +5<CR>", defaultOpts)
+keymap("n", "<C-Left>", "<cmd>vertical resize -5<CR>", defaultOpts)
+keymap("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
 
 -- map("t", "<Esc>", "<C-\\><C-N>", defaultOpts)
-map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+keymap("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
-map("n", "<leader>la", "<cmd>Lazy<cr>", defaultOpts)
+keymap("n", "<leader>la", "<cmd>Lazy<cr>", defaultOpts)
+
+function _G.get_oil_winbar()
+   local bufnr = api.nvim_win_get_buf(g.statusline_winid)
+   local dir = require("oil").get_current_dir(bufnr)
+   if dir then
+      return vim.fn.fnamemodify(dir, ":~")
+   else
+      -- If there is no current directory (e.g. over ssh), just show the buffer name
+      return vim.api.nvim_buf_get_name(0)
+   end
+end
 
 -- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+   local out = fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
    if vim.v.shell_error ~= 0 then
       vim.api.nvim_echo({
          { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
          { out, "WarningMsg" },
          { "\nPress any key to exit..." },
       }, true, {})
-      vim.fn.getchar()
+      fn.getchar()
       os.exit(1)
    end
 end
@@ -342,7 +358,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
    callback = function(event)
       if event.match:match("^%w%w+:[\\/][\\/]") then return end
       local file = vim.uv.fs_realpath(event.match) or event.match
-      vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+      fn.mkdir(fn.fnamemodify(file, ":p:h"), "p")
    end,
 })
 
@@ -524,6 +540,10 @@ require("lazy").setup({
                   vim.api.nvim_set_hl(0, "IblIndent", { fg = pallete.hilite_mid })
                   vim.api.nvim_set_hl(0, "IblScope", { fg = pallete.cyan })
 
+                  vim.api.nvim_set_hl(0, "BlinkIndent", { fg = pallete.hilite_mid })
+                  vim.api.nvim_set_hl(0, "BlinkIndentScope", { fg = pallete.cyan })
+                  vim.api.nvim_set_hl(0, "BlinkIndentScopeUnderline", { sp = pallete.cyan, underline = true })
+
                   vim.api.nvim_set_hl(0, "Headline1", { bg = "#f4feff" })
                   vim.api.nvim_set_hl(0, "Headline2", { bg = "#fefaff" })
                   vim.api.nvim_set_hl(0, "Headline3", { bg = "#f4feff" })
@@ -644,187 +664,542 @@ require("lazy").setup({
       },
 
       {
-         enabled = true,
-         "nvim-neo-tree/neo-tree.nvim",
-         branch = "v3.x",
-         cmd = "Neotree",
+         enabled = false,
+         "nvim-tree/nvim-tree.lua",
+         version = "*",
+         lazy = false,
          keys = {
             {
                "<leader>e",
-               "<cmd>Neotree source=filesystem action=focus toggle=true position=left<cr>",
+               "<cmd>NvimTreeToggle<cr>",
+               -- `api.tree.toggle({ path = "<args>", update_root = <bang>, find_file = true, focus = true, })`
             },
             {
                "<leader>E",
-               "<cmd>Neotree source=filesystem action=focus toggle=true reveal=true position=left<cr>",
-            },
-            -- {
-            --    "<leader>g",
-            --    "<cmd>Neotree source=git_status action=focus toggle=true position=left<cr>",
-            -- },
-            -- { "<leader>cs", "<cmd>Neotree toggle float reveal symbols<cr>" },
-            {
-               "<leader>.",
-               "<cmd>Neotree source=buffers toggle=true reveal=true position=left<cr>",
+               function() require("nvim-tree.api").tree.toggle({ find_file = true, focus = true }) end,
             },
             {
                "<leader>ne",
-               "<cmd>Neotree focus float dir=~/notes/<cr>",
+               function()
+                  require("nvim-tree.api").tree.open({ path = fn.expand("~/vaults/notes/"), update_root = false })
+               end,
                desc = "Find Neorg Files",
             },
             {
                "<leader>nje",
-               "<cmd>Neotree focus float dir=~/notes/journal/<cr>",
+               function()
+                  require("nvim-tree.api").tree.open({
+                     path = fn.expand("~/vaults/notes/journal/"),
+                     update_root = false,
+                  })
+               end,
                desc = "Find Neorg Files",
             },
          },
-         init = function()
-            -- Lazy load on open of directory to hijack netrw (https://www.lazyvim.org/extras/editor/neo-tree)
-            vim.api.nvim_create_autocmd("BufEnter", {
-               group = vim.api.nvim_create_augroup("Neotree_start_directory", { clear = true }),
-               desc = "Start Neo-tree with directory",
-               once = true,
-               callback = function()
-                  if package.loaded["neo-tree"] then
-                     return
-                  else
-                     local stats = vim.uv.fs_stat(vim.fn.argv(0))
-                     if stats and stats.type == "directory" then require("neo-tree") end
-                  end
-               end,
-            })
-         end,
-         ---@module "neo-tree"
-         ---@type neotree.Config?
+         dependencies = {
+            "nvim-tree/nvim-web-devicons",
+         },
+         opts = { -- BEGIN_DEFAULT_OPTS
+            on_attach = function(bufnr)
+               local opts = function(desc)
+                  return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+               end
+               local api = require("nvim-tree.api")
+               -- keymap("n", "<C-]>", nvimTreeApi.tree.change_root_to_node, defaultNvimTreeOpts("CD"))
+               -- keymap("n", "<C-e>", nvimTreeApi.node.open.replace_tree_buffer, defaultNvimTreeOpts("Open: In Place"))
+               -- remove a default
+               -- vim.keymap.del("n", "<C-]>", { buffer = bufnr })
+               -- override a default
+               -- vim.keymap.set("n", "<C-e>", api.tree.reload, opts("Refresh"))
+               -- add your mappings
+               keymap("n", "?", api.tree.toggle_help, opts("Help"))
+               keymap("n", "<C-]>", api.tree.change_root_to_node, opts("CD"))
+               keymap("n", "<C-e>", api.node.open.replace_tree_buffer, opts("Open: In Place"))
+               keymap("n", "<C-k>", api.node.show_info_popup, opts("Info"))
+               keymap("n", "<C-r>", api.fs.rename_sub, opts("Rename: Omit Filename"))
+               keymap("n", "<C-t>", api.node.open.tab, opts("Open: New Tab"))
+               keymap("n", "<C-v>", api.node.open.vertical, opts("Open: Vertical Split"))
+               keymap("n", "<C-x>", api.node.open.horizontal, opts("Open: Horizontal Split"))
+               keymap("n", "<BS>", api.node.navigate.parent_close, opts("Close Directory"))
+               keymap("n", "<CR>", api.node.open.edit, opts("Open"))
+               keymap("n", "<Tab>", api.node.open.preview, opts("Open Preview"))
+               keymap("n", ">", api.node.navigate.sibling.next, opts("Next Sibling"))
+               keymap("n", "<", api.node.navigate.sibling.prev, opts("Previous Sibling"))
+               keymap("n", ".", api.node.run.cmd, opts("Run Command"))
+               keymap("n", "-", api.tree.change_root_to_parent, opts("Up"))
+               keymap("n", "a", api.fs.create, opts("Create File Or Directory"))
+               keymap("n", "bd", api.marks.bulk.delete, opts("Delete Bookmarked"))
+               keymap("n", "bt", api.marks.bulk.trash, opts("Trash Bookmarked"))
+               keymap("n", "bmv", api.marks.bulk.move, opts("Move Bookmarked"))
+               keymap("n", "B", api.tree.toggle_no_buffer_filter, opts("Toggle Filter: No Buffer"))
+               keymap("n", "c", api.fs.copy.node, opts("Copy"))
+               keymap("n", "C", api.tree.toggle_git_clean_filter, opts("Toggle Filter: Git Clean"))
+               keymap("n", "[c", api.node.navigate.git.prev, opts("Prev Git"))
+               keymap("n", "]c", api.node.navigate.git.next, opts("Next Git"))
+               keymap("n", "d", api.fs.remove, opts("Delete"))
+               keymap("n", "D", api.fs.trash, opts("Trash"))
+               keymap("n", "E", api.tree.expand_all, opts("Expand All"))
+               keymap("n", "e", api.fs.rename_basename, opts("Rename: Basename"))
+               keymap("n", "]e", api.node.navigate.diagnostics.next, opts("Next Diagnostic"))
+               keymap("n", "[e", api.node.navigate.diagnostics.prev, opts("Prev Diagnostic"))
+               keymap("n", "F", api.live_filter.clear, opts("Live Filter: Clear"))
+               keymap("n", "f", api.live_filter.start, opts("Live Filter: Start"))
+               keymap("n", "g?", api.tree.toggle_help, opts("Help"))
+               keymap("n", "gy", api.fs.copy.absolute_path, opts("Copy Absolute Path"))
+               keymap("n", "ge", api.fs.copy.basename, opts("Copy Basename"))
+               keymap("n", "I", api.tree.toggle_gitignore_filter, opts("Toggle Filter: Git Ignore"))
+               keymap("n", "J", api.node.navigate.sibling.last, opts("Last Sibling"))
+               keymap("n", "K", api.node.navigate.sibling.first, opts("First Sibling"))
+               keymap("n", "M", api.tree.toggle_no_bookmark_filter, opts("Toggle Filter: No Bookmark"))
+               keymap("n", "m", api.marks.toggle, opts("Toggle Bookmark"))
+               keymap("n", "o", api.node.open.edit, opts("Open"))
+               keymap("n", "O", api.node.open.no_window_picker, opts("Open: No Window Picker"))
+               keymap("n", "p", api.fs.paste, opts("Paste"))
+               keymap("n", "P", api.node.navigate.parent, opts("Parent Directory"))
+               keymap("n", "q", api.tree.close, opts("Close"))
+               keymap("n", "r", api.fs.rename, opts("Rename"))
+               keymap("n", "R", api.tree.reload, opts("Refresh"))
+               keymap("n", "s", api.node.run.system, opts("Run System"))
+               keymap("n", "S", api.tree.search_node, opts("Search"))
+               keymap("n", "u", api.fs.rename_full, opts("Rename: Full Path"))
+               keymap("n", "U", api.tree.toggle_custom_filter, opts("Toggle Filter: Hidden"))
+               keymap("n", "W", api.tree.collapse_all, opts("Collapse All"))
+               keymap("n", "x", api.fs.cut, opts("Cut"))
+               keymap("n", "y", api.fs.copy.filename, opts("Copy Name"))
+               keymap("n", "Y", api.fs.copy.relative_path, opts("Copy Relative Path"))
+               keymap("n", "<2-LeftMouse>", api.node.open.edit, opts("Open"))
+               keymap("n", "<2-RightMouse>", api.tree.change_root_to_node, opts("CD"))
+
+               -- keymap("n", "H", api.tree.toggle_hidden_filter, opts("Toggle Filter: Dotfiles"))
+               -- keymap("n", "L", api.node.open.toggle_group_empty, opts("Toggle Group Empty"))
+
+               keymap("n", "l", edit_or_open, opts("Edit Or Open"))
+               keymap("n", "L", vsplit_preview, opts("Vsplit Preview"))
+               keymap("n", "h", api.tree.close, opts("Close"))
+               keymap("n", "H", api.tree.collapse_all, opts("Collapse All"))
+            end,
+            hijack_cursor = false,
+            auto_reload_on_write = true,
+            disable_netrw = false,
+            hijack_netrw = true,
+            hijack_unnamed_buffer_when_opening = false,
+            root_dirs = {},
+            prefer_startup_root = false,
+            sync_root_with_cwd = true, -- default: false
+            reload_on_bufenter = false, -- default: false
+            respect_buf_cwd = false,
+            select_prompts = false,
+            sort = {
+               sorter = "name",
+               folders_first = true,
+               files_first = false,
+            },
+            view = {
+               centralize_selection = false,
+               cursorline = true,
+               cursorlineopt = "both",
+               debounce_delay = 15,
+               side = "left",
+               preserve_window_proportions = false,
+               number = false,
+               relativenumber = false,
+               signcolumn = "yes",
+               width = 30,
+               float = {
+                  enable = false,
+                  quit_on_focus_loss = true,
+                  open_win_config = {
+                     relative = "editor",
+                     border = "rounded",
+                     width = 32, -- default: 30
+                     height = 30,
+                     row = 1,
+                     col = 1,
+                  },
+               },
+            },
+            renderer = {
+               add_trailing = true, -- default: false
+               group_empty = false,
+               full_name = false,
+               root_folder_label = ":~:s?$?/..?",
+               indent_width = 3, -- default: 2
+               special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md" },
+               hidden_display = "simple", -- default: none
+               symlink_destination = true,
+               decorators = { "Git", "Open", "Hidden", "Modified", "Bookmark", "Diagnostics", "Copied", "Cut" },
+               highlight_git = "none",
+               highlight_diagnostics = "none",
+               highlight_opened_files = "none",
+               highlight_modified = "none",
+               highlight_hidden = "none",
+               highlight_bookmarks = "none",
+               highlight_clipboard = "name",
+               indent_markers = {
+                  enable = false,
+                  inline_arrows = true,
+                  icons = {
+                     corner = "└",
+                     edge = "│",
+                     item = "│",
+                     bottom = "─",
+                     none = " ",
+                  },
+               },
+               icons = {
+                  web_devicons = {
+                     file = {
+                        enable = true,
+                        color = true,
+                     },
+                     folder = {
+                        enable = false,
+                        color = true,
+                     },
+                  },
+                  git_placement = "before",
+                  modified_placement = "after",
+                  hidden_placement = "after",
+                  diagnostics_placement = "signcolumn",
+                  bookmarks_placement = "signcolumn",
+                  padding = {
+                     icon = " ",
+                     folder_arrow = " ",
+                  },
+                  symlink_arrow = " ➛ ",
+                  show = {
+                     file = true,
+                     folder = true,
+                     folder_arrow = true,
+                     git = true,
+                     modified = true,
+                     hidden = false,
+                     diagnostics = true,
+                     bookmarks = true,
+                  },
+                  glyphs = {
+                     default = "",
+                     symlink = "",
+                     bookmark = "󰆤",
+                     modified = "●",
+                     hidden = "󰜌",
+                     folder = {
+                        arrow_closed = "",
+                        arrow_open = "",
+                        default = "",
+                        open = "",
+                        empty = "",
+                        empty_open = "",
+                        symlink = "",
+                        symlink_open = "",
+                     },
+                     git = {
+                        unstaged = "✗",
+                        staged = "✓",
+                        unmerged = "",
+                        renamed = "➜",
+                        untracked = "★",
+                        deleted = "",
+                        ignored = "◌",
+                     },
+                  },
+               },
+            },
+            hijack_directories = {
+               enable = true,
+               auto_open = true,
+            },
+            update_focused_file = {
+               enable = false,
+               update_root = {
+                  enable = false,
+                  ignore_list = {},
+               },
+               exclude = false,
+            },
+            system_open = {
+               cmd = "",
+               args = {},
+            },
+            git = {
+               enable = false, -- default: true
+               show_on_dirs = true,
+               show_on_open_dirs = true,
+               disable_for_dirs = {},
+               timeout = 400,
+               cygwin_support = false,
+            },
+            diagnostics = {
+               enable = false,
+               show_on_dirs = false,
+               show_on_open_dirs = true,
+               debounce_delay = 500,
+               severity = {
+                  min = vim.diagnostic.severity.HINT,
+                  max = vim.diagnostic.severity.ERROR,
+               },
+               icons = {
+                  hint = "",
+                  info = "",
+                  warning = "",
+                  error = "",
+               },
+            },
+            modified = {
+               enable = false,
+               show_on_dirs = true,
+               show_on_open_dirs = true,
+            },
+            filters = {
+               enable = true,
+               git_ignored = true,
+               dotfiles = false,
+               git_clean = false,
+               no_buffer = false,
+               no_bookmark = false,
+               custom = {},
+               exclude = {},
+            },
+            live_filter = {
+               prefix = "[FILTER]: ",
+               always_show_folders = true,
+            },
+            filesystem_watchers = {
+               enable = true,
+               debounce_delay = 50,
+               ignore_dirs = {
+                  "/.ccls-cache",
+                  "/build",
+                  "/node_modules",
+                  "/target",
+               },
+            },
+            actions = {
+               use_system_clipboard = true,
+               change_dir = {
+                  enable = true,
+                  global = false,
+                  restrict_above_cwd = false,
+               },
+               expand_all = {
+                  max_folder_discovery = 300,
+                  exclude = { ".git", "target", "build" }, -- default: {}
+               },
+               file_popup = {
+                  open_win_config = {
+                     col = 1,
+                     row = 1,
+                     relative = "cursor",
+                     border = "shadow",
+                     style = "minimal",
+                  },
+               },
+               open_file = {
+                  quit_on_open = true, -- defualt: false
+                  eject = true,
+                  resize_window = true,
+                  relative_path = true,
+                  window_picker = {
+                     enable = true,
+                     picker = "default",
+                     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+                     exclude = {
+                        filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
+                        buftype = { "nofile", "terminal", "help" },
+                     },
+                  },
+               },
+               remove_file = {
+                  close_window = true,
+               },
+            },
+            trash = {
+               cmd = "gio trash",
+            },
+            tab = {
+               sync = {
+                  open = false,
+                  close = false,
+                  ignore = {},
+               },
+            },
+            notify = {
+               threshold = vim.log.levels.INFO,
+               absolute_path = true,
+            },
+            help = {
+               sort_by = "key",
+            },
+            ui = {
+               confirm = {
+                  remove = true,
+                  trash = true,
+                  default_yes = false,
+               },
+            },
+            experimental = {},
+            log = {
+               enable = false,
+               truncate = false,
+               types = {
+                  all = false,
+                  config = false,
+                  copy_paste = false,
+                  dev = false,
+                  diagnostics = false,
+                  git = false,
+                  profile = false,
+                  watcher = false,
+               },
+            },
+         }, -- END_DEFAULT_OPTS
+      },
+
+      {
+         "stevearc/oil.nvim",
+         lazy = false,
+         keys = {
+            {
+               "<leader>e",
+               "<cmd>Oil --float<cr>",
+               -- function() vim.bo.filetype = "Oil" and cmd("Oil") or cmd("Oil") end,
+            },
+
+            {
+               "<leader>E",
+               function() require("oil.actions").open_cwd({}) end,
+            },
+         },
          opts = {
-            sources = {
-               "filesystem",
-               "buffers",
-               "git_status",
+            default_file_explorer = true,
+            columns = {
+               "icon",
+               "mtime",
             },
-            use_popups_for_input = false,
-            -- enable_normal_mode_for_inputs = true, -- TODO: Find alternative
-            retain_hidden_root_indent = true,
-            popup_border_style = "rounded",
-            sort_case_insensitive = true,
-            window = {
-               mappings = {
-                  ["E"] = function()
-                     vim.api.nvim_exec2("Neotree action=close", { output = true })
-                     vim.api.nvim_exec2(
-                        "Neotree action=focus source=filesystem reveal=true position=left",
-                        { output = true }
-                     )
-                  end,
-                  ["e"] = function()
-                     vim.api.nvim_exec2("Neotree action=close", { output = true })
-                     vim.api.nvim_exec2("Neotree action=focus source=filesystem position=left", { output = true })
-                  end,
-                  ["b"] = function()
-                     vim.api.nvim_exec2("Neotree action=close", { output = true })
-                     vim.api.nvim_exec2(
-                        "Neotree action=focus source=buffers position=left reveal=true",
-                        { output = true }
-                     )
-                  end,
-                  ["gs"] = function()
-                     vim.api.nvim_exec2("Neotree action=close", { output = true })
-                     vim.api.nvim_exec2("Neotree action=focus source=git_status position=left", { output = true })
-                  end,
-                  ["h"] = function(state)
-                     local node = state.tree:get_node()
-                     if node.type == "directory" and node:is_expanded() then
-                        require("neo-tree.sources.filesystem").toggle_directory(state, node)
-                     else
-                        require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
-                     end
-                  end,
-                  ["l"] = function(state)
-                     local node = state.tree:get_node()
-                     if node.type == "directory" then
-                        if not node:is_expanded() then
-                           require("neo-tree.sources.filesystem").toggle_directory(state, node)
-                        elseif node:has_children() then
-                           require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
-                        end
-                     else
-                        require("neo-tree.sources.filesystem.commands").open(state)
-                     end
-                  end,
-                  ["/"] = "noop",
-                  ["<esc>"] = function()
-                     require("neo-tree.command").execute({
-                        action = "close",
-                     })
-                  end,
-               },
+            -- Buffer-local options to use for oil buffers
+            buf_options = {
+               buflisted = false,
+               bufhidden = "hide",
             },
-            close_if_last_window = true,
-            default_component_configs = {
-               indent = {
-                  with_markers = false,
-                  with_expanders = true,
-               },
-               last_modified = {
-                  format = "relative",
-               },
+            -- Window-local options to use for oil buffers
+            win_options = {
+               wrap = true, -- default: false
+               signcolumn = "no",
+               cursorcolumn = false,
+               foldcolumn = "0",
+               spell = false,
+               list = false,
+               conceallevel = 3,
+               concealcursor = "nvic",
+               winbar = "%!v:lua.get_oil_winbar()",
             },
-            filesystem = {
-               filtered_items = {
-                  visible = true,
-                  hide_dotfiles = false,
-               },
-               hijack_netrw_behavior = "open_current",
-               use_libuv_file_watcher = false,
-               async_directory_scan = "always",
-               group_empty_dirs = false,
-               find_by_full_path_words = true,
-               window = {
-                  mappings = {
-                     ["a"] = {
-                        "add",
-                        config = {
-                           show_path = "relative", -- "none", "relative", "absolute"
-                        },
-                     },
-                     ["i"] = {
-                        "show_file_details",
-                        config = {
-                           created_format = "relative",
-                           modified_format = "relative",
-                        },
-                     },
-                  },
-                  fuzzy_finder_mappings = {
-                     ["<C-j>"] = "move_cursor_down",
-                     ["<C-k>"] = "move_cursor_up",
-                  },
+            -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
+            delete_to_trash = true, -- default: false
+            -- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)
+            skip_confirm_for_simple_edits = true, -- default: false
+            -- Selecting a new/moved/renamed file or directory will prompt you to save changes first
+            -- (:help prompt_save_on_select_new_entry)
+            prompt_save_on_select_new_entry = true,
+            -- Oil will automatically delete hidden buffers after this delay
+            -- You can set the delay to false to disable cleanup entirely
+            -- Note that the cleanup process only starts when none of the oil buffers are currently displayed
+            cleanup_delay_ms = 2000,
+            lsp_file_methods = {
+               -- Enable or disable LSP file operations
+               enabled = true,
+               -- Time to wait for LSP file operations to complete before skipping
+               timeout_ms = 1000,
+               -- Set to true to autosave buffers that are updated with LSP willRenameFiles
+               -- Set to "unmodified" to only save unmodified buffers
+               autosave_changes = false,
+            },
+            -- Constrain the cursor to the editable parts of the oil buffer
+            -- Set to `false` to disable, or "name" to keep it on the file names
+            constrain_cursor = "editable",
+            -- Set to true to watch the filesystem for changes and reload oil
+            watch_for_changes = false,
+            -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
+            -- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
+            -- Additionally, if it is a string that matches "actions.<name>",
+            -- it will use the mapping at require("oil.actions").<name>
+            -- Set to `false` to remove a keymap
+            -- See :help oil-actions for a list of all available actions
+            keymaps = {
+               ["g?"] = { "actions.show_help", mode = "n" },
+               ["<CR>"] = "actions.select",
+               -- ["<C-s>"] = { "actions.select", opts = { vertical = true } },
+               -- ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+               -- ["<C-t>"] = { "actions.select", opts = { tab = true } },
+               -- ["<C-p>"] = "actions.preview",
+               -- ["<C-c>"] = { "actions.close", mode = "n" },
+               ["q"] = { "actions.close", mode = "n" },
+               ["<leader>e"] = { "actions.close", mode = "n" },
+               ["<C-l>"] = "actions.refresh",
+               -- ["-"] = { "actions.parent", mode = "n" },
+               ["<bs>"] = { "actions.parent", mode = "n" },
+               ["<leader><bs>"] = { "actions.open_cwd", mode = "n" },
+               -- ["`"] = { "actions.cd", mode = "n" },
+               ["<leader><leader>"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+               -- ["gs"] = { "actions.change_sort", mode = "n" },
+               ["gx"] = "actions.open_external",
+               ["g."] = { "actions.toggle_hidden", mode = "n" },
+               -- ["g\\"] = { "actions.toggle_trash", mode = "n" },
+            },
+            -- Set to false to disable all of the above keymaps
+            use_default_keymaps = true,
+            view_options = {
+               show_hidden = true,
+               -- This function defines what will never be shown, even when `show_hidden` is set
+               is_always_hidden = function(name, bufnr) return false end,
+               natural_order = "fast",
+               case_insensitive = false,
+               sort = {
+                  { "type", "asc" },
+                  { "name", "asc" },
                },
             },
-            buffers = {
-               follow_current_file = {
-                  enabled = true,
-               },
-               window = {
-                  mappings = {
-                     ["d"] = "buffer_delete",
-                     ["i"] = {
-                        "show_file_details",
-                        config = {
-                           created_format = "relative",
-                           modified_format = "relative",
-                        },
-                     },
-                  },
+            -- EXPERIMENTAL support for performing file operations with git
+            git = {
+               -- Return true to automatically git add/mv/rm files
+               add = function(path) return false end,
+               mv = function(src_path, dest_path) return false end,
+               rm = function(path) return false end,
+            },
+            float = {
+               -- Padding around the floating window
+               padding = 5,
+               -- max_width and max_height can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+               max_width = 80,
+               max_height = 0,
+               border = "rounded",
+               get_win_title = function(winid) return fn.fnamemodify(fn.getcwd(0, 0), ":~") end,
+               -- get_win_title = function(winid) return "" end,
+               preview_split = "auto",
+               override = function(conf) return conf end,
+            },
+            -- Configuration for the file preview window
+            preview_win = {
+               update_on_cursor_moved = true,
+               preview_method = "fast_scratch",
+               disable_preview = function(filename) return false end,
+               win_options = {},
+            },
+            -- Configuration for the floating progress window
+            progress = {
+               max_width = 0.9,
+               min_width = { 40, 0.4 },
+               width = nil,
+               max_height = { 10, 0.9 },
+               min_height = { 5, 0.1 },
+               height = nil,
+               border = nil,
+               minimized_border = "none",
+               win_options = {
+                  winblend = 0,
                },
             },
-            event_handlers = {
-               {
-                  event = "file_opened",
-                  handler = function(_)
-                     -- do something, the value of arg varies by event.
-                     -- vim.cmd("Neotree close")
-                  end,
-               },
+            keymaps_help = {
+               border = nil,
             },
          },
       },
@@ -1144,6 +1519,7 @@ require("lazy").setup({
       -- },
 
       {
+         enabled = false,
          "nvim-treesitter/nvim-treesitter", --nvim-treesitter/nvim-treesitter-context, HiPhish/rainbow-delimiters.nvim, windwp/nvim-autopairs
          event = { "LazyFile", "VeryLazy" },
          lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
@@ -1187,7 +1563,6 @@ require("lazy").setup({
                   "json5",
                   "jsonc",
                   "lua",
-                  "lua",
                   "luadoc",
                   "luap",
                   "luau",
@@ -1218,6 +1593,8 @@ require("lazy").setup({
                   "xresources",
                   "yaml",
                   "slint",
+                  "qmldir",
+                  "qmljs",
                },
                sync_install = false,
                highlight = { enable = true },
@@ -1250,6 +1627,7 @@ require("lazy").setup({
       },
 
       {
+         enabled = false,
          "Darazaki/indent-o-matic",
          lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          -- also set as dependency for hlchunk.nvim { "VeryLazy", "LazyFile" }
@@ -1265,6 +1643,70 @@ require("lazy").setup({
       },
 
       {
+         "saghen/blink.indent",
+         enabled = false,
+         event = "LazyFile",
+         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         --- @module 'blink.indent'
+         --- @type blink.indent.Config
+         opts = {
+            blocked = {
+               buftypes = { include_defaults = true }, -- default: 'terminal', 'quickfix', 'nofile', 'prompt'
+               filetypes = { include_defaults = true }, -- default: 'lspinfo', 'packer', 'checkhealth', 'help', 'man', 'gitcommit', 'dashboard', ''
+            },
+            static = {
+               enabled = true,
+               -- char = "▎",
+               char = "│",
+               -- char = "▏",
+               priority = 1,
+               -- specify multiple highlights here for rainbow-style indent guides
+               -- highlights = {
+               --    "RainbowDelimiterRed",
+               --    "RainbowDelimiterYellow",
+               --    "RainbowDelimiterBlue",
+               --    "RainbowDelimiterOrange",
+               --    "RainbowDelimiterGreen",
+               --    "RainbowDelimiterViolet",
+               --    "RainbowDelimiterCyan",
+               -- },
+               -- highlights = {
+               --    "BlinkIndentRed",
+               --    "BlinkIndentOrange",
+               --    "BlinkIndentYellow",
+               --    "BlinkIndentGreen",
+               --    "BlinkIndentViolet",
+               --    "BlinkIndentCyan",
+               -- },
+               -- highlights = { "BlinkIndent" },
+               highlights = { "BlinkIndent" },
+            },
+            scope = {
+               enabled = true,
+               char = "│",
+               priority = 1000,
+               -- highlights = { "BlinkIndentOrange", "BlinkIndentOrange", "BlinkIndentOrange" },
+               highlights = { "BlinkIndentScope" },
+               -- highlights = { {fg = "#028a9b"}, "BlinkIndentOrange", "BlinkIndentOrange" },
+               -- enable to show underlines on the line above the current scope
+               underline = {
+                  enabled = true,
+                  -- optionally add: 'BlinkIndentRedUnderline', 'BlinkIndentCyanUnderline', 'BlinkIndentYellowUnderline', 'BlinkIndentGreenUnderline'
+                  highlights = {
+                     { "BlinkIndentScopeUnderline" },
+                     -- "BlinkIndentOrangeUnderline",
+                     -- "BlinkIndentVioletUnderline",
+                     -- "BlinkIndentBlueUnderline",
+                  },
+               },
+            },
+         },
+
+         --
+      },
+
+      {
+         enabled = false,
          lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          event = { "VeryLazy", "LazyFile" },
          "shellRaining/hlchunk.nvim",
@@ -1399,6 +1841,8 @@ require("lazy").setup({
                "clangd",
                "neocmake",
                "slint_lsp",
+               "qmlls",
+               "marksman",
                -- ruff = {},
             },
          },
@@ -1452,63 +1896,63 @@ require("lazy").setup({
                callback = function(event)
                   -- TODO: Check what server is attaching, don't use keybinds for Rust, add Rust keybinds in rust plugin
 
-                  map(
+                  keymap(
                      "n",
                      "grr",
                      function() require("snacks.picker").lsp_references() end,
                      { buffer = event.buf, desc = "[G]oto [R]eferences" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "gra",
                      function() vim.lsp.buf.code_action() end,
                      { buffer = event.buf, desc = "[G]oto Code [A]ction" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "grr",
                      function() require("snacks.picker").lsp_references() end,
                      { buffer = event.buf, desc = "[G]oto [R]eferences" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "gri",
                      function() require("snacks.picker").lsp_implementations() end,
                      { buffer = event.buf, desc = "[G]oto [I]mplementation" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "grd",
                      function() require("snacks.picker").lsp_definitions() end,
                      { buffer = event.buf, desc = "[G]oto [D]efinition" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "grD",
                      function() require("snacks.picker").lsp_declarations() end,
                      { buffer = event.buf, desc = "[G]oto [D]eclaration" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "grt",
                      function() require("snacks.picker").lsp_type_definitions() end,
                      { buffer = event.buf, desc = "[G]oto [T]ype Definition" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "gO",
                      function() require("snacks.picker").lsp_symbols() end,
                      { buffer = event.buf, desc = "Open Document Symbols" }
                   )
 
-                  map(
+                  keymap(
                      "n",
                      "gW",
                      function() require("snacks.picker").lsp_workspace_symbols() end,
@@ -1517,7 +1961,7 @@ require("lazy").setup({
                   -- - "grn" is mapped in Normal mode to |vim.lsp.buf.rename()|
                   --
                   -- TODO: Consider
-                  map("n", "gl", function() vim.diagnostic.open_float() end, { buffer = event.buf })
+                  keymap("n", "gl", function() vim.diagnostic.open_float() end, { buffer = event.buf })
                   --
                   --diagnostic.open_float
                   -- 			vim.keymap.set("n", "K", function()
@@ -1566,7 +2010,7 @@ require("lazy").setup({
                   end
 
                   if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-                     map(
+                     keymap(
                         "n",
                         "<leader>th",
                         function()
@@ -1593,6 +2037,8 @@ require("lazy").setup({
             })
 
             vim.lsp.config("taplo", { root_dir = require("lspconfig.util").root_pattern("*.toml", ".git") })
+
+            vim.lsp.config("prosemd_lsp", { root_marker = ".obsidian" })
 
             vim.diagnostic.config({
                severity_sort = true,
@@ -1674,14 +2120,14 @@ require("lazy").setup({
          keys = {
             {
                "<leader>nf",
-               function() Snacks.picker.files({ dirs = { "~/notes/" }, exclude = { "*journal*" } }) end,
+               function() Snacks.picker.files({ dirs = { "~/valuts/notes/" }, exclude = { "*journal*" } }) end,
                desc = "Find Neorg Files",
             },
             {
                "<leader>njf",
                function()
                   Snacks.picker.files({
-                     dirs = { "~/notes/journal/" },
+                     dirs = { "~/vaults/notes/journal/" },
                      sort = { fields = { "file" } },
                   })
                end,
@@ -1727,7 +2173,7 @@ require("lazy").setup({
                desc = "Delete Other Buffers",
             },
             {
-               "<leader>,",
+               "<leader>b",
                function()
                   Snacks.picker.buffers({
                      on_show = function() vim.cmd.stopinsert() end,
@@ -2128,102 +2574,147 @@ require("lazy").setup({
       -- <leader>gl - log
       -- <leader>gp - pull
       -- <leader>gP - push
+      --
+      {
+         "obsidian-nvim/obsidian.nvim",
+         version = "*", -- recommended, use latest release instead of latest commit
+         lazy = true,
+         ft = "markdown",
+         -- event = {
+         --    "BufReadPre " .. vim.fn.expand("~") .. "\\vaults\\notes\\*.md",
+         --    "BufNewFile " .. vim.fn.expand("~") .. "\\vaults\\notes\\*.md",
+         -- },
+         dependencies = {
+            "nvim-lua/plenary.nvim",
+            "folke/snacks.nvim",
+         },
+         keys = {
+            { "<leader>nn", "<cmd>Obsidian new<cr>" },
+            { "<leader>nO", "<cmd>Obsidian open<cr>" },
+            { "<leader>nd", "<cmd>Obsidian dailies<cr>" },
+            { "<leader>nrn", "<cmd>Obsidian rename<cr>" },
+            { "<leader>nt", "<cmd>Obsidian template<cr>" },
+            { "<leader>nb", "<cmd>Obsidian backlinks<cr>" },
+            { "<leader>ng", "<cmd>Obsidian search<cr>" },
+            { "<leader>nf", "<cmd>Obsidian quick_switch<cr>" },
+            { "<leader>njf", "<cmd>Obsidian dailies<cr>" },
+            { "<leader>njt", "<cmd>Obsidian today<cr>" },
+            { "<leader>njT", "<cmd>Obsidian tomorrow<cr>" },
+            { "<leader>njy", "<cmd>Obsidian yesterday<cr>" },
+         },
+         ---@module 'obsidian'
+         ---@type obsidian.config
+         opts = {
+            legacy_commands = false,
+            workspaces = {
+               {
+                  name = "notes",
+                  path = "~/vaults/notes",
+               },
+            },
+            picker = { name = "snacks.pick" },
+            daily_notes = {
+               folder = "journal",
+               date_format = "%Y-%m-%d",
+               -- template = "daily",
+            },
+         },
+      },
 
       {
-         {
-            "nvim-neorg/neorg",
-            dependencies = {
-               "nvim-neorg/lua-utils.nvim",
-               "pysan3/pathlib.nvim",
-               "nvim-neotest/nvim-nio",
-               "benlubas/neorg-interim-ls",
-               "neovim/nvim-lspconfig",
-            },
-            ft = "norg",
-            version = "*",
-            cmd = { "Neorg" },
-            keys = {
-               "<leader>nn",
-               "<leader>ni",
-               { "<leader>ni", "<cmd>Neorg index<cr>" },
-               { "<leader>njt", "<cmd>Neorg journal today<cr>" },
-               { "<leader>njm", "<cmd>Neorg journal tomorrow<cr>" },
-               { "<leader>njy", "<cmd>Neorg journal yesterday<cr>" },
-               { "<leader>njc", "<cmd>Neorg journal custom<cr>" },
-               -- { "<leader>njo", "<cmd>Neorg journal toc open<cr>" }, -- TODO: after installing TOC
-               -- { "<leader>nju", "<cmd>Neorg journal toc update<cr>" }, -- TODO: after installing TOC
-               {
-                  "<leader>nw",
-                  "<cmd>Neorg return<cr>",
-                  desc = "Find Neorg Files",
-               },
-               { "<leader>ni", "<cmd>Neorg workspace<cr>" },
-            },
-            opts = {
-               load = {
-                  ["core.defaults"] = {},
-                  ["core.ui"] = {},
-                  ["core.concealer"] = { config = { icon_preset = "diamond" } },
-                  ["core.dirman"] = {
-                     config = {
-                        workspaces = {
-                           notes = "~/notes",
-                        },
-                        default_workspace = "notes",
-                     },
-                  },
-                  ["core.integrations.treesitter"] = {},
-                  ["core.promo"] = {},
-                  ["core.esupports.metagen"] = {
-                     config = { update_date = true, type = "auto" },
-                  }, -- do not update date until https://github.com/nvim-neorg/neorg/issues/1579 fixed
-                  -- https://github.com/nvim-neorg/neorg/issues/1579
-                  -- ["core.esupports.metagen"] = {
-                  -- 	config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix
-                  -- },
-                  ["core.autocommands"] = {},
-                  ["core.esupports.indent"] = {},
-                  ["external.interim-ls"] = {},
-                  ["core.completion"] = {
-                     config = {
-                        engine = { module_name = "external.lsp-completion" },
-                     },
-                  },
-                  ["core.dirman.utils"] = {},
-                  ["core.summary"] = {},
-                  ["core.itero"] = {},
-                  ["core.looking-glass"] = {},
-                  ["core.journal"] = {
-                     config = {
-                        strategy = "flat",
-                        workspace = "notes",
-                     },
-                  },
-               },
-            },
-            config = function(_, opts)
-               vim.api.nvim_create_autocmd("FileType", {
-                  group = vim.api.nvim_create_augroup("neorg_keymaps", { clear = true }),
-                  pattern = { "norg" },
-                  callback = function()
-                     map(
-                        "n",
-                        "<leader>tt",
-                        "<Plug>(neorg.qol.todo-items.todo.task-cycle)",
-                        { buffer = true, silent = true }
-                     )
-                  end,
-               })
-
-               vim.api.nvim_create_autocmd("BufWritePre", {
-                  group = vim.api.nvim_create_augroup("neorg_indents", { clear = true }),
-                  pattern = { "*.norg" },
-                  callback = function() vim.cmd([[normal mzgg=G`z]]) end,
-               })
-               vim.wo.foldlevel = 99
-               require("neorg").setup(opts)
-            end,
+         "nvim-neorg/neorg",
+         enabled = false,
+         dependencies = {
+            "nvim-neorg/lua-utils.nvim",
+            "pysan3/pathlib.nvim",
+            "nvim-neotest/nvim-nio",
+            "benlubas/neorg-interim-ls",
+            "neovim/nvim-lspconfig",
          },
+         ft = "norg",
+         version = "*",
+         cmd = { "Neorg" },
+         keys = {
+            "<leader>nn",
+            "<leader>ni",
+            { "<leader>ni", "<cmd>Neorg index<cr>" },
+            { "<leader>njt", "<cmd>Neorg journal today<cr>" },
+            { "<leader>njm", "<cmd>Neorg journal tomorrow<cr>" },
+            { "<leader>njy", "<cmd>Neorg journal yesterday<cr>" },
+            { "<leader>njc", "<cmd>Neorg journal custom<cr>" },
+            -- { "<leader>njo", "<cmd>Neorg journal toc open<cr>" }, -- TODO: after installing TOC
+            -- { "<leader>nju", "<cmd>Neorg journal toc update<cr>" }, -- TODO: after installing TOC
+            {
+               "<leader>nw",
+               "<cmd>Neorg return<cr>",
+               desc = "Find Neorg Files",
+            },
+            { "<leader>ni", "<cmd>Neorg workspace<cr>" },
+         },
+         opts = {
+            load = {
+               ["core.defaults"] = {},
+               ["core.ui"] = {},
+               ["core.concealer"] = { config = { icon_preset = "diamond" } },
+               ["core.dirman"] = {
+                  config = {
+                     workspaces = {
+                        notes = "~/notes",
+                     },
+                     default_workspace = "notes",
+                  },
+               },
+               ["core.integrations.treesitter"] = {},
+               ["core.promo"] = {},
+               ["core.esupports.metagen"] = {
+                  config = { update_date = true, type = "auto" },
+               }, -- do not update date until https://github.com/nvim-neorg/neorg/issues/1579 fixed
+               -- https://github.com/nvim-neorg/neorg/issues/1579
+               -- ["core.esupports.metagen"] = {
+               -- 	config = { type = "auto", update_date = false }, -- TODO: Change update_date after fix
+               -- },
+               ["core.autocommands"] = {},
+               ["core.esupports.indent"] = {},
+               ["external.interim-ls"] = {},
+               ["core.completion"] = {
+                  config = {
+                     engine = { module_name = "external.lsp-completion" },
+                  },
+               },
+               ["core.dirman.utils"] = {},
+               ["core.summary"] = {},
+               ["core.itero"] = {},
+               ["core.looking-glass"] = {},
+               ["core.journal"] = {
+                  config = {
+                     strategy = "flat",
+                     workspace = "notes",
+                  },
+               },
+            },
+         },
+         config = function(_, opts)
+            vim.api.nvim_create_autocmd("FileType", {
+               group = vim.api.nvim_create_augroup("neorg_keymaps", { clear = true }),
+               pattern = { "norg" },
+               callback = function()
+                  keymap(
+                     "n",
+                     "<leader>tt",
+                     "<Plug>(neorg.qol.todo-items.todo.task-cycle)",
+                     { buffer = true, silent = true }
+                  )
+               end,
+            })
+
+            vim.api.nvim_create_autocmd("BufWritePre", {
+               group = vim.api.nvim_create_augroup("neorg_indents", { clear = true }),
+               pattern = { "*.norg" },
+               callback = function() vim.cmd([[normal mzgg=G`z]]) end,
+            })
+            vim.wo.foldlevel = 99
+            require("neorg").setup(opts)
+         end,
       },
 
       {
@@ -2262,17 +2753,17 @@ require("lazy").setup({
             -- harpoon:extend(harpoon_extensions.builtins.highlight_current_file())
             --
 
-            map("n", "<leader>a", function() harpoon:list():add() end)
-            map("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-            map("n", "<leader>1", function() harpoon:list():select(1) end)
-            map("n", "<leader>2", function() harpoon:list():select(2) end)
-            map("n", "<leader>3", function() harpoon:list():select(3) end)
-            map("n", "<leader>4", function() harpoon:list():select(4) end)
-            map("n", "<leader>5", function() harpoon:list():select(5) end)
-            map("n", "<leader>6", function() harpoon:list():select(6) end)
-            map("n", "<leader>7", function() harpoon:list():select(7) end)
-            map("n", "<leader>8", function() harpoon:list():select(8) end)
-            map("n", "<leader>9", function() harpoon:list():select(9) end)
+            keymap("n", "<leader>a", function() harpoon:list():add() end)
+            keymap("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+            keymap("n", "<leader>1", function() harpoon:list():select(1) end)
+            keymap("n", "<leader>2", function() harpoon:list():select(2) end)
+            keymap("n", "<leader>3", function() harpoon:list():select(3) end)
+            keymap("n", "<leader>4", function() harpoon:list():select(4) end)
+            keymap("n", "<leader>5", function() harpoon:list():select(5) end)
+            keymap("n", "<leader>6", function() harpoon:list():select(6) end)
+            keymap("n", "<leader>7", function() harpoon:list():select(7) end)
+            keymap("n", "<leader>8", function() harpoon:list():select(8) end)
+            keymap("n", "<leader>9", function() harpoon:list():select(9) end)
          end,
       },
 
@@ -2458,6 +2949,7 @@ require("lazy").setup({
                json = { "fixjson", "prettier" },
                cs = { "csharpier" },
                yaml = { "yamlfix" }, -- "yamlfmt",
+               markdown = { "rumdl" },
                xml = {},
                -- cpp = { lsp_format = "prefer" },
                -- cpp = {"clang-format"}
@@ -2596,29 +3088,18 @@ require("lazy").setup({
          config = function(_, opts)
             require("leetcode").setup(opts)
             -- vim.cmd([[Leet list]])
-            map("n", "<leader>ldt", "<cmd>Leet run<cr>")
-            map("n", "<leader>lds", "<cmd>Leet submit<cr>")
+            keymap("n", "<leader>ldt", "<cmd>Leet run<cr>")
+            keymap("n", "<leader>lds", "<cmd>Leet submit<cr>")
 
-            map("n", "<leader>lf", "<cmd>Leet list<cr>")
-            map("n", "<leader>li", "<cmd>Leet desc<cr><C-w><C-h>")
-            map("n", "<leader>lc", "<cmd>Leet console<cr>")
-            map("n", "<leader>lr", "<cmd>Leet reset<cr>")
-            map("n", "<leader>lR", "<cmd>Leet restore<cr>")
-            map("n", "<leader>lI", "<cmd>Leet info<cr>")
-            map("n", "<leader>lt", "<cmd>Leet tabs<cr>")
-            map("n", "<leader>lo", "<cmd>Leet open<cr>")
+            keymap("n", "<leader>lf", "<cmd>Leet list<cr>")
+            keymap("n", "<leader>li", "<cmd>Leet desc<cr><C-w><C-h>")
+            keymap("n", "<leader>lc", "<cmd>Leet console<cr>")
+            keymap("n", "<leader>lr", "<cmd>Leet reset<cr>")
+            keymap("n", "<leader>lR", "<cmd>Leet restore<cr>")
+            keymap("n", "<leader>lI", "<cmd>Leet info<cr>")
+            keymap("n", "<leader>lt", "<cmd>Leet tabs<cr>")
+            keymap("n", "<leader>lo", "<cmd>Leet open<cr>")
          end,
-      },
-
-      {
-         enabled = false,
-         "nvim-tree/nvim-tree.lua",
-         version = "*",
-         lazy = false,
-         dependencies = {
-            "nvim-tree/nvim-web-devicons",
-         },
-         config = function() require("nvim-tree").setup({}) end,
       },
 
       {
