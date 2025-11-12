@@ -234,15 +234,13 @@ keymap("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q
 
 keymap("n", "<leader>la", "<cmd>Lazy<cr>", defaultOpts)
 
+function string.starts_with(str, start) return str:sub(1, #start) == start end
+
+function string.ends_with(str, ending) return ending == "" or str:sub(-#ending) == ending end
+
 function _G.get_oil_winbar()
-   local bufnr = api.nvim_win_get_buf(g.statusline_winid)
-   local dir = require("oil").get_current_dir(bufnr)
-   if dir then
-      return vim.fn.fnamemodify(dir, ":~")
-   else
-      -- If there is no current directory (e.g. over ssh), just show the buffer name
-      return vim.api.nvim_buf_get_name(0)
-   end
+   local dir = vim.fn.fnamemodify(require("oil").get_current_dir(api.nvim_win_get_buf(g.statusline_winid)), ":~")
+   return dir:ends_with("\\") and dir or dir .. "\\"
 end
 
 -- Bootstrap lazy.nvim
@@ -1172,7 +1170,10 @@ require("lazy").setup({
                max_width = 80,
                max_height = 0,
                border = "rounded",
-               get_win_title = function(winid) return fn.fnamemodify(fn.getcwd(0, 0), ":~") end,
+               get_win_title = function(winid)
+                  local dir = fn.fnamemodify(fn.getcwd(0, 0), ":~")
+                  return dir:ends_with("\\") and dir or dir .. "\\"
+               end,
                -- get_win_title = function(winid) return "" end,
                preview_split = "auto",
                override = function(conf) return conf end,
