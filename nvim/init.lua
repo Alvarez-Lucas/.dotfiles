@@ -3,16 +3,28 @@ local g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
 local fn = vim.fn
-local keymap = vim.keymap.set
 local api = vim.api
+local lsp = vim.lsp
+local diagnostic = vim.diagnostic
+
+local keymap =
+   --- @param mode: string|string[]
+   --- @param lhs: string
+   --- @param rhs: string|function,
+   --- @param opts?: vim.keymap.set.Opts)
+   function(mode, lhs, rhs, opts)
+      if opts == nil then
+         vim.keymap.set(mode, lhs, rhs, { silent = true })
+      else
+         vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { silent = true }, opts))
+      end
+   end
 
 -- local HEIGHT_RATIO = 0.8 -- Nvimtree
 -- local WIDTH_RATIO = 0.5
 
 g.mapleader = " "
 g.maplocalleader = " "
-
--- print(vim.fn.isdirectory(vim.fn.argc(-1)(0)) == 0)
 
 cmd("let &fcs='eob: '")
 opt.cmdheight = 1
@@ -38,6 +50,7 @@ opt.tabstop = 2 --
 opt.cursorline = true --
 opt.mouse = "" --
 opt.scrolloff = 8 --
+-- opt.scrolloff = 999 --
 opt.sidescrolloff = 8 --
 opt.termguicolors = true --
 opt.showmode = false
@@ -67,13 +80,11 @@ opt.grepprg = "rg --vimgrep" -- Does this work?
 -- g.netrw_banner = 0
 -- g.netrw_localcopydircmd = "cp -r"
 
-local defaultOpts = { noremap = true, silent = true }
+---@param opts? vim.keymap.set.Opts
+local defaultOpts = function(opts)
+   return opts == nil and { noremap = true, silent = true } or vim.tbl_extend("force", { silent = true }, opts)
+end
 
--- Delete a buffer
--- vim.keymap.set("", "<leader>d", "<cmd>bdelete<cr>", defaultOpts)
--- map("n", "<C-s>", "<cms>w<cr>", defaultOpts)
--- map("n", "<leader>s", "<cmd>w<cr>", defaultOpts)
---
 if g.neovide then
    g.neovide_scale_factor = 1.0
    g.neovide_padding_top = 8
@@ -86,45 +97,53 @@ if g.neovide then
 end
 
 -- System clipboard
-keymap({ "n", "v" }, "<leader>y", '"+y', defaultOpts) -- yank motion
-keymap({ "n", "v" }, "<leader>Y", '"+Y', defaultOpts) -- yank line
-keymap({ "n", "v" }, "<leader>d", '"+d', defaultOpts) -- delete motion
-keymap({ "n", "v" }, "<leader>D", '"+D', defaultOpts) -- delete line
-keymap("n", "<leader>p", '"+p', defaultOpts) -- paste after cursor
-keymap("n", "<leader>P", '"+P', defaultOpts) -- paste before cursor
-keymap("v", "<leader>p", '"+p', defaultOpts)
-keymap("n", "<Leader>xy", "<cmd>call setreg('+', getreg('@'))<CR>", defaultOpts)
+keymap({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank into system clipboard" })
+keymap({ "n", "v" }, "<leader>Y", '"+Y', { desc = "Yank into system clipboard" })
+keymap({ "n", "v" }, "<leader>d", '"+d', { desc = "Delete into system clipboard" })
+keymap({ "n", "v" }, "<leader>D", '"+D', { desc = "Delete into system clipboard" })
+keymap({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from system clipboard" })
+keymap({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from system clipboard" })
+-- keymap("n", "<Leader>gy", "<cmd>call setreg('+', getreg('@'))<CR>", { desc = "" })
 
-keymap("n", "<c-d>", "<c-d>zz", defaultOpts) -- Keep cursor line centered on page scroll
-keymap("n", "<c-u>", "<c-u>zz", defaultOpts)
+keymap("n", "<Leader>cy", function()
+   local registerContents = fn.getreg("@")
+   fn.setreg("+", registerContents)
+   local function countLines(str)
+      local _, count = str:gsub("\n", "\n")
+      return count + 1 -- Add 1 because lines = newlines + 1
+   end
+   if countLines(registerContents) > 2 then
+      print("Copied to system clipboard")
+   else
+      print('Copied "' .. fn.getreg("+") .. '" to system clipboard')
+   end
+end, { desc = "Copy unnamed register to system clipboard" })
+
+keymap("n", "<c-d>", "<c-d>zz") -- Keep cursor line centered on page scroll
+keymap("n", "<c-u>", "<c-u>zz")
 
 keymap("n", "n", "nzzzv")
 keymap("n", "N", "Nzzzv")
 
 keymap("n", "J", "mzJ`z") -- TODO: Decide if this is worth it
 
--- better up/down TODO: Still testing
-keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-keymap({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-keymap({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+-- better up/down
+keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })
+keymap({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true })
+keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true })
+keymap({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true })
 
-keymap("n", "<Esc>", "<cmd>nohlsearch<cr>", defaultOpts)
+keymap("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Search" })
 
-keymap("v", "p", '"_dP', defaultOpts) -- Keep register after paste
+keymap("v", "p", '"_dP', { desc = "Paste (and keep register)" })
 
-keymap("v", "Y", "y$", defaultOpts) -- Yank to end of line
+keymap("v", "Y", "y$", { desc = "Yank to end of line" })
 
+-- shift indent
 keymap("v", "<", "<gv")
 keymap("v", ">", ">gv")
 
 -- TODO: Add todo plugin and snack binding for todos and jumps for todos
-
--- TODO: Add formatting keybind
--- -- formatting
--- map({ "n", "v" }, "<leader>cf", function()
--- 	LazyVim.format({ force = true })
--- end, { desc = "Format" })
 
 -- TODO: Test this
 -- if vim.lsp.inlay_hint then
@@ -132,9 +151,10 @@ keymap("v", ">", ">gv")
 -- end
 
 keymap("n", "<leader>Ui", vim.show_pos, { desc = "Inspect Pos" })
+
 keymap("n", "<leader>UI", function()
    vim.treesitter.inspect_tree()
-   vim.api.nvim_input("I")
+   api.nvim_input("I")
 end, { desc = "Inspect Tree" })
 
 -- better indenting
@@ -144,13 +164,13 @@ keymap("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Com
 keymap("n", "ycc", "yygccp", { remap = true, desc = "Copy And Comment" })
 
 keymap("n", "<leader>xl", function()
-   local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
+   local success, err = pcall(fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
    if not success and err then vim.notify(err, vim.log.levels.ERROR) end
 end, { desc = "Location List" })
 
 -- -- quickfix list
 keymap("n", "<leader>xq", function()
-   local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
+   local success, err = pcall(fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
    if not success and err then vim.notify(err, vim.log.levels.ERROR) end
 end, { desc = "Quickfix List" })
 
@@ -160,15 +180,17 @@ keymap("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 keymap("v", "J", ":m '>+1<cr>gv=gv") -- Move Text
 keymap("v", "K", ":m '<-2<cr>gv=gv")
 
-keymap("n", "<bs>", "<C-^>", defaultOpts) -- Quick switch to previous buffer
+keymap("n", "<bs>", "<C-^>", { desc = "Switch to Recently Used Buffer" })
 
-keymap("n", "H", "<cmd>bprevious<cr>", defaultOpts) -- Navidate buffers
-keymap("n", "L", "<cmd>bnext<cr>", defaultOpts)
+keymap("n", "H", "<cmd>bprevious<cr>", { desc = "Previous Buffer" }) -- Navidate buffers
+keymap("n", "L", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
-keymap("n", "<leader>bn", "<cmd>enew<cr>", defaultOpts)
+keymap("n", "<Leader>bn", "<cmd>enew<cr>", { desc = "New Buffer" })
 
-keymap("n", "<Leader>;", "m`A;<Esc>``", { noremap = true, silent = true })
-keymap("n", "<Leader>,", "m`A,<Esc>``", { noremap = true, silent = true })
+keymap("n", "<Leader>;", "m`A;<Esc>``", { desc = "Append ;" })
+keymap("n", "<Leader>,", "m`A,<Esc>``", { desc = "Append ," })
+keymap("n", "<Leader>!", "m`A!<Esc>``", { desc = "Append !" })
+keymap("n", "<Leader>.", "m`A.<Esc>``", { desc = "Append ." })
 
 -- map("n", "<tab>", "<tab>", { noremap = true })
 
@@ -199,49 +221,44 @@ keymap("n", "<leader>tw", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 keymap("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 keymap("n", "<leader>tn", "<cmd>tabnew<cr>", { desc = "New Tab" })
 
-keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
-keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", defaultOpts)
-keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", defaultOpts)
-keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+keymap("t", "<C-h>", "<C-\\><C-N><C-w>h") -- Navigate terminal
+keymap("t", "<C-j>", "<C-\\><C-N><C-w>j")
+keymap("t", "<C-k>", "<C-\\><C-N><C-w>k")
+keymap("t", "<C-l>", "<C-\\><C-N><C-w>l")
 --
-keymap("n", "<C-h>", "<C-w><C-h>", defaultOpts) -- Navigate split
-keymap("n", "<C-j>", "<C-w><C-j>", defaultOpts)
-keymap("n", "<C-k>", "<C-w><C-k>", defaultOpts)
-keymap("n", "<C-l>", "<C-w><C-l>", defaultOpts)
+keymap("n", "<C-h>", "<C-w><C-h>") -- Navigate split
+keymap("n", "<C-j>", "<C-w><C-j>")
+keymap("n", "<C-k>", "<C-w><C-k>")
+keymap("n", "<C-l>", "<C-w><C-l>")
 
-keymap("t", "<left>", "<C-\\><C-N><C-w>h", defaultOpts) -- Navigate terminal
-keymap("t", "<down>", "<C-\\><C-N><C-w>j", defaultOpts)
-keymap("t", "<up>", "<C-\\><C-N><C-w>k", defaultOpts)
-keymap("t", "<right>", "<C-\\><C-N><C-w>l", defaultOpts)
+keymap("t", "<left>", "<C-\\><C-N><C-w>h") -- Navigate terminal
+keymap("t", "<down>", "<C-\\><C-N><C-w>j")
+keymap("t", "<up>", "<C-\\><C-N><C-w>k")
+keymap("t", "<right>", "<C-\\><C-N><C-w>l")
 
-keymap("n", "<left>", "<C-w><C-h>", defaultOpts) -- Navigate split
-keymap("n", "<down>", "<C-w><C-j>", defaultOpts)
-keymap("n", "<up>", "<C-w><C-k>", defaultOpts)
-keymap("n", "<right>", "<C-w><C-l>", defaultOpts)
+keymap("n", "<left>", "<C-w><C-h>") -- Navigate split
+keymap("n", "<down>", "<C-w><C-j>")
+keymap("n", "<up>", "<C-w><C-k>")
+keymap("n", "<right>", "<C-w><C-l>")
 
-keymap("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>", defaultOpts) -- Create veritcal and horizontal split
-keymap("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>", defaultOpts)
-keymap("n", "<leader>oK", "<cmd>set nosplitright<cr><cmd>split<cr><C-w><c-k>", defaultOpts)
-keymap("n", "<leader>oH", "<cmd>set nosplitbelow<cr><cmd>vsplit<cr><C-w><c-h>", defaultOpts)
+keymap("n", "<leader>oL", "<cmd>set splitright<cr><cmd>vsplit<cr>") -- Create veritcal and horizontal split
+keymap("n", "<leader>oJ", "<cmd>set splitbelow<cr><cmd>split<cr>")
+keymap("n", "<leader>oK", "<cmd>set nosplitright<cr><cmd>split<cr><C-w><c-k>")
+keymap("n", "<leader>oH", "<cmd>set nosplitbelow<cr><cmd>vsplit<cr><C-w><c-h>")
 
-keymap("n", "<C-Up>", "<cmd>resize -5<CR>", defaultOpts) -- Resize split
-keymap("n", "<C-Down>", "<cmd>resize +5<CR>", defaultOpts)
-keymap("n", "<C-Left>", "<cmd>vertical resize -5<CR>", defaultOpts)
-keymap("n", "<C-Right>", "<cmd>vertical resize +5<CR>", defaultOpts)
+keymap("n", "<C-Up>", "<cmd>resize -5<CR>") -- Resize split
+keymap("n", "<C-Down>", "<cmd>resize +5<CR>")
+keymap("n", "<C-Left>", "<cmd>vertical resize -5<CR>")
+keymap("n", "<C-Right>", "<cmd>vertical resize +5<CR>")
 
--- map("t", "<Esc>", "<C-\\><C-N>", defaultOpts)
+-- map("t", "<Esc>", "<C-\\><C-N>")
 keymap("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
-keymap("n", "<leader>la", "<cmd>Lazy<cr>", defaultOpts)
+keymap("n", "<leader>la", "<cmd>Lazy<cr>")
 
 function string.starts_with(str, start) return str:sub(1, #start) == start end
 
 function string.ends_with(str, ending) return ending == "" or str:sub(-#ending) == ending end
-
-function _G.get_oil_winbar()
-   local dir = vim.fn.fnamemodify(require("oil").get_current_dir(api.nvim_win_get_buf(g.statusline_winid)), ":~")
-   return dir:ends_with("\\") and dir or dir .. "\\"
-end
 
 -- Bootstrap lazy.nvim
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -249,7 +266,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
    local out = fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
    if vim.v.shell_error ~= 0 then
-      vim.api.nvim_echo({
+      api.nvim_echo({
          { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
          { out, "WarningMsg" },
          { "\nPress any key to exit..." },
@@ -276,7 +293,7 @@ local function lazy_file()
    local function load()
       if #events == 0 or done then return end
       done = true
-      vim.api.nvim_del_augroup_by_name("lazy_file")
+      api.nvim_del_augroup_by_name("lazy_file")
 
       ---@type table<string,string[]>
       local skips = {}
@@ -284,9 +301,9 @@ local function lazy_file()
          skips[event.event] = skips[event.event] or Event.get_augroups(event.event)
       end
 
-      vim.api.nvim_exec_autocmds("User", { pattern = "LazyFile", modeline = false })
+      api.nvim_exec_autocmds("User", { pattern = "LazyFile", modeline = false })
       for _, event in ipairs(events) do
-         if vim.api.nvim_buf_is_valid(event.buf) then
+         if api.nvim_buf_is_valid(event.buf) then
             Event.trigger({
                event = event.event,
                exclude = skips[event.event],
@@ -301,7 +318,7 @@ local function lazy_file()
             end
          end
       end
-      vim.api.nvim_exec_autocmds("CursorMoved", { modeline = false })
+      api.nvim_exec_autocmds("CursorMoved", { modeline = false })
       events = {}
    end
 
@@ -309,8 +326,8 @@ local function lazy_file()
    -- and the UI can continue rendering without blocking
    load = vim.schedule_wrap(load)
 
-   vim.api.nvim_create_autocmd(lazy_file_events, {
-      group = vim.api.nvim_create_augroup("lazy_file", { clear = true }),
+   api.nvim_create_autocmd(lazy_file_events, {
+      group = api.nvim_create_augroup("lazy_file", { clear = true }),
       callback = function(event)
          table.insert(events, event)
          load()
@@ -321,8 +338,8 @@ lazy_file()
 
 --     function()
 -- vim.cmd([[nohlsearch \| lua Snacks.bufdelete()]])
--- vim.api.nvim_create_autocmd("FileType", {
--- 	group = vim.api.nvim_create_augroup("help_files_keymaps", {}),
+-- api.nvim_create_autocmd("FileType", {
+-- 	group = api.nvim_create_augroup("help_files_keymaps", {}),
 -- 	desc = "Add keymaps to help files",
 -- 	pattern = "help",
 -- 	callback = function(event)
@@ -351,8 +368,8 @@ lazy_file()
 -- })
 
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-   group = vim.api.nvim_create_augroup("auto_create_dir", {}),
+api.nvim_create_autocmd({ "BufWritePre" }, {
+   group = api.nvim_create_augroup("auto_create_dir", {}),
    callback = function(event)
       if event.match:match("^%w%w+:[\\/][\\/]") then return end
       local file = vim.uv.fs_realpath(event.match) or event.match
@@ -361,28 +378,28 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 })
 
 -- Highlight yanked text
-vim.api.nvim_create_autocmd("TextYankPost", {
+api.nvim_create_autocmd("TextYankPost", {
    desc = "Highlight when yanking (copying) text",
-   group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+   group = api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
    callback = function() vim.highlight.on_yank() end,
 })
 
 -- go to last loc when opening a buffer
-vim.api.nvim_create_autocmd("BufReadPost", {
-   group = vim.api.nvim_create_augroup("last_loc", { clear = true }),
+api.nvim_create_autocmd("BufReadPost", {
+   group = api.nvim_create_augroup("last_loc", { clear = true }),
    callback = function(event)
       local exclude = { "gitcommit" }
       local buf = event.buf
       if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].lazyvim_last_loc then return end
       vim.b[buf].lazyvim_last_loc = true
-      local mark = vim.api.nvim_buf_get_mark(buf, '"')
-      local lcount = vim.api.nvim_buf_line_count(buf)
-      if mark[1] > 0 and mark[1] <= lcount then pcall(vim.api.nvim_win_set_cursor, 0, mark) end
+      local mark = api.nvim_buf_get_mark(buf, '"')
+      local lcount = api.nvim_buf_line_count(buf)
+      if mark[1] > 0 and mark[1] <= lcount then pcall(api.nvim_win_set_cursor, 0, mark) end
    end,
 })
 
--- vim.api.nvim_create_autocmd("FileType", {
--- 	group = vim.api.nvim_create_augroup("open_help_files_tab", { clear = true }),
+-- api.nvim_create_autocmd("FileType", {
+-- 	group = api.nvim_create_augroup("open_help_files_tab", { clear = true }),
 -- 	pattern = "help",
 -- 	callback = function(event)
 -- 		-- vim.cmd("wincmd T", { silent = true })
@@ -395,8 +412,8 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- })
 
 -- Close some filetypes with <q>
-vim.api.nvim_create_autocmd("FileType", {
-   group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
+api.nvim_create_autocmd("FileType", {
+   group = api.nvim_create_augroup("close_with_q", { clear = true }),
    pattern = {
       "PlenaryTestPopup",
       "lspinfo",
@@ -416,13 +433,13 @@ vim.api.nvim_create_autocmd("FileType", {
    },
    callback = function(event)
       vim.bo[event.buf].buflisted = false
-      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+      keymap("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
    end,
 })
 
 -- Fix conceallevel for json files
-vim.api.nvim_create_autocmd({ "FileType" }, {
-   group = vim.api.nvim_create_augroup("coneal", { clear = true }),
+api.nvim_create_autocmd({ "FileType" }, {
+   group = api.nvim_create_augroup("coneal", { clear = true }),
    pattern = { "json", "jsonc", "json5" },
    callback = function() vim.opt_local.conceallevel = 0 end,
 })
@@ -465,9 +482,10 @@ require("lazy").setup({
       },
    },
 
-   -- Plugin Specs
    ---@type LazySpec
    spec = {
+
+      ---@type LazyPluginSpec
       {
          "e-q/okcolors.nvim",
          name = "okcolors",
@@ -477,8 +495,8 @@ require("lazy").setup({
             variant = "smooth",
          },
          config = function(_, opts)
-            vim.api.nvim_create_autocmd("ColorScheme", {
-               group = vim.api.nvim_create_augroup("custom_highlights_okcolors", {}),
+            api.nvim_create_autocmd("ColorScheme", {
+               group = api.nvim_create_augroup("custom_highlights_okcolors", {}),
                pattern = "okcolors",
                callback = function()
                   local pallete = {
@@ -506,52 +524,55 @@ require("lazy").setup({
                   }
 
                   -- Strikethrough
-                  vim.api.nvim_set_hl(0, "strikethrough", { fg = pallete.tx, strikethrough = true })
+                  api.nvim_set_hl(0, "strikethrough", { fg = pallete.tx, strikethrough = true })
 
                   -- Borders
-                  vim.api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
+                  api.nvim_set_hl(0, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
+                  api.nvim_set_hl(0, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
 
                   -- Status Line
-                  vim.api.nvim_set_hl(0, "StatusLine", { bg = pallete.bg })
+                  api.nvim_set_hl(0, "StatusLine", { bg = pallete.bg })
 
                   -- Snacks
-                  vim.api.nvim_set_hl(0, "SnacksPicker", { bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "SnacksPickerTitle", { fg = pallete.blue, bg = pallete.bg })
+                  api.nvim_set_hl(0, "SnacksPicker", { bg = pallete.bg })
+                  api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
+                  api.nvim_set_hl(0, "SnacksPickerBorder", { fg = pallete.blue, bg = pallete.bg })
+                  api.nvim_set_hl(0, "SnacksPickerTitle", { fg = pallete.blue, bg = pallete.bg })
 
                   -- Neotree
-                  vim.api.nvim_set_hl(0, "NeoTreeFloatTitle", { fg = pallete.blue, bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { fg = pallete.blue, bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "NeoTreeRootName", { link = "Title" })
+                  api.nvim_set_hl(0, "NeoTreeFloatTitle", { fg = pallete.blue, bg = pallete.bg })
+                  api.nvim_set_hl(0, "NeoTreeFloatNormal", { bg = pallete.bg })
+                  api.nvim_set_hl(0, "NeoTreeFloatBorder", { fg = pallete.blue, bg = pallete.bg })
+                  api.nvim_set_hl(0, "NeoTreeRootName", { link = "Title" })
 
                   -- TreesitterContext
-                  vim.api.nvim_set_hl(0, "TreesitterContext", { bg = pallete.surface })
+                  api.nvim_set_hl(0, "TreesitterContext", { bg = pallete.surface })
 
                   -- Lazy
-                  vim.api.nvim_set_hl(0, "LazyBackdrop", { bg = pallete.bg })
-                  vim.api.nvim_set_hl(0, "LazyNormal", { bg = pallete.bg })
+                  api.nvim_set_hl(0, "LazyBackdrop", { bg = pallete.bg })
+                  api.nvim_set_hl(0, "LazyNormal", { bg = pallete.bg })
+
+                  api.nvim_set_hl(0, "SnacksBackdrop", { bg = pallete.bg })
+                  api.nvim_set_hl(0, "SnacksBackdrop_000000", { bg = pallete.bg })
 
                   -- indent-blankline
-                  vim.api.nvim_set_hl(0, "IblIndent", { fg = pallete.hilite_mid })
-                  vim.api.nvim_set_hl(0, "IblScope", { fg = pallete.cyan })
+                  api.nvim_set_hl(0, "IblIndent", { fg = pallete.hilite_mid })
+                  api.nvim_set_hl(0, "IblScope", { fg = pallete.cyan })
 
-                  vim.api.nvim_set_hl(0, "BlinkIndent", { fg = pallete.hilite_mid })
-                  vim.api.nvim_set_hl(0, "BlinkIndentScope", { fg = pallete.cyan })
-                  vim.api.nvim_set_hl(0, "BlinkIndentScopeUnderline", { sp = pallete.cyan, underline = true })
+                  api.nvim_set_hl(0, "BlinkIndent", { fg = pallete.hilite_mid })
+                  api.nvim_set_hl(0, "BlinkIndentScope", { fg = pallete.cyan })
+                  api.nvim_set_hl(0, "BlinkIndentScopeUnderline", { sp = pallete.cyan, underline = true })
 
-                  vim.api.nvim_set_hl(0, "Headline1", { bg = "#f4feff" })
-                  vim.api.nvim_set_hl(0, "Headline2", { bg = "#fefaff" })
-                  vim.api.nvim_set_hl(0, "Headline3", { bg = "#f4feff" })
-                  vim.api.nvim_set_hl(0, "Headline4", { bg = "#f7fef8" })
-                  vim.api.nvim_set_hl(0, "Headline5", { bg = "#fefaff" })
-                  vim.api.nvim_set_hl(0, "Headline6", { bg = "#f4feff" })
-                  -- vim.api.nvim_set_hl(0, "CodeBlock", { fg = pallete.cyan })
-                  vim.api.nvim_set_hl(0, "Dash", { fg = pallete.blue })
+                  api.nvim_set_hl(0, "Headline1", { bg = "#f4feff" })
+                  api.nvim_set_hl(0, "Headline2", { bg = "#fefaff" })
+                  api.nvim_set_hl(0, "Headline3", { bg = "#f4feff" })
+                  api.nvim_set_hl(0, "Headline4", { bg = "#f7fef8" })
+                  api.nvim_set_hl(0, "Headline5", { bg = "#fefaff" })
+                  api.nvim_set_hl(0, "Headline6", { bg = "#f4feff" })
+                  -- api.nvim_set_hl(0, "CodeBlock", { fg = pallete.cyan })
+                  api.nvim_set_hl(0, "Dash", { fg = pallete.blue })
 
-                  vim.api.nvim_set_hl(0, "SnacksDashboardNormal", { link = "SnacksPickerBorder" })
+                  api.nvim_set_hl(0, "SnacksDashboardNormal", { link = "SnacksPickerBorder" })
 
                   -- vim.cmd [[highlight Headline1 guibg=#1e2718]]
                   -- vim.cmd [[highlight Headline2 guibg=#21262d]]
@@ -559,45 +580,47 @@ require("lazy").setup({
                   -- vim.cmd [[highlight Dash guibg=#D19A66 gui=bold]]
 
                   -- Harpoon
-                  vim.api.nvim_create_autocmd("FileType", {
-                     group = vim.api.nvim_create_augroup("harpoon_okcolors_highlight", { clear = true }),
+                  api.nvim_create_autocmd("FileType", {
+                     group = api.nvim_create_augroup("harpoon_okcolors_highlight", { clear = true }),
                      pattern = { "harpoon" },
                      callback = function()
-                        local ns_id = vim.api.nvim_create_namespace("harpoon_okcolors_highlight")
-                        vim.api.nvim_set_hl_ns(ns_id)
-                        vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+                        local ns_id = api.nvim_create_namespace("harpoon_okcolors_highlight")
+                        api.nvim_set_hl_ns(ns_id)
+                        api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
                      end,
                   })
 
-                  vim.api.nvim_create_autocmd("FileType", {
-                     group = vim.api.nvim_create_augroup("harpoon_okcolors_highlight", { clear = true }),
-                     pattern = { "oil" },
+                  api.nvim_create_autocmd("FileType", {
+                     group = api.nvim_create_augroup("buffer_manager_okcolors_highlight", { clear = true }),
+                     pattern = { "buffer_manager" },
                      callback = function()
-                        local ns_id = vim.api.nvim_create_namespace("oil_okcolors_highlight")
-                        vim.api.nvim_set_hl_ns(ns_id)
-                        vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+                        local ns_id = api.nvim_create_namespace("buffer_manager_okcolors_highlight")
+                        api.nvim_set_hl_ns(ns_id)
+                        api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+                        api.nvim_set_hl(ns_id, "FloatBorder", { fg = pallete.blue, bg = pallete.bg })
+                        api.nvim_set_hl(ns_id, "FloatTitle", { fg = pallete.blue, bg = pallete.bg })
                      end,
                   })
 
-                  vim.api.nvim_create_autocmd("BufEnter", {
-                     group = vim.api.nvim_create_augroup("buftype_okcolors_highlight", { clear = true }),
+                  api.nvim_create_autocmd("BufEnter", {
+                     group = api.nvim_create_augroup("buftype_okcolors_highlight", { clear = true }),
                      callback = function()
                         local buftype = vim.bo.buftype
                         if buftype == "prompt" then
-                           local ns_id = vim.api.nvim_create_namespace("buftype_okcolors_highlight")
-                           vim.api.nvim_set_hl_ns(ns_id)
-                           vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+                           local ns_id = api.nvim_create_namespace("buftype_okcolors_highlight")
+                           api.nvim_set_hl_ns(ns_id)
+                           api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
                         end
                      end,
                   })
 
-                  vim.api.nvim_create_autocmd("FileType", {
-                     group = vim.api.nvim_create_augroup("undotree_okcolors_highlight", { clear = true }),
+                  api.nvim_create_autocmd("FileType", {
+                     group = api.nvim_create_augroup("undotree_okcolors_highlight", { clear = true }),
                      pattern = { "undotree" },
                      callback = function()
-                        local ns_id = vim.api.nvim_create_namespace("undotree_okcolors_highlight")
-                        vim.api.nvim_set_hl_ns(ns_id)
-                        vim.api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
+                        local ns_id = api.nvim_create_namespace("undotree_okcolors_highlight")
+                        api.nvim_set_hl_ns(ns_id)
+                        api.nvim_set_hl(ns_id, "NormalFloat", { bg = pallete.bg })
                      end,
                   })
                end,
@@ -608,11 +631,27 @@ require("lazy").setup({
          end,
       },
 
+      ---@type LazyPluginSpec
       { "nvim-lua/plenary.nvim" },
-      { "MunifTanjim/nui.nvim" },
-      { "nvim-tree/nvim-web-devicons" }, -- Blink.cmp,
-      { "williamboman/mason.nvim", opts = {} },
 
+      ---@type LazyPluginSpec
+      { "MunifTanjim/nui.nvim" },
+
+      ---@type LazyPluginSpec
+      { "nvim-tree/nvim-web-devicons" }, -- Blink.cmp,
+
+      ---@type LazyPluginSpec
+      {
+         "williamboman/mason.nvim",
+         opts = {
+            registries = {
+               "github:mason-org/mason-registry",
+               "github:Crashdummyy/mason-registry",
+            },
+         },
+      },
+
+      ---@type LazyPluginSpec
       {
          "folke/lazydev.nvim",
          ft = "lua",
@@ -628,6 +667,7 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "saghen/blink.cmp",
          event = { "VeryLazy", "InsertEnter" },
@@ -661,9 +701,19 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
-         enabled = false,
+         "NMAC427/guess-indent.nvim", -- fastest & dumb
+         -- "Darazaki/indent-o-matic", -- fast & smarter
+         -- "tpope/vim-sleuth", -- slow & smartest
+         event = { "BufNewFile", "InsertEnter", "LazyFile" },
+         opts = {},
+      },
+
+      ---@type LazyPluginSpec
+      {
          "nvim-tree/nvim-tree.lua",
+         enabled = false,
          version = "*",
          lazy = false,
          keys = {
@@ -700,7 +750,7 @@ require("lazy").setup({
          opts = { -- BEGIN_DEFAULT_OPTS
             on_attach = function(bufnr)
                local opts = function(desc)
-                  return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+                  return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, nowait = true }
                end
                local api = require("nvim-tree.api")
                -- keymap("n", "<C-]>", nvimTreeApi.tree.change_root_to_node, defaultNvimTreeOpts("CD"))
@@ -1053,26 +1103,69 @@ require("lazy").setup({
          }, -- END_DEFAULT_OPTS
       },
 
+      ---@type LazyPluginSpec
       {
          "stevearc/oil.nvim",
-         lazy = false,
+         init = function()
+            _G.Source_File = nil
+            function _G.get_oil_winbar()
+               local ensureEndsWithSlash = function(fileName)
+                  return fileName:sub(#fileName, #fileName) == "\\" and fileName or fileName .. "\\"
+               end
+               local oilDirectory = ensureEndsWithSlash(
+                  fn.fnamemodify(require("oil").get_current_dir(api.nvim_win_get_buf(g.statusline_winid)), ":~")
+               )
+               local tabDirectory = ensureEndsWithSlash(fn.fnamemodify(fn.getcwd(0, 0), ":~"))
+               local start, last = string.find(oilDirectory, tabDirectory)
+               if start ~= nil then
+                  if last == #oilDirectory then
+                     return oilDirectory
+                  else
+                     return oilDirectory:sub(start, last) .. " -> " .. oilDirectory:sub(last, #oilDirectory)
+                  end
+               else
+                  return oilDirectory .. " (" .. tabDirectory .. ")"
+               end
+            end
+         end,
+         lazy = true,
+         cmd = "Oil",
          keys = {
             {
                "<leader>e",
-               "<cmd>Oil --float<cr>",
-               -- function() vim.bo.filetype = "Oil" and cmd("Oil") or cmd("Oil") end,
+               function() require("oil").toggle_float() end,
             },
-
             {
                "<leader>E",
-               function() require("oil.actions").open_cwd({}) end,
+               function()
+                  local oil = require("oil")
+                  oil.close()
+                  oil.open_float(fn.getcwd(0, 0))
+               end,
+            },
+            {
+               "<leader>ne",
+               function()
+                  local oil = require("oil")
+                  oil.close()
+                  oil.open_float(fn.expand("~/vaults/notes/"))
+               end,
+            },
+            {
+               "<leader>nje",
+               function()
+                  local oil = require("oil")
+                  oil.close()
+                  require("oil").open_float(fn.expand("~/vaults/notes/journal/"))
+               end,
+               desc = "Find Neorg Files",
             },
          },
          opts = {
             default_file_explorer = true,
             columns = {
                "icon",
-               "mtime",
+               -- "mtime",
             },
             -- Buffer-local options to use for oil buffers
             buf_options = {
@@ -1091,25 +1184,17 @@ require("lazy").setup({
                concealcursor = "nvic",
                winbar = "%!v:lua.get_oil_winbar()",
             },
-            -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
-            delete_to_trash = true, -- default: false
-            -- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)
-            skip_confirm_for_simple_edits = true, -- default: false
-            -- Selecting a new/moved/renamed file or directory will prompt you to save changes first
-            -- (:help prompt_save_on_select_new_entry)
-            prompt_save_on_select_new_entry = true,
+            delete_to_trash = true, -- default: false -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
+            skip_confirm_for_simple_edits = true, -- default: false -- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)
+            prompt_save_on_select_new_entry = true, -- Selecting a new/moved/renamed file or directory will prompt you to save changes first (:help prompt_save_on_select_new_entry)
             -- Oil will automatically delete hidden buffers after this delay
             -- You can set the delay to false to disable cleanup entirely
             -- Note that the cleanup process only starts when none of the oil buffers are currently displayed
             cleanup_delay_ms = 2000,
             lsp_file_methods = {
-               -- Enable or disable LSP file operations
-               enabled = true,
-               -- Time to wait for LSP file operations to complete before skipping
-               timeout_ms = 1000,
-               -- Set to true to autosave buffers that are updated with LSP willRenameFiles
-               -- Set to "unmodified" to only save unmodified buffers
-               autosave_changes = false,
+               enabled = true, -- Enable or disable LSP file operations
+               timeout_ms = 1000, -- Time to wait for LSP file operations to complete before skipping
+               autosave_changes = false, -- Set to true to autosave buffers that are updated with LSP willRenameFiles Set to "unmodified" to only save unmodified buffers
             },
             -- Constrain the cursor to the editable parts of the oil buffer
             -- Set to `false` to disable, or "name" to keep it on the file names
@@ -1125,22 +1210,81 @@ require("lazy").setup({
             keymaps = {
                ["g?"] = { "actions.show_help", mode = "n" },
                ["<CR>"] = "actions.select",
-               -- ["<C-s>"] = { "actions.select", opts = { vertical = true } },
-               -- ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
-               -- ["<C-t>"] = { "actions.select", opts = { tab = true } },
-               -- ["<C-p>"] = "actions.preview",
-               -- ["<C-c>"] = { "actions.close", mode = "n" },
+               ["<C-s>"] = { "actions.select", opts = { vertical = true } },
+               ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+               ["<C-t>"] = { "actions.select", opts = { tab = true } },
+               ["<C-p>"] = "actions.preview",
+               ["<C-c>"] = { "actions.close", mode = "n" },
+               ["<leader>q"] = { "actions.close", mode = "n" },
                ["q"] = { "actions.close", mode = "n" },
+               ["<esc>"] = { "actions.close", mode = "n" },
                ["<leader>e"] = { "actions.close", mode = "n" },
                ["<C-l>"] = "actions.refresh",
                -- ["-"] = { "actions.parent", mode = "n" },
                ["<bs>"] = { "actions.parent", mode = "n" },
                ["<leader><bs>"] = { "actions.open_cwd", mode = "n" },
                -- ["`"] = { "actions.cd", mode = "n" },
-               ["<leader><leader>"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
-               -- ["gs"] = { "actions.change_sort", mode = "n" },
+               ["<leader>."] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+               ["gs"] = { "actions.change_sort", mode = "n" },
                ["gx"] = "actions.open_external",
                ["g."] = { "actions.toggle_hidden", mode = "n" },
+               ["L"] = {
+                  function()
+                     -- FIX: Doesn't work on files in the smame directory?
+                     require("oil").close()
+                     cmd("bnext")
+                     Source_File = fn.expand("%:t")
+                     print(Source_File)
+                     require("oil").open_float(nil, nil, function()
+                        local function goto_line_containing(search_text)
+                           local bufnr = vim.api.nvim_get_current_buf()
+                           local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+                           for i, line in ipairs(lines) do
+                              if line:find(search_text, 1, true) then
+                                 vim.api.nvim_win_set_cursor(0, { i, 0 })
+                                 Source_File = nil
+                                 return true
+                              end
+                           end
+                           Source_File = nil
+
+                           print("Not found: " .. search_text)
+                           return false
+                        end
+                        goto_line_containing(Source_File)
+                     end)
+                  end,
+                  mode = "n",
+               },
+               ["H"] = {
+                  -- FIX: Doesn't work on files in the smame directory?
+                  function()
+                     require("oil").close()
+                     cmd("bprevious")
+                     Source_File = vim.fn.expand("%:t")
+                     print(Source_File)
+                     require("oil").open_float(nil, nil, function()
+                        local function goto_line_containing(search_text)
+                           local bufnr = vim.api.nvim_get_current_buf()
+                           local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+                           for i, line in ipairs(lines) do
+                              if line:find(search_text, 1, true) then
+                                 vim.api.nvim_win_set_cursor(0, { i, 0 })
+                                 Source_File = nil
+                                 return true
+                              end
+                           end
+                           Source_File = nil
+                           print("Not found: " .. search_text)
+                           return false
+                        end
+                        goto_line_containing(Source_File)
+                     end)
+                  end,
+                  mode = "n",
+               },
                -- ["g\\"] = { "actions.toggle_trash", mode = "n" },
             },
             -- Set to false to disable all of the above keymaps
@@ -1148,7 +1292,7 @@ require("lazy").setup({
             view_options = {
                show_hidden = true,
                -- This function defines what will never be shown, even when `show_hidden` is set
-               is_always_hidden = function(name, bufnr) return false end,
+               is_always_hidden = function(name, bufnr) return name == ".." end,
                natural_order = "fast",
                case_insensitive = false,
                sort = {
@@ -1165,14 +1309,15 @@ require("lazy").setup({
             },
             float = {
                -- Padding around the floating window
-               padding = 5,
+               padding = 1,
                -- max_width and max_height can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
-               max_width = 80,
+               max_width = 120,
                max_height = 0,
                border = "rounded",
-               get_win_title = function(winid)
-                  local dir = fn.fnamemodify(fn.getcwd(0, 0), ":~")
-                  return dir:ends_with("\\") and dir or dir .. "\\"
+               get_win_title = function(_) -- winid
+                  return "Oil"
+                  -- local dir = fn.fnamemodify(fn.getcwd(0, 0), ":~")
+                  -- return dir:ends_with("\\") and dir or dir .. "\\"
                end,
                -- get_win_title = function(winid) return "" end,
                preview_split = "auto",
@@ -1193,337 +1338,150 @@ require("lazy").setup({
                max_height = { 10, 0.9 },
                min_height = { 5, 0.1 },
                height = nil,
-               border = nil,
+               border = "rounded",
                minimized_border = "none",
                win_options = {
                   winblend = 0,
                },
             },
+            confirm = {
+               border = "rounded",
+            },
             keymaps_help = {
                border = nil,
             },
          },
-      },
-
-      {
-         -- "alvarez-lucas/Otree.nvim",
-         enabled = false,
-         dir = "~/repos/Otree.nvim/",
-         keys = {
-            {
-               "<leader>e",
-               "<cmd>Otree<cr>",
-            },
-            {
-               "<leader>E",
-               "<cmd>OtreeFocus<cr>",
-            },
-         },
-         -- branch = "feature/tab-scoped-directories",
-         init = function()
-            -- Lazy load on open of directory to hijack netrw (https://www.lazyvim.org/extras/editor/neo-tree)
-            vim.api.nvim_create_autocmd("BufEnter", {
-               group = vim.api.nvim_create_augroup("Otree_start_directory", { clear = true }),
-               desc = "Start Otree with directory",
-               once = true,
-               callback = function()
-                  if package.loaded["Otree"] then
-                     return
-                  else
-                     local stats = vim.uv.fs_stat(vim.fn.argv(0))
-                     if stats and stats.type == "directory" then require("Otree") end
-                  end
-               end,
-            })
-         end,
-         dependencies = {
-            "stevearc/oil.nvim",
-            "nvim-tree/nvim-web-devicons",
-         },
-         opts = {
-            win_size = 34,
-            open_on_startup = false,
-            hijack_netrw = true,
-            show_hidden = false,
-            show_ignore = false,
-            cursorline = true,
-            focus_on_enter = true,
-            open_on_left = true,
-            git_signs = true,
-            lsp_signs = false,
-            oil = "float",
-            ignore_patterns = {},
-
-            use_default_keymaps = false,
-            keymaps = {
-               ["l"] = "actions.select_then_close",
-               ["h"] = "actions.close_dir",
-               ["<Esc>"] = "actions.close_win",
-               ["<bs>"] = "actions.goto_parent",
-               ["<CR>"] = "actions.goto_dir",
-               ["<R>"] = "actions.goto_home_dir_tab",
-               ["cd"] = "actions.change_home_dir_tab",
-               ["L"] = "actions.open_dirs",
-               ["H"] = "actions.close_dirs",
-               ["o"] = "actions.oil_dir",
-               ["O"] = "actions.oil_into_dir",
-               ["t"] = "actions.open_tab",
-               ["v"] = "actions.open_vsplit",
-               ["s"] = "actions.open_split",
-               ["."] = "actions.toggle_hidden",
-               ["i"] = "actions.toggle_ignore",
-               ["r"] = "actions.refresh",
-               ["f"] = "actions.focus_file",
-               ["?"] = "actions.open_help",
-            },
-            -- tree = {
-            --    space_after_icon = " ",
-            --    space_after_connector = " ",
-            --    connector_space = " ",
-            --    -- connector_last = "─",
-            --    connector_last = "└",
-            --    connector_middle = "│",
-            --    -- connector_middle = "├",
-            --    vertical_line = "│",
-            -- },
-            tree = {
-               space_after_icon = " ",
-               space_after_connector = " ",
-               connector_space = " ",
-               -- connector_last = "─",
-               connector_last = " ",
-               connector_middle = " ",
-               -- connector_middle = " ",
-               vertical_line = " ",
-            },
-            icons = {
-               title = " ",
-               default_file = " ",
-               default_directory = " ",
-               empty_dir = " ",
-               trash = " ",
-               keymap = "⌨ ",
-               oil = " ",
-            },
-
-            highlights = {
-               directory = "Directory",
-               file = "Normal",
-               tree = "Comment",
-               title = "Title",
-               float_normal = "NormalFloat",
-               float_border = "FloatBorder",
-               link_path = "Comment",
-               git_ignored = "NonText",
-               git_untracked = "DiagnosticInfo",
-               git_modified = "DiagnosticWarn",
-               git_added = "DiagnosticHint",
-               git_deleted = "DiagnosticError",
-               git_conflict = "DiagnosticError",
-               git_renamed = "DiagnosticHint",
-               git_copied = "DiagnosticHint",
-               lsp_warn = "DiagnosticWarn",
-               lsp_info = "DiagnosticInfo",
-               lsp_hint = "DiagnosticHint",
-               lsp_error = "DiagnosticError",
-            },
-
-            float = {
-               center = true,
-               width_ratio = 0.7,
-               height_ratio = 0.7,
-               padding = 0,
-               cursorline = true,
-               border = "rounded",
-            },
-         },
          config = function(_, opts)
-            require("Otree").setup(opts)
-
-            -- Trigger only on global directory change (:cd)
-            vim.api.nvim_create_autocmd("DirChanged", {
-               pattern = "global",
-               callback = function()
-                  print("Global directory changed")
-                  vim.cmd("tcd " .. vim.fn.getcwd())
-               end,
-            })
-
-            vim.api.nvim_create_autocmd("DirChanged", {
-               pattern = "*",
-               callback = function()
-                  pcall(function() require("Otree.actions").goto_home_dir() end)
-               end,
-            })
-            -- Trigger only on window-local directory change (:lcd)
-            vim.api.nvim_create_autocmd("DirChanged", {
-               pattern = "window",
-               callback = function() print("Window directory changed") end,
-            })
-
-            -- Trigger only on tab-local directory change (:tcd)
-            vim.api.nvim_create_autocmd("DirChanged", {
-               pattern = "tabpage",
-               callback = function() print("Tab directory changed") end,
-            })
-
-            -- Trigger only on autochdir changes
-            vim.api.nvim_create_autocmd("DirChanged", {
-               pattern = "auto",
-               callback = function() print("Auto directory changed") end,
-            })
+            -- vim.api.nvim_create_autocmd("BufEnter", {
+            --    pattern = "oil://*",
+            --    once = false,
+            --    callback = function()
+            --       if Source_File and vim.bo.filetype == "oil" then
+            --          local filename = vim.fn.fnamemodify(Source_File, ":t")
+            --          local bufnr = vim.api.nvim_get_current_buf()
+            --          local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+            --
+            --          for i, line in ipairs(lines) do
+            --             if line:match(vim.pesc(filename) .. "$") or line:match(vim.pesc(filename) .. "/") then
+            --                vim.api.nvim_win_set_cursor(0, { i, 0 })
+            --                break
+            --             end
+            --          end
+            --          Source_File = nil
+            --       end
+            --    end,
+            -- })
+            require("oil").setup(opts)
          end,
       },
 
+      ---@type LazyPluginSpec
       {
          "glacambre/firenvim",
-         lazy = not vim.g.started_by_firenvim,
+         lazy = not g.started_by_firenvim,
+         init = function()
+            opt.guifont = "JetBrainsMono\\ Nerd\\ Font:h14"
+            g.firenvim_config = {
+               localSettings = {
+                  [ [[.*]] ] = {
+                     takeover = "never",
+                     priority = 0,
+                  },
+                  [ [[.*leetcode.com.*]] ] = {
+                     filename = "{hostname%32}_{pathname%32}_{selector%32}_{timestamp%32}.py",
+                     takeover = "always",
+                     priority = 1,
+                  },
+               },
+            }
+         end,
          module = false,
-         build = function() vim.fn["firenvim#install"](0) end,
+         build = function() cmd["call firenvim#install"](0) end,
          config = function()
-            vim.api.nvim_create_autocmd({ "BufEnter" }, {
-               group = vim.api.nvim_create_augroup("firenvim_filetypes", { clear = true }),
-               pattern = "leetcode.com_*.txt",
-               command = "set filetype=python",
-            })
+            keymap("n", "<esc><esc>", function() cmd([[call firenvim#focus_page()]]) end, { desc = "Return to page." })
+            keymap(
+               "n",
+               "<leader>lw",
+               function() cmd([[call firenvim#focus_page()]]) end,
+               { desc = "Return to parent window." }
+            )
+            keymap("n", "<leader>le", "<Cmd>call firenvim#hide_frame()<CR>", { desc = "Exit firenvim." })
+            -- keymap("n", "<C-z>", "<Cmd>call firenvim#hide_frame()<CR>", {})
+            keymap("n", "<leader>ds", function() cmd([[call firenvim#press_keys("<C-'>")]], { desc = "Start" }) end)
+            keymap("n", "<leader>dS", function() cmd([[call firenvim#press_keys("<C-CR>")]], { desc = "Submit" }) end)
+
+            vim.keymap.set("n", "<C-=>", function()
+               vim.o.guifont = vim.o.guifont:gsub(":h(%d+)", function(size) return ":h" .. (tonumber(size) + 1) end)
+            end)
+
+            keymap("n", "<C-->", function()
+               vim.o.guifont = vim.o.guifont:gsub(":h(%d+)", function(size) return ":h" .. (tonumber(size) - 1) end)
+            end)
+
+            -- TODO: Make keybinds to target the different areas
+            -- keymap(
+            --    "n",
+            --    "<leader>l1",
+            --    function()
+            --       fn["firenvim#eval_js"](
+            --          [[document.querySelector(`[data-layout-path="/ts0"]`).dispatchEvent( new MouseEvent("dblclick", { view: window, bubbles: true, cancelable: true, }),);]],
+            --          "Description"
+            --       )
+            --    end
+            -- )
+            --
+            -- keymap(
+            --    "n",
+            --    "<leader>l2",
+            --    function()
+            --       fn["firenvim#eval_js"](
+            --          [[document.querySelector(`[data-layout-path="/c1/ts0"]`).dispatchEvent( new MouseEvent("dblclick", { view: window, bubbles: true, cancelable: true, }),);]],
+            --          "Code"
+            --       )
+            --    end
+            -- )
+            --
+            -- keymap(
+            --    "n",
+            --    "<leader>l3",
+            --    function()
+            --       fn["firenvim#eval_js"](
+            --          [[document.querySelector(`[data-layout-path="/c1/ts1"]`).dispatchEvent( new MouseEvent("dblclick", { view: window, bubbles: true, cancelable: true, }),);]],
+            --          "Testcase_Test_Results"
+            --       )
+            --    end
+            -- )
+            -- const focusable = document.querySelectorAll(
+            --   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            -- );
+
+            -- console.log()
+
+            -- const index = Array.from(focusable).indexOf(document.activeElement);
+            -- if (index > -1 && index < focusable.length - 1) {
+            --   focusable[index + 1].focus();
+            -- }
+
+            -- keymap("n", "<leader>fi", function() fn["firenvim#eval_js"]('alert("Hello World!")', "MyFunction") end)
+            --
+            --
+            -- keymap("n", "<leader>ds", function() fn["firenvim#eval_js"]('alert("Hello World!")', "MyFunction") end)
+
+            -- api.nvim_create_autocmd({ "BufEnter" }, {
+            --    group = api.nvim_create_augroup("firenvim_filetypes", { clear = true }),
+            --    pattern = "leetcode.com_*",
+            --    command = "set filetype=cs",
+            -- })
          end,
          -- ":call firenvim#install(0)", -- Old build
       },
 
-      -- {
-      -- 	"junnplus/lsp-setup.nvim",
-      -- 	event = { "LazyFile", "VeryLazy" },
-      -- 	-- priority = 100,
-      -- 	cmd = { "LspInfo", "LspInstall", "LspUninstall" },
-      -- 	dependencies = {
-      -- 		{
-      -- 			opts = {},
-      -- 		},
-      -- 		{
-      -- 			"neovim/nvim-lspconfig",
-      -- 			config = function()
-      -- 				require("lspconfig").nushell.setup({})
-      -- 			end,
-      -- 		},
-      -- 		"williamboman/mason.nvim",
-      -- 		"williamboman/mason-lspconfig.nvim",
-      -- 		{
-      -- 			"rachartier/tiny-inline-diagnostic.nvim",
-      -- 			keys = {
-      -- 				{
-      -- 					"<leader>ck",
-      -- 					function()
-      -- 						require("tiny-inline-diagnostic").toggle()
-      -- 					end,
-      -- 				},
-      -- 			},
-      -- 			opts = {
-      -- 				preset = "powerline", -- "modern", "classic", "minimal", "powerline","ghost", "simple", "nonerdfont", "amongus"
-      -- 				options = {
-      -- 					throttle = 0,
-      -- 					softwrap = 30,
-      -- 					multilines = {
-      -- 						enabled = true,
-      -- 						always_show = true,
-      -- 					},
-      -- 					show_all_diags_on_cursorline = false,
-      -- 					enable_on_insert = false,
-      -- 					enable_on_select = false,
-      -- 				},
-      -- 			},
-      -- 		},
-      -- 	},
-      -- 	opts = {
-      -- 		default_mappings = false,
-      -- 		settings = {
-      -- 			vim.diagnostic.config({
-      -- 				signs = {
-      -- 					text = {
-      -- 						[vim.diagnostic.severity.ERROR] = "󰅚 ",
-      -- 						[vim.diagnostic.severity.WARN] = "󰀪 ",
-      -- 						[vim.diagnostic.severity.INFO] = "󰋽 ",
-      -- 						[vim.diagnostic.severity.HINT] = "󰌶 ",
-      -- 					},
-      -- 				},
-      -- 				severity_sort = true,
-      -- 				update_in_insert = false,
-      -- 				virtual_text = false,
-      -- 				underline = true,
-      -- 				virtual_lines = false,
-      -- 				float = { source = "if_many" },
-      -- 			}),
-      -- 		},
-      -- 		inlay_hints = { enabled = true },
-      -- 		-- capabilities = require("blink.cmp").get_lsp_capabilities(),
-      -- 		-- {
-      -- 		-- 					textDocument = {
-      -- 		-- 						foldingRange = {
-      -- 		-- 							dynamicRegistration = false,
-      -- 		-- 							lineFoldingOnly = true,
-      -- 		-- 						},
-      -- 		-- 					},
-      -- 		-- 				}
-      -- 		mappings = {
-      -- 			gd = "lua vim.lsp.buf.definition()",
-      -- 			gt = "lua vim.lsp.buf.type_definition()",
-      -- 			["<space>k"] = "lua vim.lsp.buf.hover()",
-      -- 			-- ["K"] = "lua vim.lsp.buf.hover()",
-      -- 			["<space>rn"] = "lua vim.lsp.buf.rename()",
-      -- 			["<space>ca"] = "lua vim.lsp.buf.code_action()",
-      -- 			["[d"] = "lua vim.diagnostic.goto_prev()",
-      -- 			["]d"] = "lua vim.diagnostic.goto_next()",
-      -- 		},
-      --
-      -- 		on_attach = function(client, bufnr)
-      -- 			local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-      -- 			local border = {
-      -- 				{ "🭽", "FloatBorder" },
-      -- 				{ "▔", "FloatBorder" },
-      -- 				{ "🭾", "FloatBorder" },
-      -- 				{ "▕", "FloatBorder" },
-      -- 				{ "🭿", "FloatBorder" },
-      -- 				{ "▁", "FloatBorder" },
-      -- 				{ "🭼", "FloatBorder" },
-      -- 				{ "▏", "FloatBorder" },
-      -- 			}
-      -- 			function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-      -- 				opts = opts or {}
-      -- 				opts.border = opts.border or border
-      -- 				return orig_util_open_floating_preview(contents, syntax, opts, ...)
-      -- 			end
-      --
-      -- 			vim.keymap.set("n", "K", function()
-      -- 				-- vim.diagnostic.open_float()
-      -- 				vim.lsp.buf.hover()
-      -- 			end)
-      -- 			vim.keymap.set("n", "gl", function()
-      -- 				vim.diagnostic.open_float()
-      -- 			end)
-      -- 			vim.keymap.set("n", "gK", function()
-      -- 				require("blink.cmp").show_signature()
-      -- 			end)
-      -- 			vim.keymap.set("i", "<c-k>", function()
-      -- 				require("blink.cmp").show_signature()
-      -- 			end)
-      -- 		end,
-      -- 		servers = {
-      -- 			yamlls = {},
-      -- 			jsonls = {},
-      -- 			powershell_es = {},
-      -- 			taplo = {},
-      -- 			omnisharp = {},
-      -- 			-- ruff = {},
-      -- 			pylsp = {},
-      -- 			lua_ls = {},
-      -- 		},
-      -- 	},
-      -- },
-
+      ---@type LazyPluginSpec
       {
-         enabled = false,
          "nvim-treesitter/nvim-treesitter", --nvim-treesitter/nvim-treesitter-context, HiPhish/rainbow-delimiters.nvim, windwp/nvim-autopairs
+         enabled = true,
          event = { "LazyFile", "VeryLazy" },
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          init = function(plugin)
             -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
             -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
@@ -1604,33 +1562,37 @@ require("lazy").setup({
          end,
       },
 
+      ---@type LazyPluginSpec
       {
          "nvim-treesitter/nvim-treesitter-context",
          event = { "LazyFile", "VeryLazy" },
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          opts = {
             mode = "topline",
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "HiPhish/rainbow-delimiters.nvim",
          event = { "LazyFile", "VeryLazy" },
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          config = function() require("rainbow-delimiters.setup").setup({}) end,
       },
 
+      ---@type LazyPluginSpec
       {
          "norcalli/nvim-colorizer.lua",
          event = { "LazyFile", "VeryLazy" },
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          config = function() require("colorizer").setup({ "*" }) end,
       },
 
+      ---@type LazyPluginSpec
       {
-         enabled = false,
          "Darazaki/indent-o-matic",
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         enabled = false,
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          -- also set as dependency for hlchunk.nvim { "VeryLazy", "LazyFile" }
          event = {
             "BufNewFile",
@@ -1643,11 +1605,12 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "saghen/blink.indent",
-         enabled = false,
+         enabled = true,
          event = "LazyFile",
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          --- @module 'blink.indent'
          --- @type blink.indent.Config
          opts = {
@@ -1706,11 +1669,12 @@ require("lazy").setup({
          --
       },
 
+      ---@type LazyPluginSpec
       {
-         enabled = false,
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
-         event = { "VeryLazy", "LazyFile" },
          "shellRaining/hlchunk.nvim",
+         enabled = false,
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         event = { "VeryLazy", "LazyFile" },
          dependencies = {
             "Darazaki/indent-o-matic",
          },
@@ -1753,11 +1717,12 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "lukas-reineke/indent-blankline.nvim",
          enabled = false,
          event = { "VeryLazy", "LazyFile" },
-         lazy = vim.fn.argc(-1) == 0, -- load early when opening a file from the cmdline
+         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
          main = "ibl",
          opts = {
             scope = { enabled = true },
@@ -1770,6 +1735,7 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "folke/todo-comments.nvim",
          event = { "LazyFile" },
@@ -1806,9 +1772,10 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
-         enabled = false,
          "folke/noice.nvim",
+         enabled = false,
          event = "VeryLazy",
          dependencies = {
             "MunifTanjim/nui.nvim",
@@ -1819,6 +1786,7 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "williamboman/mason-lspconfig.nvim",
          dependencies = "williamboman/mason.nvim",
@@ -1827,7 +1795,6 @@ require("lazy").setup({
             ensure_installed = {
                "jsonls",
                "lua_ls",
-               "omnisharp",
                "html",
                -- "tsserver",
                -- "emmet_language_server",
@@ -1849,6 +1816,7 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "neovim/nvim-lspconfig",
          dependencies = {
@@ -1892,8 +1860,8 @@ require("lazy").setup({
 
          event = "LazyFile",
          config = function()
-            vim.api.nvim_create_autocmd("LspAttach", {
-               group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+            api.nvim_create_autocmd("LspAttach", {
+               group = api.nvim_create_augroup("lsp-attach", { clear = true }),
                callback = function(event)
                   -- TODO: Check what server is attaching, don't use keybinds for Rust, add Rust keybinds in rust plugin
 
@@ -1980,29 +1948,29 @@ require("lazy").setup({
                   -- 			end)
 
                   -- When you move your cursor, the highlights will be cleared (the second autocommand).
-                  local client = vim.lsp.get_client_by_id(event.data.client_id)
+                  local client = lsp.get_client_by_id(event.data.client_id)
                   if
                      client
-                     and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
+                     and client:supports_method(lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
                   then
-                     local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
-                     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+                     local highlight_augroup = api.nvim_create_augroup("lsp-highlight", { clear = false })
+                     api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
                         buffer = event.buf,
                         group = highlight_augroup,
-                        callback = vim.lsp.buf.document_highlight,
+                        callback = lsp.buf.document_highlight,
                      })
 
-                     vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+                     api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
                         buffer = event.buf,
                         group = highlight_augroup,
-                        callback = vim.lsp.buf.clear_references,
+                        callback = lsp.buf.clear_references,
                      })
 
-                     vim.api.nvim_create_autocmd("LspDetach", {
-                        group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
+                     api.nvim_create_autocmd("LspDetach", {
+                        group = api.nvim_create_augroup("lsp-detach", { clear = true }),
                         callback = function(event2)
-                           vim.lsp.buf.clear_references()
-                           vim.api.nvim_clear_autocmds({
+                           lsp.buf.clear_references()
+                           api.nvim_clear_autocmds({
                               group = "lsp-highlight",
                               buffer = event2.buf,
                            })
@@ -2010,12 +1978,12 @@ require("lazy").setup({
                      })
                   end
 
-                  if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+                  if client and client:supports_method(lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
                      keymap(
                         "n",
                         "<leader>th",
                         function()
-                           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
+                           lsp.inlay_hint.enable(not lsp.inlay_hint.is_enabled({
                               bufnr = event.buf,
                               desc = "[T]oggle Inlay [H]ints",
                            }))
@@ -2031,26 +1999,85 @@ require("lazy").setup({
 
             -- https://www.lazyvim.org/plugins/lsp -- TODO: check this out for the default server options
             local capabilities = require("blink.cmp").get_lsp_capabilities()
-            vim.lsp.config("*", {
+            lsp.config("*", {
                capabilities = capabilities,
-               root_markers = { ".git" },
+               -- root_markers = { ".git" },
                -- on_attach = function(client, bufnr) -- Consider converting to lsp config on_attach
             })
 
-            vim.lsp.config("taplo", { root_dir = require("lspconfig.util").root_pattern("*.toml", ".git") })
+            lsp.config("roslyn", {
+               on_attach = function()
+                  print("This will run when the server attaches!")
+                  local client = vim.lsp.get_client_by_id(args.data.client_id)
+                  local bufnr = args.buf
 
-            vim.lsp.config("prosemd_lsp", { root_marker = ".obsidian" })
+                  if client and (client.name == "roslyn" or client.name == "roslyn_ls") then
+                     vim.api.nvim_create_autocmd("InsertCharPre", {
+                        desc = "Roslyn: Trigger an auto insert on '/'.",
+                        buffer = bufnr,
+                        callback = function()
+                           local char = vim.v.char
 
-            vim.diagnostic.config({
+                           if char ~= "/" then return end
+
+                           local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                           row, col = row - 1, col + 1
+                           local uri = vim.uri_from_bufnr(bufnr)
+
+                           local params = {
+                              _vs_textDocument = { uri = uri },
+                              _vs_position = { line = row, character = col },
+                              _vs_ch = char,
+                              _vs_options = {
+                                 tabSize = vim.bo[bufnr].tabstop,
+                                 insertSpaces = vim.bo[bufnr].expandtab,
+                              },
+                           }
+
+                           -- NOTE: We should send textDocument/_vs_onAutoInsert request only after
+                           -- buffer has changed.
+                           vim.defer_fn(function()
+                              client:request(
+                                 ---@diagnostic disable-next-line: param-type-mismatch
+                                 "textDocument/_vs_onAutoInsert",
+                                 params,
+                                 function(err, result, _)
+                                    if err or not result then return end
+
+                                    vim.snippet.expand(result._vs_textEdit.newText)
+                                 end,
+                                 bufnr
+                              )
+                           end, 1)
+                        end,
+                     })
+                  end
+               end,
+               settings = {
+                  ["csharp|inlay_hints"] = {
+                     csharp_enable_inlay_hints_for_implicit_object_creation = true,
+                     csharp_enable_inlay_hints_for_implicit_variable_types = true,
+                  },
+                  ["csharp|code_lens"] = {
+                     dotnet_enable_references_code_lens = true,
+                  },
+               },
+            })
+
+            lsp.config("taplo", { root_dir = require("lspconfig.util").root_pattern("*.toml", ".git") })
+
+            lsp.config("prosemd_lsp", { root_marker = ".obsidian" })
+
+            diagnostic.config({
                severity_sort = true,
                float = { border = "rounded", source = "if_many" },
-               underline = { severity = vim.diagnostic.severity.ERROR },
+               underline = { severity = diagnostic.severity.ERROR },
                signs = {
                   text = {
-                     [vim.diagnostic.severity.ERROR] = "󰅚", -- TODO: add space if using non mono version of icons
-                     [vim.diagnostic.severity.WARN] = "󰀪",
-                     [vim.diagnostic.severity.INFO] = "󰋽",
-                     [vim.diagnostic.severity.HINT] = "󰌶",
+                     [diagnostic.severity.ERROR] = "󰅚", -- TODO: add space if using non mono version of icons
+                     [diagnostic.severity.WARN] = "󰀪",
+                     [diagnostic.severity.INFO] = "󰋽",
+                     [diagnostic.severity.HINT] = "󰌶",
                   },
                },
                virtual_text = false,
@@ -2059,19 +2086,19 @@ require("lazy").setup({
                -- 	spacing = 2,
                -- 	format = function(diagnostic)
                -- 		local diagnostic_message = {
-               -- 			[vim.diagnostic.severity.ERROR] = diagnostic.message,
-               -- 			[vim.diagnostic.severity.WARN] = diagnostic.message,
-               -- 			[vim.diagnostic.severity.INFO] = diagnostic.message,
-               -- 			[vim.diagnostic.severity.HINT] = diagnostic.message,
+               -- 			[diagnostic.severity.ERROR] = diagnostic.message,
+               -- 			[diagnostic.severity.WARN] = diagnostic.message,
+               -- 			[diagnostic.severity.INFO] = diagnostic.message,
+               -- 			[diagnostic.severity.HINT] = diagnostic.message,
                -- 		}
                -- 		return diagnostic_message[diagnostic.severity]
                -- 	end,
                -- },
             })
 
-            -- vim.lsp.enable("jsonls")
-            -- vim.lsp.enable("lua_ls")
-            -- vim.lsp.enable("omnisharp")
+            -- lsp.enable("jsonls")
+            -- lsp.enable("lua_ls")
+            -- lsp.enable("omnisharp")
             -- require("lspconfig").omnisharp.setup({
             --    cmd = { "dotnet", "C:/Users/lucas/Downloads/omnisharp-win-x64-net6.0/OmniSharp.dll" },
             --    settings = {
@@ -2102,99 +2129,81 @@ require("lazy").setup({
          end,
       },
 
+      ---@type LazyPluginSpec
       {
          "mrcjkb/rustaceanvim",
          dependencies = { "neovim/nvim-lspconfig" },
          lazy = false,
       },
 
+      ---@type LazyPluginSpec
       {
          "windwp/nvim-autopairs",
          event = "InsertEnter",
          opts = {},
       },
 
+      ---@type LazyPluginSpec
       {
          "folke/snacks.nvim",
-         lazy = vim.fn.argc(-1) ~= 0,
          event = "VeryLazy",
          keys = {
             {
                "<leader>nf",
-               function() Snacks.picker.files({ dirs = { "~/valuts/notes/" }, exclude = { "*journal*" } }) end,
-               desc = "Find Neorg Files",
-            },
-            {
-               "<leader>njf",
                function()
                   Snacks.picker.files({
-                     dirs = { "~/vaults/notes/journal/" },
-                     sort = { fields = { "file" } },
+                     cwd = "~/vaults/notes/",
+                     exclude = { "*journal*", "*json", "*js", "*css", "*toml" },
                   })
                end,
                desc = "Find Neorg Files",
             },
-            {
-               "<leader>ng",
-               function() Snacks.picker.grep({ dirs = { "~/notes/" }, need_search = false }) end,
-               desc = "Grep Neorg Files",
-            },
-            {
-               "<leader>m",
-               function() Snacks.picker.notifications() end,
-               desc = "Notification History",
-            },
-            {
-               "<leader>sg",
-               function() Snacks.picker.grep({ need_search = false }) end,
-               desc = "Grep",
-            },
+            -- {
+            --    "<leader>njf",
+            --    function()
+            --       Snacks.picker.files({
+            --          dirs = { "~/vaults/notes/journal/" },
+            --          sort = { fields = { "file" } },
+            --       })
+            --    end,
+            --    desc = "Find Neorg Files",
+            -- },
+            { "<leader>sg", function() Snacks.picker.grep() end, desc = "Search Grep" },
             {
                "<leader>sg",
                function() Snacks.picker.grep_word() end,
-               desc = "Visual selection or word",
+               desc = "Search Visual Selection",
                mode = { "v" },
             },
+            { "<leader>sf", function() Snacks.picker.smart() end, desc = "Search Files" },
+            { "<leader>w", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
+            { "<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
+            { "<leader>sb", function() Snacks.picker.buffers() end, desc = "Search Buffers" },
+            { "<leader>zz", function() Snacks.picker.zoxide() end, desc = "Jump to Zoxide" },
             {
-               "<leader>f",
-               function()
-                  -- Snacks.picker.smart()
-                  Snacks.picker.files()
-               end,
-               desc = "Smart Find Files",
-            },
-            {
-               "<leader>w",
-               function() Snacks.bufdelete() end,
-               desc = "Delete Buffer",
-            },
-            {
-               "<leader>bo",
-               function() Snacks.bufdelete.other() end,
-               desc = "Delete Other Buffers",
-            },
-            {
-               "<leader>b",
-               function()
-                  Snacks.picker.buffers({
-                     on_show = function() vim.cmd.stopinsert() end,
-                     -- filter = {
-                     -- 	cwd = ,
-                     -- },
-                  })
-               end,
-               desc = "Buffers",
-            },
-            {
-               "<leader>Z",
-               function() Snacks.picker.zoxide() end,
-               desc = "Zoxide",
-            },
-            {
-               "<leader>z",
+               "<leader>zd",
                function()
                   Snacks.picker.projects({
-                     dev = { "~/repos", "~/.dotfiles" },
+                     title = "Dotfiles",
+                     dev = { "~/.dotfiles" },
+                     patterns = { "dot.yaml" },
+                     confirm = function(picker, item)
+                        if item then
+                           cmd.tcd(Snacks.picker.util.dir(item))
+                           Snacks.picker.smart({ hidden = true })
+                        else
+                           picker:close()
+                        end
+                     end,
+                  })
+               end,
+               desc = "Jump to Dot Files",
+            },
+            {
+               "<leader>zp",
+               function()
+                  Snacks.picker.projects({
+                     dev = { "~/repos" },
                      patterns = {
                         ".git",
                         "_darcs",
@@ -2203,54 +2212,16 @@ require("lazy").setup({
                         ".svn",
                         "package.json",
                         "Makefile",
-                        "dot.yaml",
-                        "dot.json",
-                        "dot.toml",
                      },
-                     confirm = function(picker, item)
-                        if item then
-                           vim.cmd.tcd(Snacks.picker.util.dir(item))
-                           picker:close()
-                           -- Snacks.picker.files()
-                           -- vim.cmd("Neotree action=focus source=filesystem position=current")
-                        else
-                           picker:close()
-                        end
-                     end,
                   })
                end,
-               desc = "Projects",
+               desc = "Jump to Projects",
             },
-            {
-               "<leader>sr",
-               function() Snacks.picker.recent() end,
-               desc = "Recent",
-            },
-            {
-               "<leader>sk",
-               function() Snacks.picker.keymaps() end,
-               desc = "keymaps",
-            },
-            {
-               "<leader>sm",
-               function() Snacks.picker.marks() end,
-               desc = "keymaps",
-            },
-            {
-               "<leader>sM",
-               function() Snacks.picker.notifications() end,
-               desc = "keymaps",
-            },
-            {
-               "<leader>su",
-               function() Snacks.picker.undo() end,
-               desc = "Undo History",
-            },
-            {
-               '<leader>s"',
-               function() Snacks.picker.registers() end,
-               desc = "Registers",
-            },
+            { "<leader>sr", function() Snacks.picker.recent() end, desc = "Search Recent" },
+            { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Search Keymaps" },
+            { "<leader>sm", function() Snacks.picker.marks() end, desc = "Search Marks" },
+            { "<leader>su", function() Snacks.picker.undo() end, desc = "Search Undo History" },
+            { '<leader>s"', function() Snacks.picker.registers() end, desc = "Search Registers" },
             -- {
             -- 	"<leader>vb",
             -- 	function()
@@ -2360,32 +2331,32 @@ require("lazy").setup({
             {
                "<leader>sh",
                function() Snacks.picker.help() end,
-               desc = "Help Pages",
+               desc = "Search Help Pages",
             },
             {
                "<leader>sH",
                function() Snacks.picker.highlights() end,
-               desc = "Highlights",
+               desc = "Search Highlights",
             },
             {
                "<leader>sj",
                function() Snacks.picker.jumps() end,
-               desc = "Highlights",
+               desc = "Search Jumps",
             },
             {
                "<leader>sl",
                function() Snacks.picker.loclist() end,
-               desc = "Location List",
+               desc = "Search Location List",
             },
             {
                "<leader>ss",
                function() Snacks.picker.resume() end,
-               desc = "Resume",
+               desc = "Search Resume",
             },
             {
                "<leader>sq",
                function() Snacks.picker.qflist() end,
-               desc = "Quickfix List",
+               desc = "Search Quickfix List",
             },
          },
          ---@module "snacks"
@@ -2413,7 +2384,13 @@ require("lazy").setup({
             --    },
             -- },
             picker = {
+               ui_select = true,
                layout = {
+                  backdrop = {
+                     bg = "#fefcf4",
+                     blend = 100,
+                  },
+                  -- layout = { backdrop = false },
                   cycle = true,
                   preset = function() return vim.o.columns >= 120 and "default" or "vertical" end,
                   -- hidden = { "input", "preview" },
@@ -2438,26 +2415,72 @@ require("lazy").setup({
                         ["<Esc>"] = { "close", mode = { "n", "i" } },
                      },
                   },
+                  -- bg = "none",
+                  -- backdrop = {
+                  --    bg = "#fefcf4",
+                  --    blend = 0,
+                  -- },
                },
                sources = {
+                  projects = {
+                     recent = false,
+                     matcher = { frecency = true, sort_empty = true, cwd_bonus = false },
+                     confirm = function(picker, item)
+                        if item then
+                           cmd.tcd(Snacks.picker.util.dir(item))
+                           Snacks.picker.smart()
+                        else
+                           picker:close()
+                        end
+                     end,
+                  },
+                  buffers = {
+                     on_show = function() cmd.stopinsert() end,
+                  },
+                  files = {
+                     hidden = false,
+                     recent = false,
+                     matcher = { frecency = true, sort_empty = true, cwd_bonus = false },
+                  },
+                  smart = {
+                     title = "Files",
+                     hidden = false,
+                     recent = false,
+                     matcher = { frecency = true, sort_empty = true, cwd_bonus = false },
+                     multi = { "files" },
+                  },
                   git_status = {
                      layout = { preset = "default" },
                   },
-                  files = {
-                     hidden = true,
-                  },
-                  help = {
+                  zoxide = {
+                     recent = false,
+                     matcher = { frecency = true, sort_empty = true, cwd_bonus = false },
                      confirm = function(picker, item)
-                        picker:close()
-                        if item then vim.schedule(function() vim.cmd("Help " .. item.text) end) end
+                        if item then
+                           cmd.tcd(Snacks.picker.util.dir(item))
+                           Snacks.picker.smart()
+                        else
+                           picker:close()
+                        end
                      end,
                   },
-                  projects = {
+                  grep = { need_search = false },
+                  highlights = {
                      recent = true,
-                     matcher = {
-                        frecency = true, -- use frecency boosting
-                        sort_empty = true, -- sort even when the filter is empty
-                        cwd_bonus = false,
+                     matcher = { frecency = true },
+                  },
+                  help = {
+                     recent = true,
+                     matcher = { frecency = true },
+
+                     -- confirm = function(picker, item)
+                     --    picker:close()
+                     --    if item then vim.schedule(function() vim.cmd("Help " .. item.text) end) end
+                     -- end,
+                  },
+                  select = {
+                     layout = {
+                        layout = { position = "float", relative = "cursor", minimal = true, row = 2, col = -30 },
                      },
                   },
                },
@@ -2465,8 +2488,10 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "dmtrKovalenko/fff.nvim",
+         enabled = false,
          build = function() require("fff.download").download_or_build_binary() end,
          opts = { -- (optional)
             debug = {
@@ -2483,21 +2508,37 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "lewis6991/gitsigns.nvim",
          event = { "LazyFile" },
+         keys = {
+            { "]c" },
+            { "[c" },
+            { "<leader>hs" },
+            { "<leader>hr" },
+            { "<leader>hs" },
+            { "<leader>hr" },
+            { "<leader>hS" },
+            { "<leader>hR" },
+            { "<leader>hp" },
+            { "<leader>hb" },
+            { "<leader>hD" },
+            { "<leader>hQ" },
+            { "<leader>hq" },
+         },
          opts = {
             on_attach = function(bufnr)
                local gitsigns = require("gitsigns")
 
-               local function map(mode, l, r, opts)
+               local function keymap(mode, l, r, opts)
                   opts = opts or {}
                   opts.buffer = bufnr
                   vim.keymap.set(mode, l, r, opts)
                end
 
                -- Navigation
-               map("n", "]c", function()
+               keymap("n", "]c", function()
                   if vim.wo.diff then
                      vim.cmd.normal({ "]c", bang = true })
                   else
@@ -2505,7 +2546,7 @@ require("lazy").setup({
                   end
                end)
 
-               map("n", "[c", function()
+               keymap("n", "[c", function()
                   if vim.wo.diff then
                      vim.cmd.normal({ "[c", bang = true })
                   else
@@ -2514,39 +2555,66 @@ require("lazy").setup({
                end)
 
                -- Actions
-               map("n", "<leader>hs", gitsigns.stage_hunk)
-               map("n", "<leader>hr", gitsigns.reset_hunk)
+               keymap("n", "<leader>hs", gitsigns.stage_hunk)
+               keymap("n", "<leader>hr", gitsigns.reset_hunk)
 
-               map("v", "<leader>hs", function() gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") }) end)
+               keymap("v", "<leader>hs", function() gitsigns.stage_hunk({ fn.line("."), fn.line("v") }) end)
 
-               map("v", "<leader>hr", function() gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") }) end)
+               keymap("v", "<leader>hr", function() gitsigns.reset_hunk({ fn.line("."), fn.line("v") }) end)
 
-               map("n", "<leader>hS", gitsigns.stage_buffer)
-               map("n", "<leader>hR", gitsigns.reset_buffer)
-               map("n", "<leader>hp", gitsigns.preview_hunk)
-               -- map("n", "<leader>hi", gitsigns.preview_hunk_inline)
+               keymap("n", "<leader>hS", gitsigns.stage_buffer)
+               keymap("n", "<leade{r>hR", gitsigns.reset_buffer)
+               keymap("n", "<leader>hp", gitsigns.preview_hunk)
+               -- keymap("n", "<leader>hi", gitsigns.preview_hunk_inline)
 
-               map("n", "<leader>hb", function() gitsigns.blame_line({ full = true }) end)
-
-               -- map("n", "<leader>hd", gitsigns.diffthis)
-
-               map("n", "<leader>hD", function() gitsigns.diffthis("~") end)
-
-               map("n", "<leader>hQ", function() gitsigns.setqflist("all") end)
-               map("n", "<leader>hq", gitsigns.setqflist)
+               keymap("n", "<leader>hb", function() gitsigns.blame_line({ full = true }) end)
+               -- keymap("n", "<leader>hd", gitsigns.diffthis)
+               keymap("n", "<leader>hD", function() gitsigns.diffthis("~") end)
+               keymap("n", "<leader>hQ", function() gitsigns.setqflist("all") end)
+               keymap("n", "<leader>hq", gitsigns.setqflist)
 
                -- TODO:
                -- Toggles
-               -- map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
-               -- map("n", "<leader>td", gitsigns.preview_hunk_inline())
-               -- map("n", "<leader>tw", gitsigns.toggle_word_diff)
+               -- keymap("n", "<leader>tb", gitsigns.toggle_current_line_blame)
+               -- keymap("n", "<leader>td", gitsigns.preview_hunk_inline())
+               -- keymap("n", "<leader>tw", gitsigns.toggle_word_diff)
 
                -- Text object
-               map({ "o", "x" }, "ih", gitsigns.select_hunk)
+               keymap({ "o", "x" }, "ih", gitsigns.select_hunk)
             end,
          },
       },
 
+      ---@type LazyPluginSpec
+      {
+         "dzfrias/arena.nvim",
+         enabled = false,
+         -- event = "BufWinEnter",
+         keys = { { "<c-b>", "<cmd>ArenaToggle<cr>" } }, -- TODO
+         opts = {},
+      },
+
+      ---@type LazyPluginSpec
+      {
+         "j-morano/buffer_manager.nvim", -- pugin
+         keys = {
+            { "<c-b>", function() require("buffer_manager.ui").toggle_quick_menu() end },
+         },
+         dependencies = { "nvim-lua/plenary.nvim" },
+         opts = {},
+         config = function(_, opts)
+            api.nvim_create_autocmd("FileType", {
+               group = api.nvim_create_augroup("buffer_manager_keymaps", { clear = true }),
+               pattern = { "buffer_manager" },
+               callback = function()
+                  keymap("n", "J", ":m .+1<CR>==", { desc = "Move line down", buffer = true })
+                  keymap("n", "K", ":m .-2<CR>==", { desc = "Move line up", buffer = true })
+               end,
+            })
+         end,
+      },
+
+      ---@type LazyPluginSpec
       {
          "NeogitOrg/neogit",
          dependencies = {
@@ -2576,18 +2644,18 @@ require("lazy").setup({
       -- <leader>gp - pull
       -- <leader>gP - push
       --
+      ---@type LazyPluginSpec
       {
          "obsidian-nvim/obsidian.nvim",
          version = "*", -- recommended, use latest release instead of latest commit
          lazy = true,
          ft = "markdown",
          -- event = {
-         --    "BufReadPre " .. vim.fn.expand("~") .. "\\vaults\\notes\\*.md",
-         --    "BufNewFile " .. vim.fn.expand("~") .. "\\vaults\\notes\\*.md",
+         --    "BufReadPre " .. fn.expand("~") .. "\\vaults\\notes\\*.md",
+         --    "BufNewFile " .. fn.expand("~") .. "\\vaults\\notes\\*.md",
          -- },
          dependencies = {
             "nvim-lua/plenary.nvim",
-            "folke/snacks.nvim",
          },
          keys = {
             { "<leader>nn", "<cmd>Obsidian new<cr>" },
@@ -2597,7 +2665,7 @@ require("lazy").setup({
             { "<leader>nt", "<cmd>Obsidian template<cr>" },
             { "<leader>nb", "<cmd>Obsidian backlinks<cr>" },
             { "<leader>ng", "<cmd>Obsidian search<cr>" },
-            { "<leader>nf", "<cmd>Obsidian quick_switch<cr>" },
+            -- { "<leader>nf" },
             { "<leader>njf", "<cmd>Obsidian dailies<cr>" },
             { "<leader>njt", "<cmd>Obsidian today<cr>" },
             { "<leader>njT", "<cmd>Obsidian tomorrow<cr>" },
@@ -2622,6 +2690,7 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "nvim-neorg/neorg",
          enabled = false,
@@ -2695,8 +2764,8 @@ require("lazy").setup({
             },
          },
          config = function(_, opts)
-            vim.api.nvim_create_autocmd("FileType", {
-               group = vim.api.nvim_create_augroup("neorg_keymaps", { clear = true }),
+            api.nvim_create_autocmd("FileType", {
+               group = api.nvim_create_augroup("neorg_keymaps", { clear = true }),
                pattern = { "norg" },
                callback = function()
                   keymap(
@@ -2708,39 +2777,80 @@ require("lazy").setup({
                end,
             })
 
-            vim.api.nvim_create_autocmd("BufWritePre", {
-               group = vim.api.nvim_create_augroup("neorg_indents", { clear = true }),
+            api.nvim_create_autocmd("BufWritePre", {
+               group = api.nvim_create_augroup("neorg_indents", { clear = true }),
                pattern = { "*.norg" },
-               callback = function() vim.cmd([[normal mzgg=G`z]]) end,
+               callback = function() cmd([[normal mzgg=G`z]]) end,
             })
             vim.wo.foldlevel = 99
             require("neorg").setup(opts)
          end,
       },
 
+      ---@type LazyPluginSpec
       {
          "ThePrimeagen/harpoon",
          branch = "harpoon2",
          keys = {
-            { "<leader>1" },
-            { "<leader>2" },
-            { "<leader>3" },
-            { "<leader>4" },
-            { "<leader>5" },
-            { "<leader>6" },
-            { "<leader>7" },
-            { "<leader>8" },
-            { "<leader>9" },
-            { "<leader>a" },
-            { "<c-e>" },
+            {
+               "<leader>1",
+               function() require("harpoon"):list():select(1) end,
+               { desc = "Harpoon Buffer 1" },
+            },
+            {
+               "<leader>2",
+               function() require("harpoon"):list():select(2) end,
+               { desc = "Harpoon Buffer 2" },
+            },
+            {
+               "<leader>3",
+               function() require("harpoon"):list():select(3) end,
+               { desc = "Harpoon Buffer 3" },
+            },
+            {
+               "<leader>4",
+               function() require("harpoon"):list():select(4) end,
+               { desc = "Harpoon Buffer 4" },
+            },
+            {
+               "<leader>5",
+               function() require("harpoon"):list():select(5) end,
+               { desc = "Harpoon Buffer 5" },
+            },
+            {
+               "<leader>6",
+               function() require("harpoon"):list():select(6) end,
+               { desc = "Harpoon Buffer 6" },
+            },
+            {
+               "<leader>7",
+               function() require("harpoon"):list():select(7) end,
+               { desc = "Harpoon Buffer 7" },
+            },
+            {
+               "<leader>8",
+               function() require("harpoon"):list():select(8) end,
+               { desc = "Harpoon Buffer 8" },
+            },
+            {
+               "<leader>9",
+               function() require("harpoon"):list():select(9) end,
+               { desc = "Harpoon Buffer 9" },
+            },
+            { "<leader>a", function() require("harpoon"):list():add() end, { desc = "Add buffer to Harpoon" } },
+            {
+               "<c-e>",
+               function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end,
+               { desc = "Edit harpoon buffers" },
+            },
          },
          opts = {},
          config = function(_, opts)
             local harpoon = require("harpoon")
             harpoon.setup(opts)
 
-            vim.api.nvim_set_hl(0, "HarpoonBorder", { fg = "#2c2e33", bg = "#FEFCF4" })
-            vim.api.nvim_set_hl(0, "HarpoonWindow", { fg = "#2c2e33", bg = "#FEFCF4" })
+            api.nvim_set_hl(0, "HarpoonBorder", { fg = "#2c2e33", bg = "#FEFCF4" })
+            api.nvim_set_hl(0, "HarpoonWindow", { fg = "#2c2e33", bg = "#FEFCF4" })
 
             -- harpoon:extend({
             -- 	UI_CREATE = function(cx)
@@ -2752,34 +2862,22 @@ require("lazy").setup({
 
             -- local harpoon_extensions = require("harpoon.extensions")
             -- harpoon:extend(harpoon_extensions.builtins.highlight_current_file())
-            --
-
-            keymap("n", "<leader>a", function() harpoon:list():add() end)
-            keymap("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-            keymap("n", "<leader>1", function() harpoon:list():select(1) end)
-            keymap("n", "<leader>2", function() harpoon:list():select(2) end)
-            keymap("n", "<leader>3", function() harpoon:list():select(3) end)
-            keymap("n", "<leader>4", function() harpoon:list():select(4) end)
-            keymap("n", "<leader>5", function() harpoon:list():select(5) end)
-            keymap("n", "<leader>6", function() harpoon:list():select(6) end)
-            keymap("n", "<leader>7", function() harpoon:list():select(7) end)
-            keymap("n", "<leader>8", function() harpoon:list():select(8) end)
-            keymap("n", "<leader>9", function() harpoon:list():select(9) end)
          end,
       },
 
       -- TODO: Pick a surround plugin
-
+      ---@type LazyPluginSpec
       {
-         enabled = false,
          "kylechui/nvim-surround",
+         enabled = false,
          keys = { "ys", "ds", "cs" },
          opts = {},
       },
 
+      ---@type LazyPluginSpec
       {
-         enabled = true,
          "echasnovski/mini.surround",
+         enabled = true,
          keys = {
             { "gsa", mode = { "n", "v" } },
             { "gsd", mode = { "n", "v" } },
@@ -2802,6 +2900,7 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "kevinhwang91/nvim-hlslens",
          keys = {
@@ -2818,31 +2917,33 @@ require("lazy").setup({
 
             local kopts = { noremap = true, silent = true }
 
-            vim.api.nvim_set_keymap(
+            api.nvim_set_keymap(
                "n",
                "n",
                [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
                kopts
             )
-            vim.api.nvim_set_keymap(
+            api.nvim_set_keymap(
                "n",
                "N",
                [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
                kopts
             )
-            vim.api.nvim_set_keymap("n", "*", [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap("n", "#", [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap("n", "g*", [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap("n", "g#", [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            api.nvim_set_keymap("n", "*", [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            api.nvim_set_keymap("n", "#", [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            api.nvim_set_keymap("n", "g*", [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            api.nvim_set_keymap("n", "g#", [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
          end,
       },
 
+      ---@type LazyPluginSpec
       {
          "tiagovla/scope.nvim",
          event = "TabNewEntered",
          opts = {},
       },
 
+      ---@type LazyPluginSpec
       {
          "CRAG666/betterTerm.nvim",
          enabled = false,
@@ -2861,13 +2962,14 @@ require("lazy").setup({
             require("betterTerm").setup(opts)
 
             local current = 1
-            vim.keymap.set({ "n" }, "<leader>:", function()
+            keymap({ "n" }, "<leader>:", function()
                require("betterTerm").open(current)
                current = current + 1
             end, { desc = "New terminal" })
          end,
       },
 
+      ---@type LazyPluginSpec
       {
          "CRAG666/code_runner.nvim",
          keys = {
@@ -2929,11 +3031,19 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
          "stevearc/conform.nvim",
          dependencies = {
             "williamboman/mason.nvim",
          },
+         init = function() vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end,
+         keys = {
+            { "grf", function() require("conform").format({ async = true }) end, mode = { "n", "v" } },
+         },
+         cmd = "ConformInfo",
+         ---@module "conform"
+         ---@type conform.setupOpts
          opts = {
             format_on_save = {
                -- These options will be passed to conform.format()
@@ -2950,16 +3060,60 @@ require("lazy").setup({
                json = { "fixjson", "prettier" },
                cs = { "csharpier" },
                yaml = { "yamlfix" }, -- "yamlfmt",
-               markdown = { "rumdl" },
-               xml = {},
+               markdown = { "prettierd" },
+               -- xml = {},
                -- cpp = { lsp_format = "prefer" },
                -- cpp = {"clang-format"}
                -- nu = { "nufmt" }, -- Currently too alpha, broken
                -- norg = { command = "C:/Users/lalvarez/source/repos/norg-fmt/target/release/norg-fmt.exe" },
             },
          },
+         config = function(_, opts)
+            require("conform").formatters.injected = { -- Customize the "injected" formatter
+               options = {
+                  ignore_errors = true,
+                  -- lang_to_formatters = {
+                  --    json = { "jq" },
+                  --    python = { "python" },
+                  -- },
+                  -- lang_to_ft = {
+                  --    python = "python",
+                  -- },
+                  lang_to_ext = {
+                     bash = "sh",
+                     c_sharp = "cs",
+                     elixir = "exs",
+                     javascript = "js",
+                     julia = "jl",
+                     latex = "tex",
+                     markdown = "md",
+                     python = "py",
+                     ruby = "rb",
+                     rust = "rs",
+                     teal = "tl",
+                     typescript = "ts",
+                  },
+                  -- lang_to_ext = {
+                  --    python = "py",
+                  --    -- c_sharp = "cs",
+                  --    -- elixir = "exs",
+                  --    -- javascript = "js",
+                  --    -- julia = "jl",
+                  --    -- latex = "tex",
+                  --    -- markdown = "md",
+                  --    -- python = "py",
+                  --    -- ruby = "rb",
+                  --    -- rust = "rs",
+                  --    -- teal = "tl",
+                  --    -- typescript = "ts",
+                  -- },
+               },
+            }
+            require("conform").setup(opts)
+         end,
       },
 
+      ---@type LazyPluginSpec
       {
          "zapling/mason-conform.nvim",
          dependencies = "stevearc/conform.nvim",
@@ -2969,6 +3123,25 @@ require("lazy").setup({
          opts = {},
       },
 
+      ---@type LazyPluginSpec
+      {
+         "folke/which-key.nvim", -- plugn
+         event = "VeryLazy",
+         opts = {
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+         },
+         keys = {
+            {
+               "<leader>?",
+               function() require("which-key").show({ global = false }) end,
+               desc = "Buffer Local Keymaps (which-key)",
+            },
+         },
+      },
+
+      ---@type LazyPluginSpec
       {
          "OXY2DEV/helpview.nvim",
          cmd = { "Helpview", "Help", "H" },
@@ -2978,6 +3151,7 @@ require("lazy").setup({
          -- keys = { "<leader>sh" },
       },
 
+      ----@type LazyPluginSpec
       -- {
       --    "maskudo/devdocs.nvim",
       --    cmd = { "DevDocs" },
@@ -3035,6 +3209,7 @@ require("lazy").setup({
       --    },
       -- },
 
+      ---@type LazyPluginSpec
       {
          "jiaoshijie/undotree",
          opts = {
@@ -3050,10 +3225,11 @@ require("lazy").setup({
          },
       },
 
+      ---@type LazyPluginSpec
       {
-         cmd = "Leet",
-         lazy = "le" ~= vim.fn.argv(0, -1),
          "kawre/leetcode.nvim",
+         cmd = "Leet",
+         lazy = "le" ~= fn.argv(0, -1),
          build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
          dependencies = {
             -- "nvim-telescope/telescope.nvim",
@@ -3103,13 +3279,54 @@ require("lazy").setup({
          end,
       },
 
+      ---@type LazyPluginSpec
       {
          "mrcjkb/rustaceanvim",
          version = "^6", -- Recommended
-         lazy = false, -- This plugin is already lazy
+         lazy = true, -- This plugin is already lazy -- if this is broken, change it back to false
          filetype = {
             "rust",
          },
+      },
+
+      ---@type LazyPluginSpec
+      {
+         "seblyng/roslyn.nvim",
+         init = function()
+            local util = require("lspconfig.util")
+            vim.lsp.config("roslyn", {
+               root_dir = function(bufnr, on_dir)
+                  local fname = vim.api.nvim_buf_get_name(bufnr)
+                  on_dir(
+                     util.root_pattern("*.sln")(fname)
+                        or util.root_pattern("*.csproj")(fname)
+                        or util.root_pattern("omnisharp.json")(fname)
+                        or util.root_pattern("function.json")(fname)
+                        or util.root_pattern("leetcode.com*")(fname)
+                        or fn.getcwd(0, 0)
+                  )
+               end,
+
+               on_attach = function() print("This will run when the server attaches!") end,
+               settings = {
+                  ["csharp|inlay_hints"] = {
+                     csharp_enable_inlay_hints_for_implicit_object_creation = true,
+                     csharp_enable_inlay_hints_for_implicit_variable_types = true,
+                  },
+                  ["csharp|code_lens"] = {
+                     dotnet_enable_references_code_lens = true,
+                  },
+               },
+            })
+         end,
+
+         ft = "cs",
+         ---@module 'roslyn.config'
+         ---@type RoslynNvimConfig
+         opts = {
+            -- your configuration comes here; leave empty for default settings
+         },
+         -- setup = function(_, opts) require("roslyn").setup(opts) end,
       },
    },
 })

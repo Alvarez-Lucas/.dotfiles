@@ -1,26 +1,33 @@
 ---
 general:
-  startup_commands: [shell-exec zebar]
-  shutdown_commands: [shell-exec taskkill /IM zebar.exe /F]
+  startup_commands:
+    - shell-exec zebar.exe
+    - shell-exec tacky-borders.exe
+    - shell-exec AltSnap.exe
+    # - shell-exec gat-gwm.exe
+  shudown_commands:
+    - shell-exec taskkill /IM zebar.exe /F
+    - shell-exec taskkill /IM tacky-borders.exe /F
+    # - shell-exec taskkill /IM gat-gwm.exe /F
   config_reload_commands: []
   focus_follows_cursor: false
   toggle_workspace_on_refocus: false
   cursor_jump: {enabled: true, trigger: window_focus}   # Options: 'monitor_focus', 'window_focus'
 gaps:
   scale_with_dpi: true
-  inner_gap: 8px
-  outer_gap: {top: 8px, bottom: 8px, left: 8px, right: 8px}
-  # single_window_outer_gap: {top: 8px, bottom: 8px, left: 8px, right: 8px}  # 16x9
-  single_window_outer_gap: {top: 8px, bottom: 8px, left: 17%, right: 17%}  # Ultrawide
+  inner_gap: 24px
+  outer_gap: {top: 20px, bottom: 20px, left: 20px, right: 20px}
+  single_window_outer_gap: {top: 20px, bottom: 20px, left: 20px, right: 20px}  # 16x9
+  # single_window_outer_gap: {top: 8px, bottom: 8px, left: 17%, right: 17%}  # Ultrawide
 window_effects:
   focused_window:
-    border: {enabled: true}
+    # border: {enabled: true}
     hide_title_bar: {enabled: false}
-    corner_style: {enabled: true, style: rounded}   # Options: 'square', 'rounded', 'small_rounded'
+    # corner_style: {enabled: true, style: rounded}   # Options: 'square', 'rounded', 'small_rounded'
   other_windows:
-    border: {enabled: false}
+    # border: {enabled: false}
     hide_title_bar: {enabled: false}
-    corner_style: {enabled: true, style: rounded}
+    # corner_style: {enabled: true, style: rounded}
 window_behavior:
   initial_state: tiling
   state_defaults:
