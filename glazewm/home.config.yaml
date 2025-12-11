@@ -15,19 +15,19 @@ general:
   cursor_jump: {enabled: true, trigger: window_focus}   # Options: 'monitor_focus', 'window_focus'
 gaps:
   scale_with_dpi: true
-  inner_gap: 24px
-  outer_gap: {top: 20px, bottom: 20px, left: 20px, right: 20px}
-  single_window_outer_gap: {top: 20px, bottom: 20px, left: 20px, right: 20px}  # 16x9
+  inner_gap: 5px
+  outer_gap: {top: 2px, bottom: 2px, left: 3px, right: 4px}
+  single_window_outer_gap: {top: 2px, bottom: 2px, left: 3px, right: 4px}  # 16x9
   # single_window_outer_gap: {top: 8px, bottom: 8px, left: 17%, right: 17%}  # Ultrawide
 window_effects:
   focused_window:
     # border: {enabled: true}
     hide_title_bar: {enabled: false}
-    # corner_style: {enabled: true, style: rounded}   # Options: 'square', 'rounded', 'small_rounded'
+    corner_style: {enabled: true, style: square}   # Options: 'square', 'rounded', 'small_rounded'
   other_windows:
     # border: {enabled: false}
     hide_title_bar: {enabled: false}
-    # corner_style: {enabled: true, style: rounded}
+    corner_style: {enabled: true, style: square}
 window_behavior:
   initial_state: tiling
   state_defaults:
@@ -64,8 +64,9 @@ binding_modes:
 keybindings:
   - {bindings: [alt+shift+p], commands: [wm-enable-binding-mode --name pause]}
   # More modes
-  - {bindings: [alt+space], commands: [wm-cycle-focus]}
-  - {bindings: [alt+shift+space], commands: [toggle-floating --centered]}
+  - {bindings: [alt+t], commands: [wm-cycle-focus]}
+  # - {bindings: [alt+space], commands: [wm-cycle-focus]}
+  # - {bindings: [alt+shift+space], commands: [toggle-floating --centered]}
   # Resize workspace
   - {bindings: [alt+u], commands: [resize --width -2%]}
   - {bindings: [alt+p], commands: [resize --width +2%]}
@@ -113,7 +114,7 @@ keybindings:
   - {bindings: [alt+shift+q], commands: [close]}
   # Toggles
   - {bindings: [alt+v], commands: [toggle-tiling-direction]}
-  - {bindings: [alt+t], commands: [toggle-tiling]}
+  - {bindings: [alt+shift+t], commands: [toggle-tiling]}
   - {bindings: [alt+x], commands: [toggle-fullscreen]}
   - {bindings: [alt+m], commands: [toggle-minimized]}
   # exit

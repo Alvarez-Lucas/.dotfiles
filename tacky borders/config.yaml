@@ -3,12 +3,13 @@
 watch_config_changes: false
 rendering_backend: V2  # options: V2, Legacy
 global:
-  border_width: 5
+  border_width: 3
   border_offset: -1
-  border_radius: Round  # Options: Auto, Square, Round, RoundSmall, radius: Integer value
+  border_radius: Square  # Options: Auto, Square, Round, RoundSmall, radius: Integer value
   initialize_delay: 0
   unminimize_delay: 0
-  inactive_color: '#fefcf4'
+  # inactive_color: '#fefcf4'
+  inactive_color: E7E4DD
   # active_color: '#c3399b'
   active_color: '#028a9b'
   komorebi_colors: {enabled: false}
