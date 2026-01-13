@@ -471,3 +471,6 @@ alias E = explorer.exe
 alias e = explorer.exe .
 
 
+
+source 'C:\Users\lucas\.jabba\jabba.nu'
+

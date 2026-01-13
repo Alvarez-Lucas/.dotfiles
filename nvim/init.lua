@@ -1811,6 +1811,7 @@ require("lazy").setup({
                "slint_lsp",
                "qmlls",
                "marksman",
+               "tailwindcss",
                -- ruff = {},
             },
          },
@@ -3061,6 +3062,8 @@ require("lazy").setup({
                cs = { "csharpier" },
                yaml = { "yamlfix" }, -- "yamlfmt",
                markdown = { "prettierd" },
+               js = { "prettierd" },
+               ts = { "prettierd" },
                -- xml = {},
                -- cpp = { lsp_format = "prefer" },
                -- cpp = {"clang-format"}
