@@ -76,6 +76,34 @@ body,
   margin-left: 4px;
 }
 
+.window-title {
+  display: flex;
+  align-items: center;
+  height = 100%;
+  margin-left: 16px;
+  margin-right: 16px;
+  /* padding: 4px 8px; */
+  /* color: "#2c2e33"; */
+  font-weight: 600;
+  color: rgba(112, 113, 117, 1);
+  border: none;
+  border-radius: 0;
+  background: rgb(0 0 0 / 0%);
+  height: 40px;
+  min-width: 0px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* Optional safety to prevent long text from overlapping sides */
+  max-width: 40%; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+
+}
+
 .workspace {
   margin-right: 4px;
   /* padding: 4px 8px; */

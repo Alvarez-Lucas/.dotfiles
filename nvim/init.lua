@@ -660,6 +660,7 @@ require("lazy").setup({
          ---@class lazydev.Config
          opts = {
             library = {
+               { path = "${3rd}/luv/library", words = { "vim%.uv" } },
                "LazyVim",
                "lazy.nvim",
             },
@@ -1481,21 +1482,12 @@ require("lazy").setup({
          "nvim-treesitter/nvim-treesitter", --nvim-treesitter/nvim-treesitter-context, HiPhish/rainbow-delimiters.nvim, windwp/nvim-autopairs
          enabled = true,
          event = { "LazyFile", "VeryLazy" },
-         lazy = fn.argc(-1) == 0, -- load early when opening a file from the cmdline
-         init = function(plugin)
-            -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-            -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-            -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-            -- Luckily, the only things that those plugins need are the custom queries, which we make available
-            -- during startup.
-            require("lazy.core.loader").add_to_rtp(plugin)
-            require("nvim-treesitter.query_predicates")
-         end,
+         cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
          build = ":TSUpdate",
          config = function()
             require("nvim-treesitter.install").prefer_git = false
             require("nvim-treesitter.install").compilers = { "gcc" }
-            local configs = require("nvim-treesitter.configs")
+            local configs = require("nvim-treesitter.config")
             ---@diagnostic disable-next-line: missing-fields
             configs.setup({
                ensure_installed = {
@@ -2679,7 +2671,7 @@ require("lazy").setup({
             workspaces = {
                {
                   name = "notes",
-                  path = "~/vaults/notes",
+                  path = "~/Documents/notes",
                },
             },
             picker = { name = "snacks.pick" },

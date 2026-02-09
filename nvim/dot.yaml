@@ -1,4 +1,3 @@
 ---
 links:
   init.lua: ~\AppData\Local\nvim\init.lua
-  fun.lua: ~\AppData\Local\nvim\lua\fun.lua

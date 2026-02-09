@@ -472,5 +472,5 @@ alias e = explorer.exe .
 
 
 
-source 'C:\Users\lucas\.jabba\jabba.nu'
+#source 'C:\Users\lucas\.jabba\jabba.nu'
 

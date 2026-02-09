@@ -18,12 +18,12 @@
     "keybindings": 
     [
         {
-            "id": null,
-            "keys": "ctrl+shift+space"
-        },
-        {
             "id": "Terminal.DuplicatePaneAuto",
             "keys": "alt+shift+d"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+space"
         },
         {
             "id": null,
@@ -38,6 +38,22 @@
     [
         {
             "type": "remainingProfiles"
+        },
+        {
+            "allowEmpty": false,
+            "entries": 
+            [
+                {
+                    "commandline": null,
+                    "name": null,
+                    "source": "Windows.Terminal.SSH",
+                    "type": "matchProfiles"
+                }
+            ],
+            "icon": "\ue969",
+            "inline": "auto",
+            "name": "SSH",
+            "type": "folder"
         }
     ],
     "profiles": 
@@ -57,6 +73,10 @@
         [
             {
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "font": 
+                {
+                    "face": "JetBrains Mono"
+                },
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
                 "name": "Windows PowerShell"
@@ -222,6 +242,42 @@
                 "hidden": false,
                 "name": "archlinux",
                 "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{a851c6d1-13eb-56a9-8f3d-8b3bf847d131}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{cef2d424-2423-5df7-8a32-202beb3f8bfb}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{1010d451-7bac-512a-bc76-cb9f8eec73ed}",
+                "hidden": false,
+                "name": "SSH - cachyos-server",
+                "source": "Windows.Terminal.SSH"
+            },
+            {
+                "guid": "{85223619-9458-548a-986d-a1c5dd63c57d}",
+                "hidden": false,
+                "name": "SSH - cachyos-server-tank",
+                "source": "Windows.Terminal.SSH"
+            },
+            {
+                "guid": "{048053a5-7d28-5d4b-8fd6-c6aaf6cabd95}",
+                "hidden": false,
+                "name": "SSH - aan.home.arpa",
+                "source": "Windows.Terminal.SSH"
+            },
+            {
+                "guid": "{cc0fef48-c178-562c-ae72-14f247f016be}",
+                "hidden": false,
+                "name": "SSH - aon.home.arpa",
+                "source": "Windows.Terminal.SSH"
             }
         ]
     },

@@ -79,8 +79,34 @@
                 ))}
               </div>
             )}
+
           </div>
 
+
+
+          {output.glazewm && (
+            <div className="window-title">
+              {(() => {
+                  // 1. Safety Check: If no window, return Desktop
+                  if (!output.glazewm?.focusedContainer?.title) return "Desktop";
+
+                  const title = output.glazewm.focusedContainer.title;
+                  const process = output.glazewm.focusedContainer.processName;
+
+                  
+                  const isRedundant = title.toLowerCase().includes(process.toLowerCase());
+
+                  // 4. Render
+                  return (
+                    <>
+                      {title}
+                      {!isRedundant && <> - {process} </>}
+                    </>
+                  );
+                })()}
+
+            </div>
+          )}
 
           <div className="right">
 
