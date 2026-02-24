@@ -1,0 +1,11 @@
+// ────────────── Startup Applications ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
+
+    spawn-sh-at-startup "/usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
+    spawn-sh-at-startup "waybar" // bar
+    spawn-sh-at-startup "mako" // notifications
+    spawn-at-startup "xorg-xwayland"
+    spawn-sh-at-startup "wl-paste --watch cliphist store"
+    spawn-at-startup "niri-float-sticky"
+
+    //spawn-sh-at-startup "qs -c noctalia-shell"

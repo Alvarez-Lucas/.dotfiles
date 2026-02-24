@@ -1,0 +1,13 @@
+---
+linux:
+  links:
+    config.kdl: ~/.config/niri/config.kdl
+    cfg/animation.kdl: ~/.config/niri/cfg/animation.kdl
+    cfg/autostart.kdl: ~/.config/niri/cfg/autostart.kdl
+    cfg/display.kdl: ~/.config/niri/cfg/display.kdl
+    cfg/input.kdl: ~/.config/niri/cfg/input.kdl
+    cfg/keybinds.kdl: ~/.config/niri/cfg/keybinds.kdl
+    cfg/layout.kdl: ~/.config/niri/cfg/layout.kdl
+    cfg/misc.kdl: ~/.config/niri/cfg/misc.kdl
+    cfg/rules.kdl: ~/.config/niri/cfg/rules.kdl
+    cfg/okcolors.kdl: ~/.config/niri/cfg/okcolors.kdl

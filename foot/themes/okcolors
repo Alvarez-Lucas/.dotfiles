@@ -1,0 +1,26 @@
+# -*- conf -*-
+# OKColors
+
+[colors]
+cursor=2C2E33 6377B6
+background=FEFCF4
+foreground=2C2E33
+regular0=2C2E33  # black done
+regular1=D7314B  # red done
+regular2=4B8B5A  # green done
+regular3=91772A  # yellow done
+regular4=6377B6  # blue done
+regular5=896AA9  # magenta done
+regular6=028A9B  # cyan done
+regular7=E0DED7  # white done
+
+bright0=2C2E33   # bright black
+bright1=D7314B   # bright red
+bright2=4B8B5A   # bright green
+bright3=91772A   # bright yellow
+bright4=6377B6   # bright blue
+bright5=896AA9   # bright magenta
+bright6=896AA9   # bright cyan
+bright7=E0DED7   # bright white
+# selection-foreground=eeeeee
+# selection-background=0087af

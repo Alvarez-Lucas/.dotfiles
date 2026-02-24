@@ -1,0 +1,4 @@
+---
+linux:
+  links:
+    fuzzel.ini: ~/.config/fuzzel/fuzzel.ini

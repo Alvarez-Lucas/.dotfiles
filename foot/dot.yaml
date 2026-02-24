@@ -1,0 +1,5 @@
+---
+linux:
+  links:
+    foot.ini: ~/.config/foot/foot.ini
+    themes/okcolors: ~/.config/foot/themes/okcolors

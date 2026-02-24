@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://f.jstanger.dev/github/ironbar/schema-v0.18.0.json
+position: top
+height: 24
+start:
+  - type: focused
+    icon_size: 16
+center:
+  - type: workspaces
+end:
+  - type: music
+    player_type: mpris
+  - type: battery
+    show_if: |
+      ls /sys/class/power_supply/ | grep --quiet '^BAT'
+  - type: tray
+  - type: clock
+    format: '%I:%M | %d/%m/%Y'

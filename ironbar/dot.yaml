@@ -1,0 +1,4 @@
+---
+linux:
+  links:
+    config.yaml: ~/.config/ironbar/config.yaml

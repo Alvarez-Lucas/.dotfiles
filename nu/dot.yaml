@@ -1,5 +1,6 @@
 ---
-links:
-  config.nu: ~\AppData\Roaming\nushell\config.nu
-  env.nu: ~\AppData\Roaming\nushell\env.nu
-  nu_scripts\aliases\git\git-aliases.nu: ~\AppData\Roaming\nushell\nu_scripts\aliases\git\git-aliases.nu
+windows:
+  links:
+    config.nu: ~\AppData\Roaming\nushell\config.nu
+    env.nu: ~\AppData\Roaming\nushell\env.nu
+    nu_scripts\aliases\git\git-aliases.nu: ~\AppData\Roaming\nushell\nu_scripts\aliases\git\git-aliases.nu

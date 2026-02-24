@@ -1,3 +1,4 @@
 ---
-links:
-  alacritty.toml: ~/AppData/Roaming/alacritty/alacritty.toml
+windows:
+  links:
+    alacritty.toml: ~/AppData/Roaming/alacritty/alacritty.toml

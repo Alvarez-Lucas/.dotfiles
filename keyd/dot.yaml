@@ -1,0 +1,4 @@
+---
+linux:
+  links:
+    bed.conf: /etc/keyd/bed.conf

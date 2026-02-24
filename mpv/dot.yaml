@@ -1,0 +1,5 @@
+---
+linux:
+  links:
+    mpv.conf: ~/.config/mpv/mpv.conf
+    scripts/autoload.lua: ~/.config/mpv/scripts/autoload.lua

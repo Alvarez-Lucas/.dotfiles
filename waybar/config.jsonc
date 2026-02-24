@@ -1,0 +1,282 @@
+// -*- mode: jsonc -*-
+{
+  "layer": "top", // Waybar at top layer
+  // "position": "bottom", // Waybar position (top|bottom|left|right)
+  "height": 32, // Waybar height (to be removed for auto height)
+  // "width": 1280, // Waybar width
+  "spacing": 8, // Gaps between modules (4px)
+  // Choose the order of the modules
+  "modules-left": ["niri/workspaces", "custom/media"],
+  "modules-center": ["cffi/niri-windows"],
+  "cffi/niri-windows": {
+    // path where you placed the .so file
+    // "module_path": "/home/calico32/.config/waybar/waybar-niri-windows.so",
+    "module_path": "/usr/lib/waybar-niri-windows.so",
+    // configure the module's behavior
+    "options": {
+      // set the module mode
+      // "graphical" (default): draw a minimap of windows in the current workspace
+      // "text": draws symbols and a focus indicator for each column (mirrors v1 behavior)
+      "mode": "graphical",
+
+      // ======= graphical mode options =======
+      //  when to show floating windows
+      //   - "always": always show floating window view, even if there are no floating windows
+      //   - "auto" (default): show floating window view if there are floating windows on the current workspace
+      //   - "never": never show floating windows
+      "show-floating": "auto",
+      // pick where the floating windows be shown relative to tiled windows
+      //   - "left": show floating windows on the left
+      //   - "right" (default): show floating windows on the right
+      "floating-position": "right",
+      // set minimum size of windows, in pixels (default: 1, minimum: 1)
+      // if this value is too large to fit all windows (e.g. in a column with many windows),
+      // it will be reduced
+      "minimum-size": 1,
+      // set spacing between windows/columns, in pixels (default: 1, minimum: 0)
+      // if this value is too large, it will be reduced
+      "spacing": 4,
+      // set minimum size of windows, in pixels, to draw icons for (default: 0, minimum: 0)
+      // if unset or 0, icons will only be drawn for tiled windows that are the only one in their column
+      // if 1+, icons will be drawn for all windows where w >= icon-minimum-size and h >= icon-minimum-size
+      // icons must be set in the "rules" section below for this to have any effect
+      "icon-minimum-size": 0,
+      // account for borders when calculating window sizes; see note below (default: 0, minimum: 0)
+      "column-borders": 0, // border on .column
+      "floating-borders": 0, // border on .floating
+      // trigger actions on tile click (see https://yalter.github.io/niri/niri_ipc/enum.Action.html for available actions)
+      // only actions that take a single window ID are supported
+      // set to an empty string to disable
+      "on-tile-click": "FocusWindow", // (default: FocusWindow)
+      "on-tile-middle-click": "CloseWindow", // (default: CloseWindow)
+      "on-tile-right-click": "", // (default: none)
+      // add CSS classes/icons to windows based on their App ID/Title (see `niri msg windows`)
+      // Go regular expression syntax is supported for app-id and title (see https://pkg.go.dev/regexp/syntax)
+      // rules are checked in the order they are defined - first match wins and checking stops
+      // set "continue" to true to also check and apply subsequent rules even if this rule matches
+      // if multiple rules with icons are applied, the first one will be used
+      // *icons are not drawn for floating windows by default*; set "icon-minimum-size" to enable (see above)
+      // "rules": [
+      //   // .alacritty will be added to all windows with the App ID "Alacritty"
+      //   //  will be drawn in windows that match
+      //   { "app-id": "foot", "class": "foot", "icon": "" },
+      //   { "app-id": "thorium", "class": "thorium", "icon": "" },
+      //   { "app-id": "org.gnome.Nautilus", "class": "nautilus", "icon": "" },
+      //   { "app-id": "spotify", "class": "spotify", "icon": "" },
+      //   { "app-id": "spotify", "class": "spotify", "icon": "" },
+      //   // .firefox will be added to all windows with the App ID "firefox"
+      //   // subsequent rules are also checked and applied for firefox windows
+      //   { "app-id": "firefox", "class": "firefox", "continue": true },
+      //   // .youtube-music will be added to all windows that have "YouTube Music" at the end of their title
+      //   //  will be drawn in windows that match
+      //   { "title": "YouTube Music$", "class": "youtube-music", "icon": "" },
+      // ],
+
+      // ======= text mode options =======
+      // customize the symbols used to draw the columns/windows
+      "symbols": {
+        "unfocused": "⋅",
+        "focused": "⊙",
+        "unfocused-floating": "∗",
+        "focused-floating": "⊛",
+        // text to display when there are no windows on the current workspace
+        // if this is an empty string (default), the module will be hidden when there are no windows
+        "empty": "",
+      },
+    },
+    "actions": {
+      // use niri IPC action names to trigger them (see https://yalter.github.io/niri/niri_ipc/enum.Action.html for available actions)
+      // any action that has no fields is supported
+      "on-scroll-up": "FocusColumnLeft",
+      "on-scroll-down": "FocusColumnRight",
+      // in graphical mode, don't configure click actions here—they're handled by the module above
+    },
+  },
+
+  // "modules-center": ["sway/window"],
+  "modules-right": ["cpu", "memory", "pulseaudio", "clock", "tray"],
+  // Modules configuration
+  // "sway/workspaces": {
+  //     "disable-scroll": true,
+  //     "all-outputs": true,
+  //     "warp-on-scroll": false,
+  //     "format": "{name}: {icon}",
+  //     "format-icons": {
+  //         "1": "",
+  //         "2": "",
+  //         "3": "",
+  //         "4": "",
+  //         "5": "",
+  //         "urgent": "",
+  //         "focused": "",
+  //         "default": ""
+  //     }
+  // },
+  // "keyboard-state": {
+  //   "numlock": true,
+  //   "capslock": true,
+  //   "format": "{name} {icon}",
+  //   "format-icons": {
+  //     "locked": "",
+  //     "unlocked": "",
+  //   },
+  // },
+  // "sway/mode": {
+  //   "format": "<span style=\"italic\">{}</span>",
+  // },
+  // "sway/scratchpad": {
+  //   "format": "{icon} {count}",
+  //   "show-empty": false,
+  //   "format-icons": ["", ""],
+  //   "tooltip": true,
+  //   "tooltip-format": "{app}: {title}",
+  // },
+  "mpd": {
+    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+    "format-disconnected": "Disconnected ",
+    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+    "unknown-tag": "N/A",
+    "interval": 5,
+    "consume-icons": {
+      "on": " ",
+    },
+    "random-icons": {
+      "off": "<span color=\"#f53c3c\"></span> ",
+      "on": " ",
+    },
+    "repeat-icons": {
+      "on": " ",
+    },
+    "single-icons": {
+      "on": "1 ",
+    },
+    "state-icons": {
+      "paused": "",
+      "playing": "",
+    },
+    "tooltip-format": "MPD (connected)",
+    "tooltip-format-disconnected": "MPD (disconnected)",
+  },
+  // "idle_inhibitor": {
+  //   "format": "{icon}",
+  //   "format-icons": {
+  //     "activated": "",
+  //     "deactivated": "",
+  //   },
+  // },
+  "tray": {
+    // "icon-size": 21,
+    "spacing": 10,
+    // "icons": {
+    //   "blueman": "bluetooth",
+    //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
+    // }
+  },
+  "clock": {
+    // "timezone": "America/New_York",
+    // "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format": "{:%I:%m %p, %A %B %Od}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+  },
+  "cpu": {
+    "format": "{usage}% ",
+    "tooltip": false,
+  },
+  "memory": {
+    "format": "{}% ",
+  },
+  "temperature": {
+    // "thermal-zone": 2,
+    // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "critical-threshold": 80,
+    // "format-critical": "{temperatureC}°C {icon}",
+    "format": "{temperatureC}°C {icon}",
+    "format-icons": ["", "", ""],
+  },
+  "backlight": {
+    // "device": "acpi_video1",
+    "format": "{percent}% {icon}",
+    "format-icons": ["", "", "", "", "", "", "", "", ""],
+  },
+  "battery": {
+    "states": {
+      // "good": 95,
+      "warning": 30,
+      "critical": 15,
+    },
+    "format": "{capacity}% {icon}",
+    "format-full": "{capacity}% {icon}",
+    "format-charging": "{capacity}% ",
+    "format-plugged": "{capacity}% ",
+    "format-alt": "{time} {icon}",
+    // "format-good": "", // An empty format will hide the module
+    // "format-full": "",
+    "format-icons": ["", "", "", "", ""],
+  },
+  "battery#bat2": {
+    "bat": "BAT2",
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": "",
+    },
+  },
+  "network": {
+    // "interface": "wlp2*", // (Optional) To force the use of this interface
+    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "Disconnected ⚠",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+  },
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{volume}% {icon} {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""],
+    },
+    "on-click": "pavucontrol",
+  },
+  "custom/media": {
+    "format": "{icon} {text}",
+    "return-type": "json",
+    "max-length": 40,
+    "format-icons": {
+      "spotify": "",
+      "default": "🎜",
+    },
+    "escape": true,
+    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null", // Script in resources folder
+    // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+  },
+  "custom/power": {
+    "format": "⏻ ",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
+    "menu-actions": {
+      "shutdown": "shutdown",
+      "reboot": "reboot",
+      "suspend": "systemctl suspend",
+      "hibernate": "systemctl hibernate",
+    },
+  },
+}

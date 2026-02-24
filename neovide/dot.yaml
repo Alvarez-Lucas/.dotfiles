@@ -1,3 +1,4 @@
 ---
-links:
-  config.toml: ~/AppData/Roaming/neovide/config.toml
+windows:
+  links:
+    config.toml: ~/AppData/Roaming/neovide/config.toml

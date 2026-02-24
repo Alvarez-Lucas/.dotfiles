@@ -260,6 +260,12 @@ function string.starts_with(str, start) return str:sub(1, #start) == start end
 
 function string.ends_with(str, ending) return ending == "" or str:sub(-#ending) == ending end
 
+api.nvim_create_autocmd("FileType", {
+   group = api.nvim_create_augroup("jsonc_comment_string", { clear = true }),
+   pattern = { "jsonc" },
+   callback = function() opt.commentstring = "// %s" end,
+})
+
 -- Bootstrap lazy.nvim
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -1129,7 +1135,7 @@ require("lazy").setup({
                end
             end
          end,
-         lazy = true,
+         lazy = false,
          cmd = "Oil",
          keys = {
             {
@@ -1492,12 +1498,14 @@ require("lazy").setup({
             configs.setup({
                ensure_installed = {
                   "c",
-                  "cmake",
-                  "cpp",
                   "c_sharp",
+                  "cmake",
+                  "corn",
+                  "cpp",
                   "csv",
                   "diff",
                   "editorconfig",
+                  "fish",
                   "git_config",
                   "git_rebase",
                   "gitattributes",
@@ -1513,6 +1521,7 @@ require("lazy").setup({
                   "json",
                   "json5",
                   "jsonc",
+                  "kdl",
                   "lua",
                   "luadoc",
                   "luap",
@@ -1525,11 +1534,15 @@ require("lazy").setup({
                   "norg",
                   "nu",
                   "passwd",
+                  "pkl",
                   "powershell",
                   "pymanifest",
                   "python",
+                  "qmldir",
+                  "qmljs",
                   "regex",
                   "rust",
+                  "slint",
                   "sql",
                   "ssh_config",
                   "svelte",
@@ -1543,9 +1556,6 @@ require("lazy").setup({
                   "xml",
                   "xresources",
                   "yaml",
-                  "slint",
-                  "qmldir",
-                  "qmljs",
                },
                sync_install = false,
                highlight = { enable = true },
@@ -1785,25 +1795,27 @@ require("lazy").setup({
          event = "VeryLazy",
          opts = {
             ensure_installed = {
-               "jsonls",
-               "lua_ls",
+               "clangd",
+               "cssls",
+               "fish_lsp",
                "html",
-               -- "tsserver",
-               -- "emmet_language_server",
-               "ts_ls",
-               -- "csharp_ls",
+               "jsonls",
+               "lemminx",
+               "lua_ls",
+               "marksman",
+               "neocmake",
                "neocmake",
                "powershell_es",
                "pylsp",
-               "taplo",
-               "yamlls",
-               "lemminx",
-               "clangd",
-               "neocmake",
-               "slint_lsp",
                "qmlls",
-               "marksman",
+               "slint_lsp",
                "tailwindcss",
+               "taplo",
+               "ts_ls",
+               "yamlls",
+               -- "csharp_ls",
+               -- "emmet_language_server",
+               -- "tsserver",
                -- ruff = {},
             },
          },
@@ -3004,6 +3016,9 @@ require("lazy").setup({
                   "gcc $fileName -W -Wall -Wextra -pedantic -Werror -g -o $fileNameWithoutExt &&",
                   "$dir/$fileNameWithoutExt",
                },
+               fish = {
+                  "fish $fileName",
+               },
                -- c = function(...)
                -- 	c_base = {
                -- 		"cd $dir &&",
@@ -3047,12 +3062,15 @@ require("lazy").setup({
                ps1 = { lsp_format = "prefer" },
                lua = { "stylua" },
                python = { "black" },
+               fish = { "fish_indent" },
                rust = { "rustfmt", lsp_format = "fallback" },
                javascript = { "prettierd", "prettier", stop_after_first = true },
                toml = { "taplo" },
                json = { "fixjson", "prettier" },
+               jsonc = { "prettier" },
                cs = { "csharpier" },
                yaml = { "yamlfix" }, -- "yamlfmt",
+               -- kdl = { "kdlfmt" }, -- TODO: Enable after bug fix https://github.com/hougesen/kdlfmt/issues/320
                markdown = { "prettierd" },
                js = { "prettierd" },
                ts = { "prettierd" },

@@ -1,0 +1,9 @@
+---
+linux:
+  links:
+    config.fish: ~/.config/fish/config.fish
+    fish_variables: ~/.config/fish/fish_variables
+    functions/y.fish: ~/.config/fish/functions/y.fish
+    functions/fk.fish: ~/.config/fish/functions/fk.fish
+    functions/ts-mic.fish: ~/.config/fish/functions/ts-mic.fish
+    functions/i.fish: ~/.config/fish/functions/i.fish

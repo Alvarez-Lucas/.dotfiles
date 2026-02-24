@@ -1,0 +1,4 @@
+---
+linux:
+  links:
+    paru.conf: ~/.config/paru/paru.conf

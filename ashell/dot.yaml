@@ -1,0 +1,4 @@
+---
+linux:
+  links:
+    config.toml: ~/.config/ashell/config.toml
