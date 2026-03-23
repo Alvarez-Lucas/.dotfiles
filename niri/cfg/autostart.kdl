@@ -7,5 +7,6 @@
     spawn-at-startup "xorg-xwayland"
     spawn-sh-at-startup "wl-paste --watch cliphist store"
     spawn-at-startup "niri-float-sticky"
+    spawn-at-startup "swayosd-server"
 
     //spawn-sh-at-startup "qs -c noctalia-shell"

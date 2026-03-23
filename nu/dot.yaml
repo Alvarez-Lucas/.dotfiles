@@ -1,6 +1,10 @@
 ---
 windows:
   links:
-    config.nu: ~\AppData\Roaming\nushell\config.nu
-    env.nu: ~\AppData\Roaming\nushell\env.nu
+    windows.config.nu: ~\AppData\Roaming\nushell\config.nu
+    windows.env.nu: ~\AppData\Roaming\nushell\env.nu
     nu_scripts\aliases\git\git-aliases.nu: ~\AppData\Roaming\nushell\nu_scripts\aliases\git\git-aliases.nu
+linux:
+  links:
+    linux.config.nu: ~/.config/nushell/config.nu
+    linux.env.nu: ~/.config/nushell/env.nu

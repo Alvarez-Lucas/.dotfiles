@@ -2,4 +2,5 @@
 linux:
   links:
     mpv.conf: ~/.config/mpv/mpv.conf
+    input.conf: ~/.config/mpv/input.conf
     scripts/autoload.lua: ~/.config/mpv/scripts/autoload.lua

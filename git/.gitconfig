@@ -3,9 +3,9 @@
 	fsmonitor = false
 	untrackedcache = true
 	commitGraph = true
-	autocrlf = true
+	autocrlf = false
 	preloadindex = true
-	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+	; sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 	whitespace = error
 	pager = delta
 	longpaths = true
@@ -108,28 +108,28 @@
 	email = lalvarez@elevatorsystems.com
 [credential "https://dev.azure.com"]
 	usehttppath = true
-[difftool "vsdiffmerge"]
-	cmd = \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\vsdiffmerge.exe\" \"$LOCAL\" \"$REMOTE\" //t
-	keepBackup = false
-[mergetool "vsdiffmerge"]
-	cmd = \"C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/vsdiffmerge.exe\" \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\" //m
-	keepBackup = false
-	trustExitCode = true
-	path = vsdiffmerge.exe
+; [difftool "vsdiffmerge"]
+; 	cmd = \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\vsdiffmerge.exe\" \"$LOCAL\" \"$REMOTE\" //t
+; 	keepBackup = false
+; [mergetool "vsdiffmerge"]
+; 	cmd = \"C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/vsdiffmerge.exe\" \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\" //m
+; 	keepBackup = false
+; 	trustExitCode = true
+; 	path = vsdiffmerge.exe
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-[difftool "sourcetree"]
-	cmd = "'' "
-[mergetool "sourcetree"]
-	cmd = "'' "
-	trustExitCode = false
-	keepBackup = false
-[gui]
-	editor = gvim
-	historybrowser = C:/Users/lalvarez/AppData/Local/Programs/git-cola/Python/pythonw.exe C:/Users/lalvarez/AppData/Local/Programs/git-cola/git-cola.launch.pyw dag
-[cola]
-	blameviewer = git gui blame
-	statusshowtotals = true
+; [difftool "sourcetree"]
+; 	cmd = "'' "
+; [mergetool "sourcetree"]
+; 	cmd = "'' "
+; 	trustExitCode = false
+; 	keepBackup = false
+; [gui]
+; 	editor = gvim
+	; historybrowser = C:/Users/lalvarez/AppData/Local/Programs/git-cola/Python/pythonw.exe C:/Users/lalvarez/AppData/Local/Programs/git-cola/git-cola.launch.pyw dag
+; [cola]
+; 	blameviewer = git gui blame
+	; statusshowtotals = true

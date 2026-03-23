@@ -1,7 +1,7 @@
 # -*- conf -*-
 # OKColors
 
-[colors]
+[colors-light]
 cursor=2C2E33 6377B6
 background=FEFCF4
 foreground=2C2E33

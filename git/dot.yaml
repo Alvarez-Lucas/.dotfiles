@@ -7,3 +7,6 @@ windows[whoami.username!="lucas"]:
   links:
     .gitconfig: ~/.gitconfig
     .gitconfig.local.work: ~/.gitconfig.local
+linux:
+  links:
+    .gitconfig: ~/.gitconfig

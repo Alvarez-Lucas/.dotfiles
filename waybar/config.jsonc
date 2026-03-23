@@ -6,7 +6,8 @@
   // "width": 1280, // Waybar width
   "spacing": 8, // Gaps between modules (4px)
   // Choose the order of the modules
-  "modules-left": ["niri/workspaces", "custom/media"],
+  // "modules-left": ["hyprland/workspaces", "custom/media"],
+  "modules-left": ["niri/workspaces", "hyprland/workspaces", "custom/media"],
   "modules-center": ["cffi/niri-windows"],
   "cffi/niri-windows": {
     // path where you placed the .so file
