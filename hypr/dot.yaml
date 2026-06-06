@@ -1,4 +1,4 @@
 ---
 linux:
   links:
-    hyprland.conf: ~/.config/hypr/hyprland.conf
+    hyprland.lua: ~/.config/hypr/hyprland.lua

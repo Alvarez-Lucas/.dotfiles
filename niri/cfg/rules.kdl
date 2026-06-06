@@ -19,6 +19,11 @@
     }
 
     window-rule {
+        match app-id="steam_app_3321460"
+        open-fullscreen true
+    }
+
+    window-rule {
       match title="(?i)picture.in.picture"
       default-column-width { proportion 0.25; }
       open-floating true

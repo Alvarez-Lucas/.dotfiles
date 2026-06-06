@@ -11,12 +11,13 @@ input {
 
     mouse {
         accel-profile "flat" 
-	    accel-speed 0.0
+	    accel-speed 1.0
     }
 
     touchpad {
         tap // Enable tap-to-click
         natural-scroll // Enable natural (macOS-style) scrolling
+        accel-profile "flat"
     }
 
     focus-follows-mouse // Automatically focus windows under the mouse pointer

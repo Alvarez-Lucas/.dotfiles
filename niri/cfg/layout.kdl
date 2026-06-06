@@ -12,5 +12,14 @@
             proportion 0.66667
         }
 
+        tab-indicator {
+            width 16
+            gap 0
+            length total-proportion=1.0
+            place-within-column
+        }
+
         struts {}
     }
+
+

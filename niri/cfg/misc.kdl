@@ -13,7 +13,8 @@
     debug {
         // Allows notification actions and window activation from Noctalia.
         honor-xdg-activation-with-invalid-serial
-        wait-for-frame-completion-before-queueing
+        // wait-for-frame-completion-before-queueing
+        force-tearing
     }
 
     hotkey-overlay {

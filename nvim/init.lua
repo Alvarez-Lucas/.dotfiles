@@ -1388,6 +1388,7 @@ require("lazy").setup({
       {
          "glacambre/firenvim",
          lazy = not g.started_by_firenvim,
+         -- lazy = true,
          init = function()
             opt.guifont = "JetBrainsMono\\ Nerd\\ Font:h14"
             g.firenvim_config = {
@@ -1815,7 +1816,6 @@ require("lazy").setup({
                "lemminx",
                "lua_ls",
                "marksman",
-               "neocmake",
                "neocmake",
                "powershell_es",
                "pylsp",
@@ -3019,9 +3019,12 @@ require("lazy").setup({
                   "rustc $fileName &&",
                   "$dir/$fileNameWithoutExt",
                },
+               -- cs = {
+               --    "cd $dir &&",
+               --    "dotnet run",
+               -- },
                cs = {
-                  "cd $dir &&",
-                  "dotnet run",
+                  "dotnet run $fileName",
                },
                c = {
                   "cd $dir &&",
@@ -3030,6 +3033,9 @@ require("lazy").setup({
                },
                fish = {
                   "fish $fileName",
+               },
+               nu = {
+                  "nu $fileName",
                },
                -- c = function(...)
                -- 	c_base = {
@@ -3085,7 +3091,7 @@ require("lazy").setup({
                jsonc = { "prettier" },
                lua = { "stylua" },
                markdown = { "prettierd" },
-               nu = { "nufmt" },
+               -- nu = { "nufmt" },
                ps1 = { lsp_format = "prefer" },
                python = { "black" },
                rust = { "rustfmt", lsp_format = "fallback" },
@@ -3318,6 +3324,7 @@ require("lazy").setup({
       ---@type LazyPluginSpec
       {
          "seblyng/roslyn.nvim",
+         -- enabled = false,
          init = function()
             local util = require("lspconfig.util")
             vim.lsp.config("roslyn", {
