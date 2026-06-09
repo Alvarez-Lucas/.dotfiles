@@ -1,25 +1,25 @@
 
-output "DP-4" {
+output "DP-2" {
     // off
     mode "2560x1440@479.989"
     scale 1
     position x=1920 y=0
 }
 
-output "DP-3" {
+output "DP-1" {
     // off
     mode "1920x1080@599.944" // Set resolution and refresh rate
     scale 1 // No scaling (use 2 for HiDPI)
     position x=0 y=0
 }
 
-output "HDMI-A-2" {
+output "HDMI-A-1" {
     off
     mode "3840x2160@119.880" // Set resolution and refresh rate
     scale 1.75 // No scaling (use 2 for HiDPI)
 }
 
-output "HDMI-A-3" {
+output "HDMI-A-2" {
     off
     mode "1920x1080@60.000"
     scale 2

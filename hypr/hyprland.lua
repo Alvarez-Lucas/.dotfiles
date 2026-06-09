@@ -15,33 +15,37 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-   output = "DP-3", -- BENQ
+   output = "DP-1", -- BENQ
    mode = "1920x1080@599.94Hz",
    position = "0x0",
    scale = 1,
+   disabled = true,
 })
 
 hl.monitor({
-   output = "DP-4", -- Asus OLED
+   output = "DP-2", -- Asus OLED
    mode = "2560x1440@479.99Hz",
    position = "1920x0",
    scale = 1,
-})
-
-hl.monitor({
-   output = "HDMI-A-3", -- Small TV
-   mode = "1920x1080@60.00Hz",
-   position = "auto",
-   scale = 1,
    disabled = true,
 })
 
 hl.monitor({
-   output = "HDMI-A-2", -- LG Oled TV
+   output = "HDMI-A-2", -- Small TV
+   mode = "1920x1080@60.00Hz",
+   position = "0x0", -- left monitor starts at origin
+   scale = 1.5,
+   disabled = false,
+})
+
+hl.monitor({
+   output = "HDMI-A-1", -- LG Oled TV
    mode = "3840x2160@120.00Hz",
    position = "auto",
-   scale = 1,
-   disabled = true,
+   scale = 2,
+   -- bitdepth = 10,
+   -- cm = "hdr",
+   disabled = false,
 })
 
 ---------------------
@@ -52,6 +56,7 @@ hl.monitor({
 local terminal = "foot"
 local fileManager = "dolphin"
 local menu = "fuzzel"
+local web_browser = "thorium"
 
 -------------------
 ---- AUTOSTART ----
@@ -114,16 +119,16 @@ hl.config({
       },
 
       -- Set to true to enable resizing windows by clicking and dragging on borders and gaps
-      resize_on_border = false,
+      resize_on_border = true,
 
       -- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
-      allow_tearing = false,
+      allow_tearing = true,
 
       layout = "dwindle",
    },
 
    decoration = {
-      rounding = 10,
+      rounding = 0,
       rounding_power = 2,
 
       -- Change transparency of focused and unfocused windows
@@ -131,14 +136,14 @@ hl.config({
       inactive_opacity = 1.0,
 
       shadow = {
-         enabled = true,
+         enabled = false,
          range = 4,
          render_power = 3,
          color = 0xee1a1a1a,
       },
 
       blur = {
-         enabled = true,
+         enabled = false,
          size = 3,
          passes = 1,
          vibrancy = 0.1696,
@@ -146,9 +151,11 @@ hl.config({
    },
 
    animations = {
-      enabled = true,
+      enabled = false,
    },
 })
+
+hl.window_rule({ match = { class = "steam_app_1240440" }, immediate = true, fullscreen = true })
 
 -- Default curves and animations, see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Animations/
 hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
@@ -224,7 +231,7 @@ hl.config({
 hl.config({
    misc = {
       force_default_wallpaper = -1, -- Set to 0 or 1 to disable the anime mascot wallpapers
-      disable_hyprland_logo = false, -- If true disables the random hyprland logo / anime girl background. :(
+      disable_hyprland_logo = true, -- If true disables the random hyprland logo / anime girl background. :(
    },
 })
 
@@ -239,6 +246,8 @@ hl.config({
       kb_model = "",
       kb_options = "",
       kb_rules = "",
+
+      accel_profile = "flat",
 
       follow_mouse = 1,
 
@@ -258,10 +267,10 @@ hl.gesture({
 
 -- Example per-device config
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
-hl.device({
-   name = "epic-mouse-v1",
-   sensitivity = -0.5,
-})
+-- hl.device({
+--    name = "epic-mouse-v1",
+--    sensitivity = -0.5,
+-- })
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -270,24 +279,27 @@ hl.device({
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
-hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
-local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("/home/lucas/.local/bin/cliphist-fuzzel-img.sh"))
+local closeWindowBind = hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
 hl.bind(
-   mainMod .. " + M",
+   "CTRL + SHIFT + ESCAPE",
    hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(web_browser))
+-- hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+-- hl.bind(mainMod .. " + M", hl.dsp.fullscreen(1))
+hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
+hl.bind(mainMod .. " + C", hl.dsp.layout("togglesplit")) -- dwindle only
 
 -- Move focus with mainMod + arrow keys
-hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
+hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
@@ -296,6 +308,8 @@ for i = 1, 10 do
    hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
+
+-- hl.bind(mainMod .. " + Backsap<", hl.dsp.workspace("previous"))
 
 -- Example special workspace (scratchpad)
 hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("magic"))
